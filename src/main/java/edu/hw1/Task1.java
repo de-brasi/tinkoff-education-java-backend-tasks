@@ -1,7 +1,14 @@
 package edu.hw1;
 
 public class Task1 {
+    private Task1() {
+        // not allowed
+    }
+
     private final static int SECONDS_PER_MINUTE = 60;
+    private final static int MIN_NUMBER_CHAR_CODE = 48;
+    private final static int MAX_NUMBER_CHAR_CODE = 57;
+
 
     public static int minutesToSeconds(String time) {
         if (!timeIsValid(time)) {
@@ -16,13 +23,12 @@ public class Task1 {
     }
 
     private static boolean timeIsValid(String toCheck) {
-        // проверить что только цифры и ':', секунд меньше 60
         boolean checkingResult = (!toCheck.isEmpty());
         for (char symbol: toCheck.toCharArray()) {
             // Check string's content
             if (!(
-                symbol == ':' ||
-                    (48 <= (int)symbol && (int)symbol <= 57))
+                symbol == ':'
+                    || (MIN_NUMBER_CHAR_CODE <= (int) symbol && (int) symbol <= MAX_NUMBER_CHAR_CODE))
             ) {
                 checkingResult = false;
                 break;
@@ -31,7 +37,7 @@ public class Task1 {
 
         if (checkingResult) {
             final int secondsCount = Integer.parseInt(toCheck.split(":")[1]);
-            checkingResult = (0 <= secondsCount && secondsCount < 60);
+            checkingResult = (0 <= secondsCount && secondsCount < SECONDS_PER_MINUTE);
         }
 
         return checkingResult;

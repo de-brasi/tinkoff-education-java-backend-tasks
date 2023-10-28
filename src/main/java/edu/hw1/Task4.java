@@ -1,6 +1,10 @@
 package edu.hw1;
 
 public class Task4 {
+    private Task4() {
+        // not allowed
+    }
+
     public static String fixString(String toFix) {
         var toFixChars = toFix.toCharArray();
         char tmp;

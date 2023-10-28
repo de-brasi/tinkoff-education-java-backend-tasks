@@ -3,14 +3,18 @@ package edu.hw1;
 import java.util.Arrays;
 
 public class Task3 {
+    private Task3() {
+        // not allowed
+    }
+
     public static boolean checkNestingPossibility(final int[] encaseArray, final int[] nestingArray) {
-        if ((encaseArray == null || encaseArray.length == 0) &&
-            (nestingArray == null || nestingArray.length == 0)) {
+        if ((encaseArray == null || encaseArray.length == 0)
+            && (nestingArray == null || nestingArray.length == 0)) {
             return true;
         }
 
-        if ((encaseArray != null || encaseArray.length > 0) &&
-            (nestingArray == null || nestingArray.length == 0)) {
+        if ((encaseArray != null || encaseArray.length > 0)
+            && (nestingArray == null || nestingArray.length == 0)) {
             return true;
         }
 

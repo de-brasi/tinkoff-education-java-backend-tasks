@@ -3,6 +3,12 @@ package edu.hw1;
 import java.util.Arrays;
 
 public class Task6 {
+    private Task6() {
+        // not allowed
+    }
+
+    private final static int RADIX = 10;
+
     private static final int EXPECTED_RESULT = 6174;
 
     public static int countK(int toCheck) {
@@ -33,7 +39,7 @@ public class Task6 {
         int[] result = new int[sourceAsString.length];
 
         for (int i = 0; i < sourceAsString.length; i++) {
-            result[i] = (int)sourceAsString[i] - (int)'0';
+            result[i] = (int) sourceAsString[i] - (int) '0';
         }
 
         return result;
@@ -43,7 +49,7 @@ public class Task6 {
         int res = 0;
 
         for (int curNum : source) {
-            res *= 10;
+            res *= RADIX;
             res += curNum;
         }
 

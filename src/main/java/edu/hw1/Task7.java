@@ -1,7 +1,13 @@
 package edu.hw1;
 
 public class Task7 {
-    public static int rotateLeft(int n, int shift) {
+    private Task7() {
+        // not allowed
+    }
+
+    public static int rotateLeft(int n, int shiftCount) {
+        int shift = shiftCount;
+
         var bitsAsStr = Integer.toBinaryString(n).split("");
         shift %= bitsAsStr.length;
 
@@ -19,7 +25,9 @@ public class Task7 {
         return Integer.parseInt(result, 2);
     }
 
-    public static int rotateRight(int n, int shift) {
+    public static int rotateRight(int n, int shiftCount) {
+        int shift = shiftCount;
+
         var bitsAsStr = Integer.toBinaryString(n).split("");
         shift %= bitsAsStr.length;
 
