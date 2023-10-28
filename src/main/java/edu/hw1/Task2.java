@@ -1,7 +1,14 @@
 package edu.hw1;
 
 public class Task2 {
-    public static int getCountOfCharacters(Integer searchedNumber) {
+    private Task2() {
+        // not allowed
+    }
+
+    private final static int RADIX = 10;
+
+    public static int getCountOfCharacters(Integer searched) {
+        Integer searchedNumber = searched;
         if (searchedNumber.equals(0)) {
             return 1;
         }
@@ -13,7 +20,7 @@ public class Task2 {
         int charCount = 0;
         while (searchedNumber != 0) {
             ++charCount;
-            searchedNumber /= 10;
+            searchedNumber /= RADIX;
         }
 
         return charCount;
