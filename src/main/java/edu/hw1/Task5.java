@@ -29,9 +29,7 @@ public class Task5 {
 
         int curIndex = 0;
         int tmpSum;
-        // todo: проверить для двузначных чисел как работает
         for (int i = 0; i < sourceContent.length / 2; i++) {
-            // todo: тут кринж из за того что в начале 0
             tmpSum = ((int)sourceContent[curIndex] - (int)'0');
             if (curIndex + 1 < sourceContent.length) {
                 tmpSum += ((int)sourceContent[curIndex + 1] - (int)'0');
