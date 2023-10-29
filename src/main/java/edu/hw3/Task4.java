@@ -17,15 +17,16 @@ public class Task4 {
     private final static Integer MIN_VALUE = 1;
 
     private final static Integer THOUSAND_VAL = 1000;
-    private final static Integer HUNDRED_VAL = 1000;
-    private final static Integer DECIMAL_VAL = 1000;
+    private final static Integer HUNDRED_VAL = 100;
+    private final static Integer DECIMAL_VAL = 10;
 
     private final static Integer INTERMEDIATE_NUMBER = 5;
 
     private final static Integer UNIQUE_VALUE_FOUR = 4;
     private final static Integer UNIQUE_VALUE_NINE = 9;
 
-    public static String convertToRoman(int number) {
+    public static String convertToRoman(int src) {
+        int number = src;
         if (number < MIN_VALUE || number > MAX_VALUE) {
             throw new IllegalArgumentException("Число должно быть в диапазоне от 1 до 3999");
         }
@@ -33,9 +34,12 @@ public class Task4 {
         var result = new StringBuilder();
 
         int thousandsCount = number / THOUSAND_VAL;
-        int hundredsCount = (number % THOUSAND_VAL) / HUNDRED_VAL;
-        int tensCount = (number % HUNDRED_VAL) / DECIMAL_VAL;
-        int onesCount = number % DECIMAL_VAL;
+        number %= THOUSAND_VAL;
+        int hundredsCount = number / HUNDRED_VAL;
+        number %= HUNDRED_VAL;
+        int tensCount = number / DECIMAL_VAL;
+        number %= DECIMAL_VAL;
+        int onesCount = number;
 
         result.append(gotRepresentation(thousandsCount, "", THOUSAND));
         result.append(gotRepresentation(hundredsCount, FIVE_HUNDRED, HUNDRED));
