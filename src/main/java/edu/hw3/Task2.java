@@ -1,8 +1,7 @@
 package edu.hw3;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Stack;
+import java.util.HashMap;
 
 public class Task2 {
     private Task2() {
@@ -11,33 +10,47 @@ public class Task2 {
 
     public static String[] clusterize(final String src) {
         final var toClusterizeContent = src.toCharArray();
-        var clusterizedContent = new ArrayList<String>();
 
-        var currentCluster = new ArrayDeque<Character>();
-        var openBraces = new Stack<Character>();
+        var clusterizedContent = new ArrayList<String>();
+        var currentCluster = new ArrayList<Character>();
+
+        var openBraceStatistics = new HashMap<Character, Integer>() {{
+            put('(', 0);
+            put('[', 0);
+            put('{', 0);
+        }};
+
 
         for (char curLetter : toClusterizeContent) {
+            currentCluster.add(curLetter);
+
             if (isOpenBrace(curLetter)) {
-                openBraces.push(curLetter);
+                openBraceStatistics.put(
+                    curLetter,
+                    openBraceStatistics.get(curLetter) + 1
+                );
             } else if (isCloseBrace(curLetter)) {
-                assert bracesHasSameTypes(curLetter, openBraces.peek());
-                currentCluster.push(openBraces.pop());
-                currentCluster.add(curLetter);
+                char relativeBrace = getRelativeBrace(curLetter);
+                openBraceStatistics.put(
+                    relativeBrace,
+                    openBraceStatistics.get(relativeBrace) - 1
+                );
 
-                if (openBraces.isEmpty()) {
-                    var cluster = new StringBuilder();
+                // all open-braces was closed
+                if (openBraceStatistics.get('(') == 0
+                    && openBraceStatistics.get('[') == 0
+                    && openBraceStatistics.get('{') == 0) {
+                    // flash cluster
 
-                    for (var letter : currentCluster) {
-                        cluster.append(letter);
+                    StringBuilder builder = new StringBuilder(currentCluster.size());
+                    for(Character ch: currentCluster) {
+                        builder.append(ch);
                     }
 
-                    // current cluster handled
-                    clusterizedContent.add(cluster.toString());
+                    clusterizedContent.add(builder.toString());
 
                     currentCluster.clear();
                 }
-            } else {
-                currentCluster.add(curLetter);
             }
         }
 
@@ -72,6 +85,24 @@ public class Task2 {
                 case '}' -> (rhs == '{');
                 case ']' -> (rhs == '[');
                 default -> false;
+            };
+        }
+    }
+
+    private static char getRelativeBrace(char brace) {
+        if (isOpenBrace(brace)) {
+            return switch (brace) {
+                case '(' -> ')';
+                case '{' -> '}';
+                case '[' -> ']';
+                default -> throw new IllegalArgumentException("");
+            };
+        } else {
+            return switch (brace) {
+                case ')' -> '(';
+                case '}' -> '{';
+                case ']' -> '[';
+                default -> throw new IllegalArgumentException("");
             };
         }
     }
