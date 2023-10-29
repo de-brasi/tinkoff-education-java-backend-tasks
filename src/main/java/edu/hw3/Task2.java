@@ -70,25 +70,6 @@ public class Task2 {
         return (toCheck == ')') || (toCheck == '}') || (toCheck == ']');
     }
 
-    private static boolean bracesHasSameTypes(char lhs, char rhs) {
-        assert (isOpenBrace(lhs) || isCloseBrace(lhs)) && (isOpenBrace(rhs) || isCloseBrace(rhs));
-        if (isOpenBrace(lhs)) {
-            return switch (lhs) {
-                case '(' -> (rhs == ')');
-                case '{' -> (rhs == '}');
-                case '[' -> (rhs == ']');
-                default -> false;
-            };
-        } else {
-            return switch (lhs) {
-                case ')' -> (rhs == '(');
-                case '}' -> (rhs == '{');
-                case ']' -> (rhs == '[');
-                default -> false;
-            };
-        }
-    }
-
     private static char getRelativeBrace(char brace) {
         if (isOpenBrace(brace)) {
             return switch (brace) {
