@@ -43,7 +43,7 @@ public class Task2 {
                     // flash cluster
 
                     StringBuilder builder = new StringBuilder(currentCluster.size());
-                    for(Character ch: currentCluster) {
+                    for (Character ch: currentCluster) {
                         builder.append(ch);
                     }
 
