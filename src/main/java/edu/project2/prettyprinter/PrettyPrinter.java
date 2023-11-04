@@ -38,8 +38,6 @@ public class PrettyPrinter {
 
         setStartStatement(mazePlan);
 
-        print(mazePlan);   // todo: debug only
-
         Cell[] curRow;
         Cell curCell;
 
@@ -135,17 +133,6 @@ public class PrettyPrinter {
     }
 
     private void buildWallsNearCell(char[][] plan, Coordinate cellCoordinate, Cell cell) {
-
-        System.out.println("Checking cell. Maze with checking:");               // todo: debug only
-        char[][] planCopy = new char[plan.length][plan[0].length];              // todo: debug only
-        for (int i = 0; i < plan.length; i++) {                                 // todo: debug only
-            for (int j = 0; j < plan[i].length; j++) {                          // todo: debug only
-                planCopy[i][j] = plan[i][j];                                    // todo: debug only
-            }                                                                   // todo: debug only
-        }                                                                       // todo: debug only
-        planCopy[cellCoordinate.row()][cellCoordinate.col()] = '*';             // todo: debug only
-        print(planCopy);                                                        // todo: debug only
-
         Coordinate wallCoordinate;
 
         for (final var direction: this.directions) {
@@ -154,8 +141,6 @@ public class PrettyPrinter {
                 plan[wallCoordinate.row()][wallCoordinate.col()] = emptySpace;
             }
         }
-
-//        mergeAllAnglesWithNeighbourWalls(plan, cellCoordinate);
     }
 
     private static void smoothCorners(char[][] plan) {
