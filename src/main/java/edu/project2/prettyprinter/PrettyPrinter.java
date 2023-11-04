@@ -34,9 +34,11 @@ public class PrettyPrinter {
             return new char[0][0];
         }
 
-        var mazePlane = new char[2 * maze.getHeight() + 1][2 * maze.getWidth() + 1];
+        var mazePlan = new char[2 * maze.getHeight() + 1][2 * maze.getWidth() + 1];
 
-        setEmptySpace(mazePlane);
+        setEmptySpace(mazePlan);
+
+        print(mazePlan);   // todo: debug only
 
         Cell[] curRow;
         Cell curCell;
@@ -57,13 +59,13 @@ public class PrettyPrinter {
 
                 curCellCoordinateInMazePlane = new Coordinate(curCellRowInMazePlane, curCellColInMazePlane);
 
-                buildWallsNearCell(mazePlane, curCellCoordinateInMazePlane, curCell);
+                buildWallsNearCell(mazePlan, curCellCoordinateInMazePlane, curCell);
             }
         }
 
-        setBorders(mazePlane);
+        setBorders(mazePlan);
 
-        return mazePlane;
+        return mazePlan;
     }
 
     private static void setBorders(char[][] mazePlan) {
@@ -117,7 +119,18 @@ public class PrettyPrinter {
     }
 
     private void buildWallsNearCell(char[][] plan, Coordinate cellCoordinate, Cell cell) {
-        Coordinate neighbourCell;
+
+        System.out.println("Checking cell. Maze with checking:");               // todo: debug only
+        char[][] planCopy = new char[plan.length][plan[0].length];              // todo: debug only
+        for (int i = 0; i < plan.length; i++) {                                 // todo: debug only
+            for (int j = 0; j < plan[i].length; j++) {                          // todo: debug only
+                planCopy[i][j] = plan[i][j];                                    // todo: debug only
+            }                                                                   // todo: debug only
+        }                                                                       // todo: debug only
+        planCopy[cellCoordinate.row()][cellCoordinate.col()] = '*';             // todo: debug only
+        print(planCopy);                                                        // todo: debug only
+
+        Coordinate neighbourCellCoordinates;
         int neighbourCellRowInMazePlane;
         int neighbourCellColInMazePlane;
 
@@ -131,16 +144,25 @@ public class PrettyPrinter {
             //  однако эти координаты я использовал как координаты соседа (НЕ буфера каждой клетки, а соседа)
             //  в массиве plan.
             //  Вроде как исправил - стал брать реальные координаты от этих координат, но словил кринж((
-            neighbourCell = cellCoordinate.coordinateFromDirection(direction);
-            plan[neighbourCell.row()][neighbourCell.col()] =
+            neighbourCellCoordinates = cellCoordinate.coordinateFromDirection(direction);
+
+
+
+            System.out.println("Checking neighbour cell. Maze after:");                         // todo: debug only
+            planCopy[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] = 'O';     // todo: debug only
+            print(planCopy);                                                                    // todo: debug only
+
+
+
+            plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] =
                 mergeWalls(
-                    plan[neighbourCell.row()][neighbourCell.col()],
+                    plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()],
                     direction
                 );
 
-//            neighbourCell = cellCoordinate.coordinateFromDirection(direction);
-//            neighbourCellRowInMazePlane = 2 * neighbourCell.row() + 1;
-//            neighbourCellColInMazePlane = 2 * neighbourCell.col() + 1;
+//            neighbourCellCoordinates = cellCoordinate.coordinateFromDirection(direction);
+//            neighbourCellRowInMazePlane = 2 * neighbourCellCoordinates.row() + 1;
+//            neighbourCellColInMazePlane = 2 * neighbourCellCoordinates.col() + 1;
 //
 //            if (0 <= neighbourCellRowInMazePlane
 //                && neighbourCellRowInMazePlane < plan.length
@@ -317,7 +339,8 @@ public class PrettyPrinter {
     }
 
 //    private final static char emptySpace = '\u0020';
-    private final static char emptySpace = ' ';
+//    private final static char emptySpace = ' ';
+    private final static char emptySpace = '\u2591';
 
     private final static char leftUpAngle = '\u2554';
     private final static char rightUpAngle = '\u2557';
