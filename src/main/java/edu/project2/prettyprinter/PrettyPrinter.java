@@ -36,7 +36,7 @@ public class PrettyPrinter {
 
         var mazePlan = new char[2 * maze.getHeight() + 1][2 * maze.getWidth() + 1];
 
-        setEmptySpace(mazePlan);
+        setStartStatement(mazePlan);
 
         print(mazePlan);   // todo: debug only
 
@@ -63,7 +63,7 @@ public class PrettyPrinter {
             }
         }
 
-        setBorders(mazePlan);
+//        setBorders(mazePlan);
 
         return mazePlan;
     }
@@ -112,10 +112,33 @@ public class PrettyPrinter {
         }
     }
 
-    private static void setEmptySpace(char[][] mazePlan) {
-        for (char[] chars : mazePlan) {
-            Arrays.fill(chars, emptySpace);
+    private static void setStartStatement(char[][] mazePlan) {
+        for (int i = 0; i < mazePlan.length; i++) {
+            if (i % 2 == 1) {
+                for (int j = 0; j < mazePlan[i].length; j++) {
+                    if (j % 2 == 1) {
+                        mazePlan[i][j] = emptySpace;
+                    } else {
+                        mazePlan[i][j] = verticalSmoothWall;
+                    }
+                }
+            } else {
+                for (int j = 0; j < mazePlan[i].length; j++) {
+                    if (j % 2 == 1) {
+                        mazePlan[i][j] = horizontalSmoothWall;
+                    } else {
+                        mazePlan[i][j] = crossWall;
+                    }
+                }
+            }
         }
+
+        setBorders(mazePlan);
+
+
+//        for (char[] chars : mazePlan) {
+//            Arrays.fill(chars, emptySpace);
+//        }
     }
 
     private void buildWallsNearCell(char[][] plan, Coordinate cellCoordinate, Cell cell) {
@@ -131,34 +154,39 @@ public class PrettyPrinter {
         print(planCopy);                                                        // todo: debug only
 
         Coordinate neighbourCellCoordinates;
-        int neighbourCellRowInMazePlane;
-        int neighbourCellColInMazePlane;
+//        int neighbourCellRowInMazePlane;
+//        int neighbourCellColInMazePlane;
+        Coordinate wallCoordinate;
 
         for (final var direction: this.directions) {
             if (!cell.checkWall(direction)) {
-                // TODO: может просто удалять стену??
+                // TODO: может просто удалять стену?? БЛЯТЬ ДА
+                wallCoordinate = cellCoordinate.coordinateFromDirection(direction);
+                plan[wallCoordinate.row()][wallCoordinate.col()] = emptySpace;
+//                continue;
+            } else {
                 continue;
             }
 
-            // TODO: тут была проблема в том, что я получал координаты соседа как если бы я работал с типом Maze,
-            //  однако эти координаты я использовал как координаты соседа (НЕ буфера каждой клетки, а соседа)
-            //  в массиве plan.
-            //  Вроде как исправил - стал брать реальные координаты от этих координат, но словил кринж((
-            neighbourCellCoordinates = cellCoordinate.coordinateFromDirection(direction);
-
-
-
-            System.out.println("Checking neighbour cell. Maze after:");                         // todo: debug only
-            planCopy[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] = 'O';     // todo: debug only
-            print(planCopy);                                                                    // todo: debug only
-
-
-
-            plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] =
-                mergeWalls(
-                    plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()],
-                    direction
-                );
+//            // TODO: тут была проблема в том, что я получал координаты соседа как если бы я работал с типом Maze,
+//            //  однако эти координаты я использовал как координаты соседа (НЕ буфера каждой клетки, а соседа)
+//            //  в массиве plan.
+//            //  Вроде как исправил - стал брать реальные координаты от этих координат, но словил кринж((
+//            neighbourCellCoordinates = cellCoordinate.coordinateFromDirection(direction);
+//
+//
+//
+//            System.out.println("Checking neighbour cell. Maze after:");                         // todo: debug only
+//            planCopy[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] = 'O';     // todo: debug only
+//            print(planCopy);                                                                    // todo: debug only
+//
+//
+//
+//            plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] =
+//                mergeWalls(
+//                    plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()],
+//                    direction
+//                );
 
 //            neighbourCellCoordinates = cellCoordinate.coordinateFromDirection(direction);
 //            neighbourCellRowInMazePlane = 2 * neighbourCellCoordinates.row() + 1;
@@ -339,8 +367,8 @@ public class PrettyPrinter {
     }
 
 //    private final static char emptySpace = '\u0020';
-//    private final static char emptySpace = ' ';
-    private final static char emptySpace = '\u2591';
+    private final static char emptySpace = ' ';
+//    private final static char emptySpace = '\u2591';
 
     private final static char leftUpAngle = '\u2554';
     private final static char rightUpAngle = '\u2557';
