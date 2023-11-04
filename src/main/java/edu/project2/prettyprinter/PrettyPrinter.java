@@ -5,7 +5,6 @@ import edu.project2.util.Coordinate;
 import edu.project2.util.Direction;
 import edu.project2.util.Maze;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class PrettyPrinter {
@@ -20,6 +19,7 @@ public class PrettyPrinter {
         //  2) print path;
 
         final var walls = getWalls(maze);
+        smoothCorners(walls);
         print(walls);
     }
 
@@ -62,8 +62,6 @@ public class PrettyPrinter {
                 buildWallsNearCell(mazePlan, curCellCoordinateInMazePlane, curCell);
             }
         }
-
-//        setBorders(mazePlan);
 
         return mazePlan;
     }
@@ -134,11 +132,6 @@ public class PrettyPrinter {
         }
 
         setBorders(mazePlan);
-
-
-//        for (char[] chars : mazePlan) {
-//            Arrays.fill(chars, emptySpace);
-//        }
     }
 
     private void buildWallsNearCell(char[][] plan, Coordinate cellCoordinate, Cell cell) {
@@ -153,218 +146,250 @@ public class PrettyPrinter {
         planCopy[cellCoordinate.row()][cellCoordinate.col()] = '*';             // todo: debug only
         print(planCopy);                                                        // todo: debug only
 
-        Coordinate neighbourCellCoordinates;
-//        int neighbourCellRowInMazePlane;
-//        int neighbourCellColInMazePlane;
         Coordinate wallCoordinate;
 
         for (final var direction: this.directions) {
             if (!cell.checkWall(direction)) {
-                // TODO: может просто удалять стену?? БЛЯТЬ ДА
                 wallCoordinate = cellCoordinate.coordinateFromDirection(direction);
                 plan[wallCoordinate.row()][wallCoordinate.col()] = emptySpace;
-//                continue;
-            } else {
-                continue;
             }
-
-//            // TODO: тут была проблема в том, что я получал координаты соседа как если бы я работал с типом Maze,
-//            //  однако эти координаты я использовал как координаты соседа (НЕ буфера каждой клетки, а соседа)
-//            //  в массиве plan.
-//            //  Вроде как исправил - стал брать реальные координаты от этих координат, но словил кринж((
-//            neighbourCellCoordinates = cellCoordinate.coordinateFromDirection(direction);
-//
-//
-//
-//            System.out.println("Checking neighbour cell. Maze after:");                         // todo: debug only
-//            planCopy[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] = 'O';     // todo: debug only
-//            print(planCopy);                                                                    // todo: debug only
-//
-//
-//
-//            plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()] =
-//                mergeWalls(
-//                    plan[neighbourCellCoordinates.row()][neighbourCellCoordinates.col()],
-//                    direction
-//                );
-
-//            neighbourCellCoordinates = cellCoordinate.coordinateFromDirection(direction);
-//            neighbourCellRowInMazePlane = 2 * neighbourCellCoordinates.row() + 1;
-//            neighbourCellColInMazePlane = 2 * neighbourCellCoordinates.col() + 1;
-//
-//            if (0 <= neighbourCellRowInMazePlane
-//                && neighbourCellRowInMazePlane < plan.length
-//                && 0 <= neighbourCellColInMazePlane
-//                && neighbourCellColInMazePlane < plan[neighbourCellRowInMazePlane].length - 1) {
-//                // TODO: real coordinates
-//                plan[neighbourCellRowInMazePlane][neighbourCellColInMazePlane] =
-//                    mergeWalls(
-//                        plan[neighbourCellRowInMazePlane][neighbourCellColInMazePlane],
-//                        direction
-//                    );
-//            }
         }
 
-        mergeAllAnglesWithNeighbourWalls(plan, cellCoordinate);
+//        mergeAllAnglesWithNeighbourWalls(plan, cellCoordinate);
     }
 
-    private static char mergeWalls(char alreadyBuildWall,
-        Direction newWallDirection /*relative to the center of the cell*/) {
-        return switch (newWallDirection) {
-            case UP -> {
-                if (alreadyBuildWall == emptySpace
-                    || alreadyBuildWall == horizontalSmoothWall
-                    || alreadyBuildWall == leftUpAngle
-                    || alreadyBuildWall == rightUpAngle
-                    || alreadyBuildWall == horizontalDownLedgeWall) {
-                    yield horizontalSmoothWall;
-                } else if (alreadyBuildWall == verticalSmoothWall
-                    || alreadyBuildWall == horizontalUpLedgeWall
-                    || alreadyBuildWall == verticalLeftLedgeWall
-                    || alreadyBuildWall == verticalRightLedgeWall
-                    || alreadyBuildWall == leftDownAngle
-                    || alreadyBuildWall == rightDownAngle) {
-                    yield horizontalUpLedgeWall;
-                } else {
-                    throw new RuntimeException("Not expected case while wall merging");
+    private static void smoothCorners(char[][] plan) {
+        for (int rowIndex = 0; rowIndex < plan.length; rowIndex++) {
+            for (int colIndex = 0; colIndex < plan[rowIndex].length; colIndex++) {
+                if (plan[rowIndex][colIndex] != emptySpace) {
+                    polishWall(plan, rowIndex, colIndex);
                 }
             }
-            case DOWN -> {
-                if (alreadyBuildWall == emptySpace
-                    || alreadyBuildWall == horizontalSmoothWall
-                    || alreadyBuildWall == leftDownAngle
-                    || alreadyBuildWall == rightDownAngle
-                    || alreadyBuildWall == horizontalUpLedgeWall) {
-                    yield horizontalSmoothWall;
-                } else if (alreadyBuildWall == verticalSmoothWall
-                    || alreadyBuildWall == horizontalDownLedgeWall
-                    || alreadyBuildWall == verticalLeftLedgeWall
-                    || alreadyBuildWall == verticalRightLedgeWall
-                    || alreadyBuildWall == leftUpAngle
-                    || alreadyBuildWall == rightUpAngle) {
-                    yield horizontalDownLedgeWall;
-                } else {
-                    throw new RuntimeException("Not expected case while wall merging");
-                }
-            }
-            case LEFT -> {
-                if (alreadyBuildWall == emptySpace
-                    || alreadyBuildWall == verticalSmoothWall
-                    || alreadyBuildWall == leftUpAngle
-                    || alreadyBuildWall == leftDownAngle
-                    || alreadyBuildWall == verticalRightLedgeWall) {
-                    yield verticalSmoothWall;
-                } else if (alreadyBuildWall == rightUpAngle
-                    || alreadyBuildWall == rightDownAngle
-                    || alreadyBuildWall == horizontalSmoothWall
-                    || alreadyBuildWall == verticalLeftLedgeWall
-                    || alreadyBuildWall == horizontalUpLedgeWall
-                    || alreadyBuildWall == horizontalDownLedgeWall) {
-                    yield verticalLeftLedgeWall;
-                } else {
-                    throw new RuntimeException("Not expected case while wall merging");
-                }
-            }
-            case RIGHT -> {
-                if (alreadyBuildWall == emptySpace
-                    || alreadyBuildWall == verticalSmoothWall
-                    || alreadyBuildWall == rightUpAngle
-                    || alreadyBuildWall == rightDownAngle
-                    || alreadyBuildWall == verticalLeftLedgeWall) {
-                    yield verticalSmoothWall;
-                } else if (alreadyBuildWall == leftUpAngle
-                    || alreadyBuildWall == leftDownAngle
-                    || alreadyBuildWall == horizontalSmoothWall
-                    || alreadyBuildWall == verticalRightLedgeWall
-                    || alreadyBuildWall == horizontalUpLedgeWall
-                    || alreadyBuildWall == horizontalDownLedgeWall) {
-                    yield verticalRightLedgeWall;
-                } else {
-                    throw new RuntimeException("Not expected case while wall merging");
-                }
-            }
+        }
+    }
+
+    private static void polishWall(char[][] plan, int rowIndex, int colIndex) {
+        if (rowIndex + 1 < plan.length && plan[rowIndex + 1][colIndex] == emptySpace) {
+            polishBottom(plan, rowIndex, colIndex);
+        }
+
+        if (0 < rowIndex - 1 && plan[rowIndex - 1][colIndex] == emptySpace) {
+            polishTop(plan, rowIndex, colIndex);
+        }
+
+        if (0 < colIndex - 1 && plan[rowIndex][colIndex - 1] == emptySpace) {
+            polishLeft(plan, rowIndex, colIndex);
+        }
+
+        if (colIndex + 1 < plan[rowIndex].length && plan[rowIndex][colIndex + 1] == emptySpace) {
+            polishRight(plan, rowIndex, colIndex);
+        }
+    }
+
+    private static void polishBottom(char[][] plan, int rowIndex, int colIndex) {
+        char curValue = plan[rowIndex][colIndex];
+        plan[rowIndex][colIndex] = switch (curValue) {
+            case leftUpAngle, rightUpAngle, leftDownAngle, rightDownAngle, verticalSmoothWall, horizontalSmoothWall, horizontalUpLedgeWall -> curValue;
+            case verticalLeftLedgeWall -> rightDownAngle;
+            case verticalRightLedgeWall -> leftDownAngle;
+            case horizontalDownLedgeWall -> horizontalSmoothWall;
+            case crossWall -> horizontalUpLedgeWall;
+            default -> throw new RuntimeException("Not expected case while shaping: " + curValue);
+        };
+    }
+    private static void polishTop(char[][] plan, int rowIndex, int colIndex) {
+        char curValue = plan[rowIndex][colIndex];
+        plan[rowIndex][colIndex] = switch (curValue) {
+            case leftUpAngle, rightUpAngle, leftDownAngle, rightDownAngle, verticalSmoothWall, horizontalSmoothWall, horizontalDownLedgeWall -> curValue;
+            case verticalLeftLedgeWall -> rightUpAngle;
+            case verticalRightLedgeWall -> leftDownAngle;
+            case horizontalUpLedgeWall -> horizontalSmoothWall;
+            case crossWall -> horizontalDownLedgeWall;
+            default -> throw new RuntimeException("Not expected case while shaping: " + curValue);
+        };
+    }
+    private static void polishLeft(char[][] plan, int rowIndex, int colIndex) {
+        char curValue = plan[rowIndex][colIndex];
+        plan[rowIndex][colIndex] = switch (curValue) {
+            case leftUpAngle, rightUpAngle, leftDownAngle, rightDownAngle, horizontalSmoothWall -> curValue;
+            case verticalSmoothWall, verticalLeftLedgeWall -> verticalSmoothWall;
+            case verticalRightLedgeWall -> verticalRightLedgeWall;
+            case horizontalUpLedgeWall -> leftDownAngle;
+            case horizontalDownLedgeWall -> leftUpAngle;
+            case crossWall -> verticalRightLedgeWall;
+            default -> throw new RuntimeException("Not expected case while shaping: " + curValue);
+        };
+    }
+    private static void polishRight(char[][] plan, int rowIndex, int colIndex) {
+        char curValue = plan[rowIndex][colIndex];
+        plan[rowIndex][colIndex] = switch (curValue) {
+            case leftUpAngle, rightUpAngle, leftDownAngle, rightDownAngle, horizontalSmoothWall -> curValue;
+            case verticalSmoothWall, verticalRightLedgeWall -> verticalSmoothWall;
+            case verticalLeftLedgeWall -> verticalLeftLedgeWall;
+            case horizontalUpLedgeWall -> rightDownAngle;
+            case horizontalDownLedgeWall -> rightUpAngle;
+            case crossWall -> verticalLeftLedgeWall;
+            default -> throw new RuntimeException("Not expected case while shaping: " + curValue);
         };
     }
 
-    private static char mergeWalls(char alreadyBuildWall, char toBuildWall) {
-        return switch (toBuildWall) {
-            case leftDownAngle -> mergeLeftDownAngleWith(alreadyBuildWall);
-            case leftUpAngle -> mergeLeftUpAngleWith(alreadyBuildWall);
-            case rightUpAngle -> mergeRightUpAngleWith(alreadyBuildWall);
-            case rightDownAngle -> mergeRightDownAngleWith(alreadyBuildWall);
-            case emptySpace -> alreadyBuildWall;
-            default -> throw new RuntimeException("Not expected case while wall merging");
-        };
-    }
+//    private static char mergeWalls(char alreadyBuildWall,
+//        Direction newWallDirection /*relative to the center of the cell*/) {
+//        return switch (newWallDirection) {
+//            case UP -> {
+//                if (alreadyBuildWall == emptySpace
+//                    || alreadyBuildWall == horizontalSmoothWall
+//                    || alreadyBuildWall == leftUpAngle
+//                    || alreadyBuildWall == rightUpAngle
+//                    || alreadyBuildWall == horizontalDownLedgeWall) {
+//                    yield horizontalSmoothWall;
+//                } else if (alreadyBuildWall == verticalSmoothWall
+//                    || alreadyBuildWall == horizontalUpLedgeWall
+//                    || alreadyBuildWall == verticalLeftLedgeWall
+//                    || alreadyBuildWall == verticalRightLedgeWall
+//                    || alreadyBuildWall == leftDownAngle
+//                    || alreadyBuildWall == rightDownAngle) {
+//                    yield horizontalUpLedgeWall;
+//                } else {
+//                    throw new RuntimeException("Not expected case while wall merging");
+//                }
+//            }
+//            case DOWN -> {
+//                if (alreadyBuildWall == emptySpace
+//                    || alreadyBuildWall == horizontalSmoothWall
+//                    || alreadyBuildWall == leftDownAngle
+//                    || alreadyBuildWall == rightDownAngle
+//                    || alreadyBuildWall == horizontalUpLedgeWall) {
+//                    yield horizontalSmoothWall;
+//                } else if (alreadyBuildWall == verticalSmoothWall
+//                    || alreadyBuildWall == horizontalDownLedgeWall
+//                    || alreadyBuildWall == verticalLeftLedgeWall
+//                    || alreadyBuildWall == verticalRightLedgeWall
+//                    || alreadyBuildWall == leftUpAngle
+//                    || alreadyBuildWall == rightUpAngle) {
+//                    yield horizontalDownLedgeWall;
+//                } else {
+//                    throw new RuntimeException("Not expected case while wall merging");
+//                }
+//            }
+//            case LEFT -> {
+//                if (alreadyBuildWall == emptySpace
+//                    || alreadyBuildWall == verticalSmoothWall
+//                    || alreadyBuildWall == leftUpAngle
+//                    || alreadyBuildWall == leftDownAngle
+//                    || alreadyBuildWall == verticalRightLedgeWall) {
+//                    yield verticalSmoothWall;
+//                } else if (alreadyBuildWall == rightUpAngle
+//                    || alreadyBuildWall == rightDownAngle
+//                    || alreadyBuildWall == horizontalSmoothWall
+//                    || alreadyBuildWall == verticalLeftLedgeWall
+//                    || alreadyBuildWall == horizontalUpLedgeWall
+//                    || alreadyBuildWall == horizontalDownLedgeWall) {
+//                    yield verticalLeftLedgeWall;
+//                } else {
+//                    throw new RuntimeException("Not expected case while wall merging");
+//                }
+//            }
+//            case RIGHT -> {
+//                if (alreadyBuildWall == emptySpace
+//                    || alreadyBuildWall == verticalSmoothWall
+//                    || alreadyBuildWall == rightUpAngle
+//                    || alreadyBuildWall == rightDownAngle
+//                    || alreadyBuildWall == verticalLeftLedgeWall) {
+//                    yield verticalSmoothWall;
+//                } else if (alreadyBuildWall == leftUpAngle
+//                    || alreadyBuildWall == leftDownAngle
+//                    || alreadyBuildWall == horizontalSmoothWall
+//                    || alreadyBuildWall == verticalRightLedgeWall
+//                    || alreadyBuildWall == horizontalUpLedgeWall
+//                    || alreadyBuildWall == horizontalDownLedgeWall) {
+//                    yield verticalRightLedgeWall;
+//                } else {
+//                    throw new RuntimeException("Not expected case while wall merging");
+//                }
+//            }
+//        };
+//    }
 
-    private static char mergeLeftDownAngleWith(char toMerge) {
-        return switch (toMerge) {
-            case emptySpace, leftDownAngle -> leftDownAngle;
-            case leftUpAngle, rightUpAngle, verticalLeftLedgeWall, horizontalDownLedgeWall, crossWall -> crossWall;
-            case rightDownAngle, horizontalSmoothWall, horizontalUpLedgeWall -> horizontalUpLedgeWall;
-            case verticalSmoothWall, verticalRightLedgeWall -> verticalRightLedgeWall;
-            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
-        };
-    }
+//    private static char mergeWalls(char alreadyBuildWall, char toBuildWall) {
+//        return switch (toBuildWall) {
+//            case leftDownAngle -> mergeLeftDownAngleWith(alreadyBuildWall);
+//            case leftUpAngle -> mergeLeftUpAngleWith(alreadyBuildWall);
+//            case rightUpAngle -> mergeRightUpAngleWith(alreadyBuildWall);
+//            case rightDownAngle -> mergeRightDownAngleWith(alreadyBuildWall);
+//            case emptySpace -> alreadyBuildWall;
+//            default -> throw new RuntimeException("Not expected case while wall merging");
+//        };
+//    }
 
-    private static char mergeLeftUpAngleWith(char toMerge) {
-        return switch (toMerge) {
-            case emptySpace, leftUpAngle -> leftUpAngle;
-            case rightUpAngle, horizontalSmoothWall, horizontalDownLedgeWall -> horizontalDownLedgeWall;
-            case leftDownAngle, verticalSmoothWall, verticalRightLedgeWall -> verticalRightLedgeWall;
-            case rightDownAngle, verticalLeftLedgeWall, horizontalUpLedgeWall, crossWall -> crossWall;
-            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
-        };
-    }
+//    private static char mergeLeftDownAngleWith(char toMerge) {
+//        return switch (toMerge) {
+//            case emptySpace, leftDownAngle -> leftDownAngle;
+//            case leftUpAngle, rightUpAngle, verticalLeftLedgeWall, horizontalDownLedgeWall, crossWall -> crossWall;
+//            case rightDownAngle, horizontalSmoothWall, horizontalUpLedgeWall -> horizontalUpLedgeWall;
+//            case verticalSmoothWall, verticalRightLedgeWall -> verticalRightLedgeWall;
+//            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
+//        };
+//    }
+//
+//    private static char mergeLeftUpAngleWith(char toMerge) {
+//        return switch (toMerge) {
+//            case emptySpace, leftUpAngle -> leftUpAngle;
+//            case rightUpAngle, horizontalSmoothWall, horizontalDownLedgeWall -> horizontalDownLedgeWall;
+//            case leftDownAngle, verticalSmoothWall, verticalRightLedgeWall -> verticalRightLedgeWall;
+//            case rightDownAngle, verticalLeftLedgeWall, horizontalUpLedgeWall, crossWall -> crossWall;
+//            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
+//        };
+//    }
+//
+//    private static char mergeRightUpAngleWith(char toMerge) {
+//        return switch (toMerge) {
+//            case emptySpace, rightUpAngle -> rightUpAngle;
+//            case leftUpAngle, horizontalSmoothWall, horizontalDownLedgeWall -> horizontalDownLedgeWall;
+//            case leftDownAngle, verticalRightLedgeWall, horizontalUpLedgeWall, crossWall -> crossWall;
+//            case rightDownAngle, verticalSmoothWall, verticalLeftLedgeWall -> verticalLeftLedgeWall;
+//            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
+//        };
+//    }
+//
+//    private static char mergeRightDownAngleWith(char toMerge) {
+//        return switch (toMerge) {
+//            case emptySpace, rightDownAngle -> rightDownAngle;
+//            case leftUpAngle, verticalRightLedgeWall, horizontalDownLedgeWall, crossWall -> crossWall;
+//            case rightUpAngle, verticalSmoothWall, verticalLeftLedgeWall -> verticalLeftLedgeWall;
+//            case leftDownAngle, horizontalSmoothWall, horizontalUpLedgeWall -> horizontalUpLedgeWall;
+//            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
+//        };
+//    }
 
-    private static char mergeRightUpAngleWith(char toMerge) {
-        return switch (toMerge) {
-            case emptySpace, rightUpAngle -> rightUpAngle;
-            case leftUpAngle, horizontalSmoothWall, horizontalDownLedgeWall -> horizontalDownLedgeWall;
-            case leftDownAngle, verticalRightLedgeWall, horizontalUpLedgeWall, crossWall -> crossWall;
-            case rightDownAngle, verticalSmoothWall, verticalLeftLedgeWall -> verticalLeftLedgeWall;
-            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
-        };
-    }
-
-    private static char mergeRightDownAngleWith(char toMerge) {
-        return switch (toMerge) {
-            case emptySpace, rightDownAngle -> rightDownAngle;
-            case leftUpAngle, verticalRightLedgeWall, horizontalDownLedgeWall, crossWall -> crossWall;
-            case rightUpAngle, verticalSmoothWall, verticalLeftLedgeWall -> verticalLeftLedgeWall;
-            case leftDownAngle, horizontalSmoothWall, horizontalUpLedgeWall -> horizontalUpLedgeWall;
-            default -> throw new RuntimeException("Not expected case while wall merging with toMerge:" + toMerge);
-        };
-    }
-
-    private static void mergeAllAnglesWithNeighbourWalls(char[][] plan, Coordinate centre) {
-        final char leftValue = plan[centre.row()][centre.col() - 1];
-        final char topValue = plan[centre.row() - 1][centre.col()];
-        final char rightValue = plan[centre.row()][centre.col() + 1];
-        final char bottomValue = plan[centre.row() + 1][centre.col()];
-
-        char leftDownAngleValueForMerging =
-            (bottomValue != emptySpace && leftValue != emptySpace) ? leftDownAngle : emptySpace;
-        char leftUpAngleValueForMerging =
-            (leftValue != emptySpace && topValue != emptySpace) ? leftUpAngle : emptySpace;
-        char rightUpAngleValueForMerging =
-            (topValue != emptySpace && rightValue != emptySpace) ? rightUpAngle : emptySpace;
-        char rightDownAngleValueForMerging =
-            (rightValue != emptySpace && bottomValue != emptySpace) ? rightDownAngle : emptySpace;
-
-        plan[centre.row() + 1][centre.col() - 1] = mergeWalls(
-            plan[centre.row() + 1][centre.col() - 1],
-            leftDownAngleValueForMerging);
-        plan[centre.row() - 1][centre.col() - 1] = mergeWalls(
-            plan[centre.row() - 1][centre.col() - 1],
-            leftUpAngleValueForMerging);
-        plan[centre.row() - 1][centre.col() + 1] = mergeWalls(
-            plan[centre.row() - 1][centre.col() + 1],
-            rightUpAngleValueForMerging);
-        plan[centre.row() + 1][centre.col() + 1] = mergeWalls(
-            plan[centre.row() + 1][centre.col() + 1],
-            rightDownAngleValueForMerging);
-    }
+//    private static void mergeAllAnglesWithNeighbourWalls(char[][] plan, Coordinate centre) {
+//        final char leftValue = plan[centre.row()][centre.col() - 1];
+//        final char topValue = plan[centre.row() - 1][centre.col()];
+//        final char rightValue = plan[centre.row()][centre.col() + 1];
+//        final char bottomValue = plan[centre.row() + 1][centre.col()];
+//
+//        char leftDownAngleValueForMerging =
+//            (bottomValue != emptySpace && leftValue != emptySpace) ? leftDownAngle : emptySpace;
+//        char leftUpAngleValueForMerging =
+//            (leftValue != emptySpace && topValue != emptySpace) ? leftUpAngle : emptySpace;
+//        char rightUpAngleValueForMerging =
+//            (topValue != emptySpace && rightValue != emptySpace) ? rightUpAngle : emptySpace;
+//        char rightDownAngleValueForMerging =
+//            (rightValue != emptySpace && bottomValue != emptySpace) ? rightDownAngle : emptySpace;
+//
+//        plan[centre.row() + 1][centre.col() - 1] = mergeWalls(
+//            plan[centre.row() + 1][centre.col() - 1],
+//            leftDownAngleValueForMerging);
+//        plan[centre.row() - 1][centre.col() - 1] = mergeWalls(
+//            plan[centre.row() - 1][centre.col() - 1],
+//            leftUpAngleValueForMerging);
+//        plan[centre.row() - 1][centre.col() + 1] = mergeWalls(
+//            plan[centre.row() - 1][centre.col() + 1],
+//            rightUpAngleValueForMerging);
+//        plan[centre.row() + 1][centre.col() + 1] = mergeWalls(
+//            plan[centre.row() + 1][centre.col() + 1],
+//            rightDownAngleValueForMerging);
+//    }
 
 //    private final static char emptySpace = '\u0020';
     private final static char emptySpace = ' ';
