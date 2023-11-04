@@ -20,8 +20,11 @@ public class PrettyPrinter {
         //  2) print path;
 
         final var walls = getWalls(maze);
+        print(walls);
+    }
 
-        for (var row: walls) {
+    private static void print(char[][] maze) {
+        for (var row: maze) {
             System.out.println(row);
         }
     }
