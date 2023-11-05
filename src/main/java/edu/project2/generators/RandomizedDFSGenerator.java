@@ -70,6 +70,16 @@ public class RandomizedDFSGenerator implements Generator {
             }
         }
 
+        setAllCellsNotVisited(maze);
+
         return maze;
+    }
+
+    private static void setAllCellsNotVisited(Maze toSetMaze) {
+        for (int i = 0; i < toSetMaze.getHeight(); i++) {
+            for (int j = 0; j < toSetMaze.getRowShallowCopy(i).length; j++) {
+                toSetMaze.getCell(i, j).forget();
+            }
+        }
     }
 }
