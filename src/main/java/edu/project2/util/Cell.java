@@ -16,7 +16,7 @@ public class Cell {
         return isVisited;
     }
 
-    public boolean checkWall(Direction direction) {
+    public boolean checkWallExistence(Direction direction) {
         assert direction.getIndex() < wallInformation.length;
         return wallInformation[direction.getIndex()];
     }
