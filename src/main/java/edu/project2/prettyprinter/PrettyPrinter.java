@@ -56,15 +56,12 @@ public class PrettyPrinter {
     }
 
     private static void print(char[][] maze) {
-        // TODO: отличать метки пути и выводить их с другим цветом
         for (var row: maze) {
             for (char rowValue: row) {
                 if (rowValue == amogusPathMarker) {
                     System.out.print(ANSI_RED + rowValue + ANSI_RED);
-//                    System.out.print(rowValue);
                 } else {
                     System.out.print(ANSI_BLACK + rowValue + ANSI_BLACK);
-//                    System.out.print(rowValue);
                 }
             }
             System.out.println();
@@ -263,8 +260,8 @@ public class PrettyPrinter {
     }
 
     private final static char emptySpace = '\u0020';
-    private final static char amogusPathMarker = '*';
-//    private final static char amogusPathMarker = '\u0D9E';
+//    private final static char amogusPathMarker = '*';
+    private final static char amogusPathMarker = '\u0D9E';
 
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_BLACK = "\u001B[30m";
