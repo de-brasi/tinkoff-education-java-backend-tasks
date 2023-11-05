@@ -28,6 +28,7 @@ public class SolverDFS implements Solver {
             curCoordinate = solution.removeLast();
             curCell = maze.getCell(curCoordinate);
 
+
             for (var direction : this.directions) {
                 nextStepCoordinate = curCoordinate.coordinateFromDirection(direction);
 
@@ -41,6 +42,7 @@ public class SolverDFS implements Solver {
                 nextCell.visit();
                 solution.addLast(curCoordinate);
                 solution.addLast(nextStepCoordinate);
+                break;
             }
         }
 
