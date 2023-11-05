@@ -242,7 +242,8 @@ public class PrettyPrinter {
     }
 
     private final static char emptySpace = '\u0020';
-    private final static char amogusPathMarker = '\u0D9E';
+    private final static char amogusPathMarker = '*';
+//    private final static char amogusPathMarker = '\u0D9E';
 
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_BLACK = "\u001B[30m";
