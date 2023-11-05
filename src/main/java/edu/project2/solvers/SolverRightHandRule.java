@@ -33,6 +33,11 @@ public class SolverRightHandRule implements Solver {
 
         while (!curCell.equals(finishCell)) {
             curCellCoordinate = curCellCoordinate.coordinateFromDirection(prevDirection);
+
+            if (!coordinateIsValid(curCellCoordinate, maze)) {
+                throw new RuntimeException("Unexpected state after direction choosing!");
+            }
+
             curCell = maze.getCell(curCellCoordinate);
 
             result.add(curCellCoordinate);
@@ -110,4 +115,9 @@ public class SolverRightHandRule implements Solver {
     private static final Direction[] DIRECTIONS = new Direction[] {
         Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT
     };
+
+    private static boolean coordinateIsValid(Coordinate toCheck, Maze toCheckIn) {
+        return (0 <= toCheck.row() && toCheck.row() < toCheckIn.getHeight())
+            && (0 <= toCheck.col() && toCheck.col() < toCheckIn.getWidth());
+    }
 }
