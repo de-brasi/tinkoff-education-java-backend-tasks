@@ -5,6 +5,8 @@ import edu.project2.util.Coordinate;
 import edu.project2.util.Direction;
 import edu.project2.util.Maze;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PrettyPrinter {
     public PrettyPrinter() {}
@@ -55,15 +57,17 @@ public class PrettyPrinter {
     }
 
     private static void print(char[][] maze) {
+        StringBuilder builder;
         for (var row: maze) {
+            builder = new StringBuilder();
             for (char rowValue: row) {
                 if (rowValue == AMOGUS_PATH_MARKER) {
-                    System.out.print(ANSI_RED + rowValue + ANSI_RED);
+                    builder.append(ANSI_RED).append(rowValue).append(ANSI_RED);
                 } else {
-                    System.out.print(ANSI_BLACK + rowValue + ANSI_BLACK);
+                    builder.append(ANSI_BLACK).append(rowValue).append(ANSI_BLACK);
                 }
             }
-            System.out.println();
+            LOGGER.info(builder.toString());
         }
     }
 
@@ -293,4 +297,5 @@ public class PrettyPrinter {
     };
 
     private static final String NOT_EXPECTED_CASE_MESSAGE = "Not expected case while shaping: ";
+    private final static Logger LOGGER = LogManager.getLogger();
 }
