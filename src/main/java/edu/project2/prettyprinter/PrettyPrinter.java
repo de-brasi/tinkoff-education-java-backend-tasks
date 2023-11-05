@@ -14,10 +14,6 @@ public class PrettyPrinter {
         final var start = path.get(0);
         final var finish = path.get(path.size() - 1);
 
-        // TODO:
-        //  1) print maze;
-        //  2) print path;
-
         final var mazePlan = getWalls(maze);
         smoothCorners(mazePlan);
         markUpPath(mazePlan, path);
@@ -38,9 +34,6 @@ public class PrettyPrinter {
             realPlanCoordinate = getCoordinateInMazePlan(curMazePosition);
 
             if (i + 1 < path.size()) {
-                // TODO: чекать следующего кандидата,
-                //  смотреть по какому направлению он находится,
-                //  брать клетку этого направления, помечать ее
                 nextMazePosition = path.get(i + 1);
                 directionToNext = getDirectionTo(curMazePosition, nextMazePosition);
                 intermediateStepCoordinate = realPlanCoordinate.coordinateFromDirection(directionToNext);
@@ -187,7 +180,7 @@ public class PrettyPrinter {
         Coordinate wallCoordinate;
 
         for (final var direction: this.directions) {
-            if (!cell.checkWall(direction)) {
+            if (!cell.checkWallExistence(direction)) {
                 wallCoordinate = cellCoordinate.coordinateFromDirection(direction);
                 plan[wallCoordinate.row()][wallCoordinate.col()] = emptySpace;
             }
