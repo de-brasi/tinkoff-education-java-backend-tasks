@@ -25,13 +25,41 @@ public class PrettyPrinter {
     }
 
     private static void markUpPath(char[][] mazePlan, List<Coordinate> path) {
+        Coordinate curMazePosition;
+        Coordinate nextMazePosition;
+
+        Direction directionToNext;
+
         Coordinate realPlanCoordinate;
-        for (Coordinate curPosition : path) {
-            // TODO: промежуточные клетки тоже закрашивать
-            realPlanCoordinate = getCoordinateInMazePlan(curPosition);
+        Coordinate intermediateStepCoordinate;
+
+        for (int i = 0; i < path.size(); i++) {
+            curMazePosition = path.get(i);
+            realPlanCoordinate = getCoordinateInMazePlan(curMazePosition);
+
+            if (i + 1 < path.size()) {
+                // TODO: чекать следующего кандидата,
+                //  смотреть по какому направлению он находится,
+                //  брать клетку этого направления, помечать ее
+                nextMazePosition = path.get(i + 1);
+                directionToNext = getDirectionTo(curMazePosition, nextMazePosition);
+                intermediateStepCoordinate = realPlanCoordinate.coordinateFromDirection(directionToNext);
+
+                mazePlan[intermediateStepCoordinate.row()][intermediateStepCoordinate.col()] = amogusPathMarker;
+            }
+
             mazePlan[realPlanCoordinate.row()][realPlanCoordinate.col()] = amogusPathMarker;
         }
 
+    }
+
+    private static Direction getDirectionTo(Coordinate from, Coordinate to) {
+        for (Direction directionToCheck : directions) {
+            if (to.equals(from.coordinateFromDirection(directionToCheck))) {
+                return directionToCheck;
+            }
+        }
+        throw new IllegalArgumentException("Unexpected pair of coordinates! The must to be neighbours.");
     }
 
     private static void print(char[][] maze) {
@@ -264,7 +292,7 @@ public class PrettyPrinter {
 
     private final static char crossWall = '\u256C';
 
-    private final Direction[] directions = new Direction[] {
+    private static final Direction[] directions = new Direction[] {
         Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT
     };
 }
