@@ -15,6 +15,8 @@ public class SolverBFS implements Solver {
 
     @Override
     public ArrayList<Coordinate> solve(Maze maze, Coordinate start, Coordinate finish) {
+        maze.resetCells();
+
         final var distanceToCoordinatesMap = new HashMap<Integer, HashSet<Coordinate>>();
 
         final int maxDistance = maze.getHeight() * maze.getWidth();

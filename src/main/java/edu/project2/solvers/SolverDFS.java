@@ -13,6 +13,8 @@ public class SolverDFS implements Solver {
 
     @Override
     public ArrayList<Coordinate> solve(Maze maze, Coordinate start, Coordinate end) {
+        maze.resetCells();
+
         var solution = new ArrayDeque<Coordinate>();
 
         Coordinate curCoordinate;

@@ -12,6 +12,8 @@ public class SolverRightHandRule implements Solver {
 
     @Override
     public ArrayList<Coordinate> solve(Maze maze, Coordinate start, Coordinate finish) {
+        maze.resetCells();
+
         // For simply connected maze only!
         var result = new ArrayList<Coordinate>();
 
