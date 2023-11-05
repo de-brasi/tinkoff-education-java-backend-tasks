@@ -15,31 +15,32 @@ public class SolverDFS implements Solver {
     public ArrayList<Coordinate> solve(Maze maze, Coordinate start, Coordinate end) {
         var solution = new ArrayDeque<Coordinate>();
 
+        Coordinate curCoordinate;
+        Coordinate nextStepCoordinate;
+
+        Cell curCell;
+        Cell nextCell;
+
         maze.getCell(start).visit();
         solution.addLast(start);
 
-        Coordinate curCoordinate;
-        Cell curCell;
-
-        Coordinate nextStepCoordinate;
-
-
         while (!solution.isEmpty() && !solution.getLast().equals(end)) {
-            curCoordinate = solution.pollLast();
+            curCoordinate = solution.removeLast();
             curCell = maze.getCell(curCoordinate);
 
             for (var direction : this.directions) {
                 nextStepCoordinate = curCoordinate.coordinateFromDirection(direction);
 
-                if (curCell.checkWall(direction) || maze.getCell(nextStepCoordinate).checkIsVisited()) {
+                if (curCell.checkWallExistence(direction)
+                    || !coordinateIsValid(nextStepCoordinate, maze)
+                    || maze.getCell(nextStepCoordinate).checkIsVisited()) {
                     continue;
                 }
 
+                nextCell = maze.getCell(nextStepCoordinate);
+                nextCell.visit();
                 solution.addLast(curCoordinate);
-                if (coordinateIsValid(nextStepCoordinate, maze) && !maze.getCell(nextStepCoordinate).checkIsVisited()) {
-                    maze.getCell(nextStepCoordinate).visit();
-                    solution.addLast(nextStepCoordinate);
-                }
+                solution.addLast(nextStepCoordinate);
             }
         }
 
