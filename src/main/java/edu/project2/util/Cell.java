@@ -26,6 +26,14 @@ public class Cell {
         wallInformation[direction.getIndex()] = false;
     }
 
+    public void forget() {
+        isVisited = false;
+    }
+
+    public void markAsNotVisited() {
+        this.forget();
+    }
+
     private final boolean[] wallInformation;
     private boolean isVisited = false;
 }
