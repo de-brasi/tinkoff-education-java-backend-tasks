@@ -1,11 +1,11 @@
 package edu.project2.util;
 
+import java.util.Arrays;
+
 public class Cell {
     public Cell() {
         wallInformation = new boolean[4];
-        for (int i = 0; i < wallInformation.length; i++) {
-            wallInformation[i] = true;
-        }
+        Arrays.fill(wallInformation, true);
     }
 
     public void visit() {
