@@ -99,6 +99,14 @@ public final class Maze {
         return Arrays.copyOf(buffer, indexToRecord);
     }
 
+    public void resetCells() {
+        for (var row: grid) {
+            for (var item : row) {
+                item.markAsNotVisited();
+            }
+        }
+    }
+
     private final int height;
 
     private final int width;
