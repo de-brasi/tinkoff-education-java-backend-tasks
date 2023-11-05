@@ -19,7 +19,7 @@ public class Main {
         final var rhrSolver = new SolverRightHandRule();
         final var printer = new PrettyPrinter();
 
-        final var maze = randomGenerator.generate(20, 20);
+        final var maze = randomGenerator.generate(5, 5);
 
         final var start = new Coordinate(0, 0);
         final var end = new Coordinate(maze.getHeight() - 1, maze.getWidth() - 1);
