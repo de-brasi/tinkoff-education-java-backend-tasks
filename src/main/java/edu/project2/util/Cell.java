@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Cell {
     public Cell() {
-        wallInformation = new boolean[4];
+        wallInformation = new boolean[WALL_COUNT];
         Arrays.fill(wallInformation, true);
     }
 
@@ -36,4 +36,5 @@ public class Cell {
 
     private final boolean[] wallInformation;
     private boolean isVisited = false;
+    private static final int WALL_COUNT = 4;
 }

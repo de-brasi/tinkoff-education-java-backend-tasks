@@ -99,7 +99,7 @@ public class SolverRightHandRule implements Solver {
 
     private static Direction choseDirection(Maze maze, Coordinate position) {
         Cell curCell = maze.getCell(position);
-        for (Direction direction : directions) {
+        for (Direction direction : DIRECTIONS) {
             if (!curCell.checkWallExistence(direction)) {
                 return direction;
             }
@@ -107,7 +107,7 @@ public class SolverRightHandRule implements Solver {
         throw new RuntimeException("Unexpected case");
     }
 
-    private static final Direction[] directions = new Direction[] {
+    private static final Direction[] DIRECTIONS = new Direction[] {
         Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT
     };
 }

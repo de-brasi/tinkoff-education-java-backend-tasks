@@ -15,8 +15,8 @@ public class RandomizedDFSGenerator implements Generator {
     public Maze generate(int width, int height) {
         if (height < 0 || width < 0) {
             throw new IllegalArgumentException(
-                "Height and width must be more or equal zero. " +
-                    "Got height=" + height + " width=" + width
+                "Height and width must be more or equal zero. "
+                    + "Got height=" + height + " width=" + width
             );
         }
 

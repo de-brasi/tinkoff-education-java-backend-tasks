@@ -43,7 +43,7 @@ public class SolverBFS implements Solver {
             setToAddNew = distanceToCoordinatesMap.get(distanceFromStart);
 
             for (Coordinate prevDistanceCellCoordinate : setLookupFrom) {
-                for (Direction directionToNext: directions) {
+                for (Direction directionToNext: DIRECTIONS) {
                     suspectNextCellCoordinate = prevDistanceCellCoordinate.coordinateFromDirection(directionToNext);
 
                     if (coordinateIsValid(suspectNextCellCoordinate, maze)
@@ -77,7 +77,7 @@ public class SolverBFS implements Solver {
         Coordinate prevCoordinate = finish;
         solution.addFirst(finish);
 
-        for (int distance = distanceFromStart - 1; distance > 0 ; distance--) {
+        for (int distance = distanceFromStart - 1; distance > 0; distance--) {
             for (var prev : distanceToCoordinatesMap.get(distance)) {
                 if (isOneStepReachable(maze, prevCoordinate, prev)) {
                     solution.addFirst(prev);
@@ -98,7 +98,7 @@ public class SolverBFS implements Solver {
     private static boolean isOneStepReachable(Maze maze, Coordinate from, Coordinate to) {
         Cell toCell = maze.getCell(to);
 
-        for (var direction : directions) {
+        for (var direction : DIRECTIONS) {
             if (coordinateIsValid(from.coordinateFromDirection(direction), maze)
                 && maze.getCell(from.coordinateFromDirection(direction)).equals(toCell)) {
                 return true;
@@ -108,7 +108,7 @@ public class SolverBFS implements Solver {
         return false;
     }
 
-    private static final Direction[] directions = new Direction[] {
+    private static final Direction[] DIRECTIONS = new Direction[] {
         Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT
     };
 }

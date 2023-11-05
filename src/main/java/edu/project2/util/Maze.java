@@ -77,7 +77,7 @@ public final class Maze {
         assert 0 <= target.row() && target.row() < height;
         assert 0 <= target.col() && target.col() < width;
 
-        final var buffer = new Direction[4];
+        final var buffer = new Direction[DIRECTIONS_COUNT];
         int indexToRecord = 0;
 
         if (target.row() > 0 && !grid[target.row() - 1][target.col()].checkIsVisited()) {
@@ -112,4 +112,6 @@ public final class Maze {
     private final int width;
 
     private final Cell[][] grid;
+
+    private static final int DIRECTIONS_COUNT = 4;
 }

@@ -8,6 +8,10 @@ import edu.project2.solvers.SolverRightHandRule;
 import edu.project2.util.Coordinate;
 
 public class Main {
+    private Main() {
+        // not allowed
+    }
+
     public static void main(String[] args) {
         final var randomGenerator = new RandomizedDFSGenerator();
         final var dfsSolver = new SolverDFS();
@@ -21,18 +25,16 @@ public class Main {
         final var end = new Coordinate(maze.getHeight() - 1, maze.getWidth() - 1);
 
         var solution = dfsSolver.solve(maze, start, end);
-        printer.Print(maze, solution);
+        printer.print(maze, solution);
 
         maze.resetCells();
-        System.out.println();
 
         solution = bfsSolver.solve(maze, start, end);
-        printer.Print(maze, solution);
+        printer.print(maze, solution);
 
         maze.resetCells();
-        System.out.println();
 
         solution = rhrSolver.solve(maze, start, end);
-        printer.Print(maze, solution);
+        printer.print(maze, solution);
     }
 }
