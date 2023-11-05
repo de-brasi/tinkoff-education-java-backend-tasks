@@ -35,7 +35,8 @@ public class SolverRightHandRule implements Solver {
             curCellCoordinate = curCellCoordinate.coordinateFromDirection(prevDirection);
 
             if (!coordinateIsValid(curCellCoordinate, maze)) {
-                throw new RuntimeException("Unexpected state after direction choosing!");
+                throw new RuntimeException("Unexpected state after direction choosing! Chosen direction: "
+                    + prevDirection);
             }
 
             curCell = maze.getCell(curCellCoordinate);
@@ -74,7 +75,7 @@ public class SolverRightHandRule implements Solver {
         } else if (!curCell.checkWallExistence(Direction.DOWN)) {
             return Direction.DOWN;
         } else {
-            return Direction.LEFT;
+            return Direction.RIGHT;
         }
     }
 
