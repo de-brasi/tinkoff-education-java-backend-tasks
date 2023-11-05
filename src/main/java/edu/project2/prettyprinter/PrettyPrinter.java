@@ -11,22 +11,51 @@ public class PrettyPrinter {
     public PrettyPrinter() {}
 
     public void Print(Maze maze, List<Coordinate> path) {
-//        final var start = path.get(0);
-//        final var finish = path.get(path.size() - 1);
+        final var start = path.get(0);
+        final var finish = path.get(path.size() - 1);
 
         // TODO:
         //  1) print maze;
         //  2) print path;
 
-        final var walls = getWalls(maze);
-        smoothCorners(walls);
-        print(walls);
+        final var mazePlan = getWalls(maze);
+        smoothCorners(mazePlan);
+        markUpPath(mazePlan, path);
+        print(mazePlan);
+    }
+
+    private static void markUpPath(char[][] mazePlan, List<Coordinate> path) {
+        Coordinate realPlanCoordinate;
+        for (Coordinate curPosition : path) {
+            // TODO: промежуточные клетки тоже закрашивать
+            realPlanCoordinate = getCoordinateInMazePlan(curPosition);
+            mazePlan[realPlanCoordinate.row()][realPlanCoordinate.col()] = amogusPathMarker;
+        }
+
     }
 
     private static void print(char[][] maze) {
+        // TODO: отличать метки пути и выводить их с другим цветом
         for (var row: maze) {
-            System.out.println(row);
+            for (char rowValue: row) {
+                if (rowValue == amogusPathMarker) {
+                    System.out.print(ANSI_RED + rowValue + ANSI_RED);
+//                    System.out.print(rowValue);
+                } else {
+                    System.out.print(ANSI_BLACK + rowValue + ANSI_BLACK);
+//                    System.out.print(rowValue);
+                }
+            }
+            System.out.println();
         }
+    }
+
+    private static Coordinate getCoordinateInMazePlan(Coordinate coordinateInMaze) {
+        return getCoordinateInMazePlan(coordinateInMaze.row(), coordinateInMaze.col());
+    }
+
+    private static Coordinate getCoordinateInMazePlan(int rowInMaze, int colInMaze) {
+        return new Coordinate(2 * rowInMaze + 1, 2 * colInMaze + 1);
     }
 
     private char[][] getWalls(Maze maze) {
@@ -41,9 +70,6 @@ public class PrettyPrinter {
         Cell[] curRow;
         Cell curCell;
 
-        int curCellRowInMazePlane;
-        int curCellColInMazePlane;
-
         Coordinate curCellCoordinateInMazePlane;
 
         for (int mazeRowIndex = 0; mazeRowIndex < maze.getHeight(); mazeRowIndex++) {
@@ -52,10 +78,7 @@ public class PrettyPrinter {
             for (int mazeColIndex = 0; mazeColIndex < curRow.length; mazeColIndex++) {
                 curCell = curRow[mazeColIndex];
 
-                curCellColInMazePlane = 2 * mazeColIndex + 1;
-                curCellRowInMazePlane = 2 * mazeRowIndex + 1;
-
-                curCellCoordinateInMazePlane = new Coordinate(curCellRowInMazePlane, curCellColInMazePlane);
+                curCellCoordinateInMazePlane = getCoordinateInMazePlan(mazeRowIndex, mazeColIndex);
 
                 buildWallsNearCell(mazePlan, curCellCoordinateInMazePlane, curCell);
             }
@@ -219,6 +242,10 @@ public class PrettyPrinter {
     }
 
     private final static char emptySpace = '\u0020';
+    private final static char amogusPathMarker = '\u0D9E';
+
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_BLACK = "\u001B[30m";
 
     private final static char leftUpAngle = '\u2554';
     private final static char rightUpAngle = '\u2557';
