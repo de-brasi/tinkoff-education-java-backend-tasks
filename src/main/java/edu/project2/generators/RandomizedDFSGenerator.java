@@ -76,10 +76,6 @@ public class RandomizedDFSGenerator implements Generator {
     }
 
     private static void setAllCellsNotVisited(Maze toSetMaze) {
-        for (int i = 0; i < toSetMaze.getHeight(); i++) {
-            for (int j = 0; j < toSetMaze.getRowShallowCopy(i).length; j++) {
-                toSetMaze.getCell(i, j).forget();
-            }
-        }
+        toSetMaze.resetCells();
     }
 }
