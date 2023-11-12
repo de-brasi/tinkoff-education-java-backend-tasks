@@ -20,7 +20,7 @@ public class Task2Test {
                 LocalDate.of(1925, 3, 13),
                 LocalDate.of(1925, 11, 13)
             )
-            .collect(Collectors.toList());;
+            .collect(Collectors.toList());
 
         final List<LocalDate> actualResult = Task2.getAllFridaysThe13Th(year);
 

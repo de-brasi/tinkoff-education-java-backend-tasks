@@ -101,7 +101,7 @@ public class Task3Test {
     @DisplayName("Тест неожиданный формат: not today")
     public void test10() {
         final String dateToParse = "not today";
-        final Optional<LocalDate> expectedResult = Optional.<LocalDate>empty();
+        final Optional<LocalDate> expectedResult = Optional.empty();
         final Optional<LocalDate> actualResult = Task3.parseDate(dateToParse);
 
         assertThat(expectedResult).isEqualTo(actualResult);
@@ -111,7 +111,7 @@ public class Task3Test {
     @DisplayName("Тест неожиданный формат: sometext")
     public void test11() {
         final String dateToParse = "sometext";
-        final Optional<LocalDate> expectedResult = Optional.<LocalDate>empty();
+        final Optional<LocalDate> expectedResult = Optional.empty();
         final Optional<LocalDate> actualResult = Task3.parseDate(dateToParse);
 
         assertThat(expectedResult).isEqualTo(actualResult);
@@ -121,7 +121,7 @@ public class Task3Test {
     @DisplayName("Тест неожиданный формат: 2020 10 10")
     public void test12() {
         final String dateToParse = "2020 10 10";
-        final Optional<LocalDate> expectedResult = Optional.<LocalDate>empty();
+        final Optional<LocalDate> expectedResult = Optional.empty();
         final Optional<LocalDate> actualResult = Task3.parseDate(dateToParse);
 
         assertThat(expectedResult).isEqualTo(actualResult);
