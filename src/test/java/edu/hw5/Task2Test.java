@@ -1,9 +1,7 @@
 package edu.hw5;
 
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -65,6 +63,32 @@ public class Task2Test {
     public void test4() {
         final LocalDate startDate = LocalDate.of(1925, 1, 1);
         final LocalDate expectedResult = LocalDate.of(1925, 2, 13);
+
+        final LocalDate actualResult = Task2.getNearestFridaysThe13Th(startDate);
+
+        assertThat(actualResult.getDayOfMonth()).isEqualTo(13);
+        assertThat(actualResult.getDayOfWeek()).isEqualTo(DayOfWeek.FRIDAY);
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    @DisplayName("Тест: следующая пятница 13 для 13 февраля 1925 года")
+    public void test5() {
+        final LocalDate startDate = LocalDate.of(1925, 2, 13);
+        final LocalDate expectedResult = LocalDate.of(1925, 3, 13);
+
+        final LocalDate actualResult = Task2.getNearestFridaysThe13Th(startDate);
+
+        assertThat(actualResult.getDayOfMonth()).isEqualTo(13);
+        assertThat(actualResult.getDayOfWeek()).isEqualTo(DayOfWeek.FRIDAY);
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    @DisplayName("Тест: следующая пятница 13 для 13 марта 1925 года")
+    public void test6() {
+        final LocalDate startDate = LocalDate.of(1925, 3, 13);
+        final LocalDate expectedResult = LocalDate.of(1925, 11, 13);
 
         final LocalDate actualResult = Task2.getNearestFridaysThe13Th(startDate);
 

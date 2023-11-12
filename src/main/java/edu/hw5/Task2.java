@@ -1,23 +1,20 @@
 package edu.hw5;
 
 import java.time.DayOfWeek;
-import java.time.Month;
+import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 public class Task2 {
     private Task2() {
         // not allowed
     }
 
-    public static List<LocalDate> getAllFridaysThe13Th (int year) {
+    public static List<LocalDate> getAllFridaysThe13Th(int year) {
         ArrayList<LocalDate> result = new ArrayList<>();
 
         LocalDate curDate = getNearestFridaysThe13Th(LocalDate.of(year, 1, 1));
@@ -29,7 +26,8 @@ public class Task2 {
         return result;
     }
 
-    public static LocalDate getNearestFridaysThe13Th (LocalDate curDate) {
+    @SuppressWarnings("MagicNumber")
+    public static LocalDate getNearestFridaysThe13Th(LocalDate curDate) {
         TemporalAdjuster nextFriday15Th = date -> {
             Temporal res = date;
             int dayOfMonth = res.get(ChronoField.DAY_OF_MONTH);
