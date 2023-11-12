@@ -1,17 +1,15 @@
 package edu.hw5.task3util;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DateParserStartsWithYear extends DateParser{
+public class DateParserStartsWithYear extends DateParser {
     public DateParserStartsWithYear() {
         pattern = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d+)$");
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public Optional<LocalDate> parse(String date) {
         var matcher = pattern.matcher(date);

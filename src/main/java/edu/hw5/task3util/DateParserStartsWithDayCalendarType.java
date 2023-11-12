@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class DateParserStartsWithDayCalendarType extends DateParser{
+public class DateParserStartsWithDayCalendarType extends DateParser {
     public DateParserStartsWithDayCalendarType() {
         pattern = Pattern.compile("^(\\d+)/(\\d+)/(\\d+)$");
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public Optional<LocalDate> parse(String date) {
         var matcher = pattern.matcher(date);

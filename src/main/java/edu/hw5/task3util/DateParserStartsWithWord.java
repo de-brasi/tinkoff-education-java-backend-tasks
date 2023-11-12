@@ -3,7 +3,7 @@ package edu.hw5.task3util;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class DateParserStartsWithWord extends DateParser{
+public class DateParserStartsWithWord extends DateParser {
     @Override
     public Optional<LocalDate> parse(String date) {
         return switch (date) {
