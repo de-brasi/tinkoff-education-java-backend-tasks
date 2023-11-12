@@ -2,8 +2,6 @@ package edu.hw5;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
-import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task4Test {
