@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class TimeSequencesAnalyser {
-    private TimeSequencesAnalyser() {
+public class Task1 {
+    private Task1() {
         // not allowed
     }
 
@@ -19,9 +19,9 @@ public class TimeSequencesAnalyser {
             summaryDuration = summaryDuration.plus(getDurationFromString(curInterval));
         }
 
-        return !intervals.isEmpty() ?
-            summaryDuration.dividedBy(intervals.size()) :
-            summaryDuration;
+        return !intervals.isEmpty()
+            ? summaryDuration.dividedBy(intervals.size())
+            : summaryDuration;
     }
 
     private static Duration getDurationFromString(String source) {

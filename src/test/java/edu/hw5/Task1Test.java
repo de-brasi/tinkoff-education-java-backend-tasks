@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class TimeSequencesAnalyserTest {
+public class Task1Test {
     @Test
     @DisplayName("Тест из условия: 3ч 40м")
     public void test1() {
@@ -20,7 +20,7 @@ public class TimeSequencesAnalyserTest {
             .collect(Collectors.toList());
         final Duration expectedResult = Duration.ofHours(3).plusMinutes(40);
 
-        final Duration actualResult = TimeSequencesAnalyser.getAverageDuration(source);
+        final Duration actualResult = Task1.getAverageDuration(source);
 
         assertThat(expectedResult).isEqualTo(actualResult);
     }
@@ -31,7 +31,7 @@ public class TimeSequencesAnalyserTest {
         List<String> source = Stream.<String>empty().collect(Collectors.toList());
         final Duration expectedResult = Duration.ZERO;
 
-        final Duration actualResult = TimeSequencesAnalyser.getAverageDuration(source);
+        final Duration actualResult = Task1.getAverageDuration(source);
 
         assertThat(expectedResult).isEqualTo(actualResult);
     }
@@ -44,7 +44,7 @@ public class TimeSequencesAnalyserTest {
             .collect(Collectors.toList());
         final Duration expectedResult = Duration.ofHours(3).plusMinutes(30);
 
-        final Duration actualResult = TimeSequencesAnalyser.getAverageDuration(source);
+        final Duration actualResult = Task1.getAverageDuration(source);
 
         assertThat(expectedResult).isEqualTo(actualResult);
     }
@@ -76,7 +76,7 @@ public class TimeSequencesAnalyserTest {
             .collect(Collectors.toList());
         final Duration expectedResult = Duration.ofMinutes(2);
 
-        final Duration actualResult = TimeSequencesAnalyser.getAverageDuration(source);
+        final Duration actualResult = Task1.getAverageDuration(source);
 
         assertThat(expectedResult).isEqualTo(actualResult);
     }
