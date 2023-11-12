@@ -1,6 +1,13 @@
 package edu.hw5;
 
 import java.time.DayOfWeek;
+import java.time.Month;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -23,15 +30,26 @@ public class Task2 {
     }
 
     public static LocalDate getNearestFridaysThe13Th (LocalDate curDate) {
-        // todo: dummy solution; do something better
-        // todo задание:
-        //  После этого используя TemporalAdjuster, напишите функцию,
-        //  которая для заданной даты ищет следующую ближайшую пятницу 13.
-        LocalDate result = curDate.plusDays(1);
-        while (!(result.getDayOfMonth() == 13 && result.getDayOfWeek() == DayOfWeek.FRIDAY)) {
-            result = result.plusDays(1);
-        }
+        TemporalAdjuster nextFriday15Th = date -> {
+            Temporal res = date;
+            int dayOfMonth = res.get(ChronoField.DAY_OF_MONTH);
+            if (dayOfMonth > 13) {
+                res = res.minus(dayOfMonth - 13, ChronoUnit.DAYS);
+                res = res.plus(1, ChronoUnit.MONTHS);
+            } else if (dayOfMonth < 13) {
+                res = res.plus(13 - dayOfMonth, ChronoUnit.DAYS);
+            } else {
+                // day equal 13
+                res = res.plus(1, ChronoUnit.MONTHS);
+            }
 
-        return result;
+            while (res.get(ChronoField.DAY_OF_WEEK) != DayOfWeek.FRIDAY.getValue()) {
+                res = res.plus(1, ChronoUnit.MONTHS);
+            }
+
+            return res;
+        };
+
+        return curDate.with(nextFriday15Th);
     }
 }

@@ -1,5 +1,6 @@
 package edu.hw5;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class Task2Test {
                 LocalDate.of(2024, 9, 13),
                 LocalDate.of(2024, 12, 13)
             )
-            .collect(Collectors.toList());;
+            .collect(Collectors.toList());
 
         final List<LocalDate> actualResult = Task2.getAllFridaysThe13Th(year);
 
@@ -52,10 +53,23 @@ public class Task2Test {
             .of(
                 LocalDate.of(2042, 6, 13)
             )
-            .collect(Collectors.toList());;
+            .collect(Collectors.toList());
 
         final List<LocalDate> actualResult = Task2.getAllFridaysThe13Th(year);
 
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    @DisplayName("Тест: следующая пятница 13 для 1 января 1925 года")
+    public void test4() {
+        final LocalDate startDate = LocalDate.of(1925, 1, 1);
+        final LocalDate expectedResult = LocalDate.of(1925, 2, 13);
+
+        final LocalDate actualResult = Task2.getNearestFridaysThe13Th(startDate);
+
+        assertThat(actualResult.getDayOfMonth()).isEqualTo(13);
+        assertThat(actualResult.getDayOfWeek()).isEqualTo(DayOfWeek.FRIDAY);
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 }
