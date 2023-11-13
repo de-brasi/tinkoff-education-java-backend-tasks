@@ -194,7 +194,6 @@ public class Task8Tests {
 
     @Test
     @DisplayName("Subtask-3 Тест: валидная строка '000000'")
-    // TODO: кратно 3, а не равно 3!!!!
     public void testSubtask3ValidString3() {
         final String toValidate = "000000";
         assertThat(Task8.validateSubtask3(toValidate)).isTrue();
