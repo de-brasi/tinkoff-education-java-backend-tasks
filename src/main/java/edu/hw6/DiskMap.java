@@ -16,31 +16,31 @@ import java.util.UUID;
 
 public class DiskMap extends HashMap<String, String> {
     private final String separator = ":";
-    private final String FILENAME_PREFIX = "DiskMap_file_";
-    private final String FILE_EXTENSION = ".txt";
+    private final String filenamePrefix = "DiskMap_file_";
+    private final String fileExtension = ".txt";
     private final String fileName;
     private final File file;
 
     public DiskMap() {
-        fileName = FILENAME_PREFIX + String.valueOf(UUID.randomUUID()) + FILE_EXTENSION;
+        fileName = filenamePrefix + String.valueOf(UUID.randomUUID()) + fileExtension;
         file = new File(fileName);
     }
 
     public DiskMap(Map<String, String> map) {
         super(map);
-        fileName = FILENAME_PREFIX + String.valueOf(UUID.randomUUID()) + FILE_EXTENSION;
+        fileName = filenamePrefix + String.valueOf(UUID.randomUUID()) + fileExtension;
         file = new File(fileName);
     }
 
     public DiskMap(String pathToFile) {
-        fileName = FILENAME_PREFIX + String.valueOf(UUID.fromString(pathToFile)) + FILE_EXTENSION;
+        fileName = filenamePrefix + String.valueOf(UUID.fromString(pathToFile)) + fileExtension;
         file = new File(fileName);
         validateFile(file);
     }
 
     public DiskMap(Map<String, String> map, String pathToFile) {
         super(map);
-        fileName = FILENAME_PREFIX + String.valueOf(UUID.fromString(pathToFile)) + FILE_EXTENSION;
+        fileName = filenamePrefix + String.valueOf(UUID.fromString(pathToFile)) + fileExtension;
         file = new File(fileName);
         validateFile(file);
     }
