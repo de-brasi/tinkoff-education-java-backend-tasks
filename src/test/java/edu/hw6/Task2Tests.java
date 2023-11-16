@@ -180,8 +180,6 @@ public class Task2Tests {
         Path currentPath = Paths.get("").toAbsolutePath();
         Path parentDirPath = currentPath.getParent();
 
-        String exampleContent = "Какой-то текст для тестирования";
-
         try {
             // Do copy
             Task2.cloneFile(parentDirPath);
@@ -189,7 +187,6 @@ public class Task2Tests {
         } catch (IllegalArgumentException ignored) {}
     }
 
-    // TODO: проверять кейс когда передан путь к директории
     private static void createFileWithContentUtilFunction(Path pathToCreate, String content)
         throws IOException {
         File newFile = Files.createFile(pathToCreate).toFile();
