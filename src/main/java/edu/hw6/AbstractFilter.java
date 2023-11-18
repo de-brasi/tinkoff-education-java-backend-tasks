@@ -8,8 +8,6 @@ import java.nio.file.Path;
 
 @FunctionalInterface
 public interface AbstractFilter extends DirectoryStream.Filter<Path> {
-    // TODO: почему default?
-    //  А если мне надо чтобы этот метод был виден вне пакета?
     default AbstractFilter and(AbstractFilter otherFilter) {
         return new AbstractFilter() {
             @Override
