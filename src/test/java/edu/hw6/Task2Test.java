@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Task2Tests {
+public class Task2Test {
     @Test
     @DisplayName("Копирование файла, одна копия, проверка создания новой копии (не учитывая контент)")
     public void test1() {
