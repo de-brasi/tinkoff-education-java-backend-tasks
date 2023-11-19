@@ -1,7 +1,5 @@
 package edu.hw6;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.Adler32;
 import java.util.zip.CheckedOutputStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Task4 {
     private Task4() {
@@ -23,11 +23,16 @@ public class Task4 {
             throw new IllegalArgumentException("Unexpected type of file");
         }
 
-        try (OutputStream fileOutputStream = Files.newOutputStream(filePath);
-             CheckedOutputStream checkedOutputStream = new CheckedOutputStream(fileOutputStream, new Adler32());
-             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(checkedOutputStream);
-             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(bufferedOutputStream, StandardCharsets.UTF_8);
-             PrintWriter fileWriter = new PrintWriter(outputStreamWriter)) {
+        try (OutputStream fileOutputStream =
+                 Files.newOutputStream(filePath);
+             CheckedOutputStream checkedOutputStream =
+                 new CheckedOutputStream(fileOutputStream, new Adler32());
+             BufferedOutputStream bufferedOutputStream =
+                 new BufferedOutputStream(checkedOutputStream);
+             OutputStreamWriter outputStreamWriter =
+                 new OutputStreamWriter(bufferedOutputStream, StandardCharsets.UTF_8);
+             PrintWriter fileWriter =
+                 new PrintWriter(outputStreamWriter)) {
 
             fileWriter.println(text);
 
