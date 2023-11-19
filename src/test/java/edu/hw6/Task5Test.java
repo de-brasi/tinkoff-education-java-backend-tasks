@@ -27,6 +27,4 @@ public class Task5Test {
         final String gotName = HackerNews.news(id);
         assertThat(expectedName).isEqualTo(gotName);
     }
-
-    private final static Logger LOGGER = LogManager.getLogger();
 }
