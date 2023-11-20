@@ -42,7 +42,7 @@ public class Task2Test {
         final var dummyDuration = System.nanoTime() - begin;
 
         begin = System.nanoTime();
-        BigInteger parallelFactorial = Task2.getFactorial(factorialArgument);
+        Task2.getFactorial(factorialArgument);
         var parallelDuration = System.nanoTime() - begin;
 
         assertThat(parallelDuration).isLessThan(dummyDuration);
