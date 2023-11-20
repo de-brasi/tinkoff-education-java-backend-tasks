@@ -272,4 +272,74 @@ public class Task3Test {
             )
         );
     }
+
+    @Test
+    @DisplayName("Two threads concurrent call different method")
+    public void test6() throws InterruptedException {
+        var database = new Task3();
+        final int batchSize = 100;
+
+        final Person[] personsForWorkers = new Person[batchSize];
+
+        for (int i = 0; i < batchSize; i++) {
+            personsForWorkers[i] =
+                new Person(
+                    i,
+                    Integer.toString(i),
+                    Integer.toString(i),
+                    Integer.toString(i)
+                );
+        }
+
+        // Workers routine
+        Thread worker1 = new Thread(
+            () -> {
+                for (var person: personsForWorkers) { database.add(person); }
+            }
+        );
+        Thread worker2 = new Thread(
+            () -> {
+                for (var person: personsForWorkers) {
+                    database.findByPhone(person.phoneNumber());
+                    database.findByAddress(person.address());
+                    database.findByName(person.name());
+                }
+            }
+        );
+
+        worker1.start();
+        worker2.start();
+
+        worker1.join();
+        worker2.join();
+
+
+        // By address
+        assertThat(personsForWorkers).allMatch(
+            (
+                person -> {
+                    return database.findByAddress(person.address()) != null;
+                }
+            )
+        );
+
+        // By name
+        assertThat(personsForWorkers).allMatch(
+            (
+                person -> {
+                    return database.findByName(person.name()) != null;
+                }
+            )
+        );
+
+
+        // By phone
+        assertThat(personsForWorkers).allMatch(
+            (
+                person -> {
+                    return database.findByPhone(person.phoneNumber()) != null;
+                }
+            )
+        );
+    }
 }
