@@ -1,5 +1,6 @@
 package edu.hw7;
 
+import edu.hw7.util.Person;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
