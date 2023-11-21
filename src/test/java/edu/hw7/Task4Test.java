@@ -154,6 +154,34 @@ public class Task4Test {
         }
     }
 
+    @Test
+    @DisplayName("Average efficiency gain (from 1 to 8 threads; count of threads less or equal CPU core count)")
+    public void test6() {
+        var solver = new PiMonteCarloMultiThreadSolver();
+        final int iterationCount = 1_000_000_000;
+        final int maxThreadCount = 8;
+
+        long[] timings = new long[maxThreadCount];
+
+        for (int i = 1; i <= maxThreadCount; i++) {
+            var startTime = System.nanoTime();
+            solver.calculatePiValue(iterationCount, i);
+            var durationNanoSeconds = System.nanoTime() - startTime;
+            timings[i - 1] = durationNanoSeconds;
+        }
+
+        long commonTimingDifference = 0;
+        for (int i = 1; i < timings.length; i++) {
+            commonTimingDifference += (timings[i - 1] - timings[i]);
+        }
+
+        LOGGER.info(
+            "Average efficiency gain per thread=" +
+            commonTimingDifference / (timings.length - 1) / NANOSECONDS_PER_SECOND
+            + " seconds"
+        );
+    }
+
     private static float getRelativeBias(float experimentValue, float realValue) {
         return Math.abs(experimentValue - realValue) / realValue * 100;
     }
