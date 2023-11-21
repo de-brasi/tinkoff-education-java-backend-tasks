@@ -114,48 +114,36 @@ public class Task3Test {
         // By address
         assertThat(personsForWorker1).allMatch(
             (
-                person -> {
-                    return database.findByAddress(person.address()) != null;
-                }
+                person -> database.findByAddress(person.address()) != null
             )
         );
         assertThat(personsForWorker2).allMatch(
             (
-                person -> {
-                    return database.findByAddress(person.address()) != null;
-                }
+                person -> database.findByAddress(person.address()) != null
             )
         );
 
         // By name
         assertThat(personsForWorker1).allMatch(
             (
-                person -> {
-                    return database.findByName(person.name()) != null;
-                }
+                person -> database.findByName(person.name()) != null
             )
         );
         assertThat(personsForWorker2).allMatch(
             (
-                person -> {
-                    return database.findByName(person.name()) != null;
-                }
+                person -> database.findByName(person.name()) != null
             )
         );
 
         // By phone
         assertThat(personsForWorker1).allMatch(
             (
-                person -> {
-                    return database.findByPhone(person.phoneNumber()) != null;
-                }
+                person -> database.findByPhone(person.phoneNumber()) != null
             )
         );
         assertThat(personsForWorker2).allMatch(
             (
-                person -> {
-                    return database.findByPhone(person.phoneNumber()) != null;
-                }
+                person -> database.findByPhone(person.phoneNumber()) != null
             )
         );
     }
@@ -228,48 +216,36 @@ public class Task3Test {
         // By address
         assertThat(personsForWorker1).allMatch(
             (
-                person -> {
-                    return database.findByAddress(person.address()) == null;
-                }
+                person -> database.findByAddress(person.address()) == null
             )
         );
         assertThat(personsForWorker2).allMatch(
             (
-                person -> {
-                    return database.findByAddress(person.address()) == null;
-                }
+                person -> database.findByAddress(person.address()) == null
             )
         );
 
         // By name
         assertThat(personsForWorker1).allMatch(
             (
-                person -> {
-                    return database.findByName(person.name()) == null;
-                }
+                person -> database.findByName(person.name()) == null
             )
         );
         assertThat(personsForWorker2).allMatch(
             (
-                person -> {
-                    return database.findByName(person.name()) == null;
-                }
+                person -> database.findByName(person.name()) == null
             )
         );
 
         // By phone
         assertThat(personsForWorker1).allMatch(
             (
-                person -> {
-                    return database.findByPhone(person.phoneNumber()) == null;
-                }
+                person -> database.findByPhone(person.phoneNumber()) == null
             )
         );
         assertThat(personsForWorker2).allMatch(
             (
-                person -> {
-                    return database.findByPhone(person.phoneNumber()) == null;
-                }
+                person -> database.findByPhone(person.phoneNumber()) == null
             )
         );
     }
@@ -318,18 +294,14 @@ public class Task3Test {
         // By address
         assertThat(personsForWorkers).allMatch(
             (
-                person -> {
-                    return database.findByAddress(person.address()) != null;
-                }
+                person -> database.findByAddress(person.address()) != null
             )
         );
 
         // By name
         assertThat(personsForWorkers).allMatch(
             (
-                person -> {
-                    return database.findByName(person.name()) != null;
-                }
+                person -> database.findByName(person.name()) != null
             )
         );
 
@@ -337,9 +309,7 @@ public class Task3Test {
         // By phone
         assertThat(personsForWorkers).allMatch(
             (
-                person -> {
-                    return database.findByPhone(person.phoneNumber()) != null;
-                }
+                person -> database.findByPhone(person.phoneNumber()) != null
             )
         );
     }
