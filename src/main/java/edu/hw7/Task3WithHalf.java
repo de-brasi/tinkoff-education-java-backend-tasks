@@ -1,5 +1,7 @@
 package edu.hw7;
 
+import edu.hw7.util.Person;
+import edu.hw7.util.PersonDatabase;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,8 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import edu.hw7.util.Person;
-import edu.hw7.util.PersonDatabase;
 import org.jetbrains.annotations.Nullable;
 
 public class Task3WithHalf implements PersonDatabase {
