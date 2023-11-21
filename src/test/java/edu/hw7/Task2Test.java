@@ -9,22 +9,22 @@ public class Task2Test {
     @Test
     @DisplayName("0!")
     public void test1() {
-        assertThat(Task2.getFactorial(0)).isEqualTo(1);
+        assertThat(Task2.getFactorial(0)).isEqualTo(BigInteger.ONE);
     }
 
     @Test
     @DisplayName("1!")
     public void test2() {
-        assertThat(Task2.getFactorial(1)).isEqualTo(1);
+        assertThat(Task2.getFactorial(1)).isEqualTo(BigInteger.ONE);
     }
 
     @Test
     @DisplayName("10!")
     public void test3() {
         final int factorialArgument = 10;
-        int expectedRes = 1;
+        BigInteger expectedRes = BigInteger.ONE;
         for (int i = 1; i < factorialArgument + 1; i++) {
-            expectedRes *= i;
+            expectedRes = expectedRes.multiply(BigInteger.valueOf(i));
         }
         assertThat(Task2.getFactorial(factorialArgument)).isEqualTo(expectedRes);
     }
