@@ -1,5 +1,6 @@
-package edu.hw7;
+package edu.hw7.util;
 
+import edu.hw7.util.Person;
 import org.jetbrains.annotations.Nullable;
 
 public interface PersonDatabase {
