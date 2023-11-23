@@ -9,6 +9,7 @@ public class Game {
         attemptCounter = 8;
     }
 
+    @SuppressWarnings("MagicNumber")
     public Game(String word) {
         targetWordRepresentation = new WordRepresentation(word);
         attemptCounter = 8;
