@@ -35,13 +35,14 @@ public class Game {
 
         assert !guessedLetter.isEmpty();
 
-        char curLetter = guessedLetter.toLowerCase().toCharArray()[0];
         if (
-            guessedLetter.length() > 1
-            || targetWordRepresentation.letterGuessed(curLetter)
+            guessedLetter.length() != 1
+            || targetWordRepresentation.letterGuessed(guessedLetter.toLowerCase().toCharArray()[0])
         ) {
             return GameResponse.REQUEST_IGNORED;
         }
+
+        char curLetter = guessedLetter.toLowerCase().toCharArray()[0];
 
         if (targetWordRepresentation.containsLetter(curLetter)) {
             targetWordRepresentation.openLetter(curLetter);

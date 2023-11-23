@@ -17,21 +17,34 @@ public class CommandLineGameInterface {
         GameResponse response;
         Scanner scanner = new Scanner(System.in);
 
-        do {
-            showInviteInputMessage();
-            String playerAttempt = scanner.nextLine();
+        showInviteInputMessage();
+        String playerAttempt = scanner.nextLine();
+        response =
+            (playerAttempt.length() > 1)
+                ? game.guessEntireWord(playerAttempt)
+                : game.guessLetter(playerAttempt);
+        showResponseMessage(response);
+
+        while (!(response == GameResponse.LOSS || response == GameResponse.WIN)) {
+            showGameState();
+            playerAttempt = scanner.nextLine();
             response =
                 (playerAttempt.length() > 1)
                     ? game.guessEntireWord(playerAttempt)
                     : game.guessLetter(playerAttempt);
             showResponseMessage(response);
-        } while (!(response == GameResponse.LOSS || response == GameResponse.WIN));
+        }
 
     }
 
     @SuppressWarnings({"RegexpSinglelineJava", "MultipleStringLiterals"})
     protected void showInviteInputMessage() {
         System.out.println("Guess a letter or word with length " + game.getWordLength() + ":");
+    }
+
+    @SuppressWarnings({"RegexpSinglelineJava", "MultipleStringLiterals"})
+    protected void showGameState() {
+        showInviteInputMessage();
     }
 
     @SuppressWarnings({"RegexpSinglelineJava", "MultipleStringLiterals"})
@@ -61,5 +74,5 @@ public class CommandLineGameInterface {
         }
     }
 
-    private final Game game;
+    protected Game game;
 }

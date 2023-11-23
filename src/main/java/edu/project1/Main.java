@@ -7,5 +7,9 @@ public class Main {
         // CLI version test
         var gameInterface = new CommandLineGameInterface();
         gameInterface.startGame();
+
+        // ASCII Interface version test
+        gameInterface = new AsciiInterface();
+        gameInterface.startGame();
     }
 }
