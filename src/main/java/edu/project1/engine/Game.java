@@ -9,6 +9,11 @@ public class Game {
         attemptCounter = 8;
     }
 
+    public Game(String word) {
+        targetWordRepresentation = new WordRepresentation(word);
+        attemptCounter = 8;
+    }
+
     public Game(int attemptCount) {
         targetWordRepresentation = new WordRepresentation(
             TargetWordGetter.makeWord()
