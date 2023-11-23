@@ -93,7 +93,7 @@ public class GameEngineTest {
             game.guessLetter(absolutelyIncorrectLetters[wrongLetterIndex++]);
         }
 
-        assertThat(game.guessLetter(absolutelyIncorrectLetters[wrongLetterIndex++])).isEqualTo(GameResponse.LOSS);
+        assertThat(game.guessLetter(absolutelyIncorrectLetters[wrongLetterIndex])).isEqualTo(GameResponse.LOSS);
     }
 
     @Test
