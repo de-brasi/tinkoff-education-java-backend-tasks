@@ -119,23 +119,29 @@ public class GameEngineTest {
         GameResponse faultyAttempt;
 
         successAttempt = game.guessLetter("h");
+        assertThat(successAttempt).isEqualTo(GameResponse.SUCCESSFUL_ATTEMPT);
         assertThat(game.getAttemptCount()).isEqualTo(attemptsCount);
 
         successAttempt = game.guessLetter("h");
+        assertThat(successAttempt).isEqualTo(GameResponse.REQUEST_IGNORED);
         assertThat(game.getAttemptCount()).isEqualTo(attemptsCount);
 
         faultyAttempt = game.guessLetter("a");
+        assertThat(faultyAttempt).isEqualTo(GameResponse.FAILURE_ATTEMPT);
         --attemptsCount;
         assertThat(game.getAttemptCount()).isEqualTo(attemptsCount);
 
         faultyAttempt = game.guessLetter("a");
+        assertThat(faultyAttempt).isEqualTo(GameResponse.FAILURE_ATTEMPT);
         --attemptsCount;
         assertThat(game.getAttemptCount()).isEqualTo(attemptsCount);
 
         successAttempt = game.guessLetter("e");
+        assertThat(successAttempt).isEqualTo(GameResponse.SUCCESSFUL_ATTEMPT);
         assertThat(game.getAttemptCount()).isEqualTo(attemptsCount);
 
         faultyAttempt = game.guessLetter("b");
+        assertThat(faultyAttempt).isEqualTo(GameResponse.FAILURE_ATTEMPT);
         --attemptsCount;
         assertThat(game.getAttemptCount()).isEqualTo(attemptsCount);
     }
