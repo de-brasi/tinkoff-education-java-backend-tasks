@@ -44,6 +44,16 @@ public class WordRepresentation {
         }
     }
 
+    public boolean allLettersOpened() {
+        return alreadyGuessedLetters.size() == lettersIndexes.keySet().size();
+    }
+
+    public void openAllLetters() {
+        for (var letter: lettersIndexes.keySet()) {
+            openLetter(letter);
+        }
+    }
+
     public String getWordRepresentation() {
         return String.copyValueOf(wordRepresentation);
     }

@@ -45,7 +45,7 @@ public class Game {
 
         if (targetWordRepresentation.containsLetter(curLetter)) {
             targetWordRepresentation.openLetter(curLetter);
-            return GameResponse.SUCCESSFUL_ATTEMPT;
+            return (targetWordRepresentation.allLettersOpened()) ? GameResponse.WIN : GameResponse.SUCCESSFUL_ATTEMPT;
         } else {
             --attemptCounter;
             return (attemptCounter > 0) ? GameResponse.FAILURE_ATTEMPT : GameResponse.LOSS;
@@ -68,6 +68,7 @@ public class Game {
         }
 
         if (guessedWord.equalsIgnoreCase(targetWordRepresentation.getContent())) {
+            targetWordRepresentation.openAllLetters();
             attemptCounter = 0;
             return GameResponse.WIN;
         } else {
