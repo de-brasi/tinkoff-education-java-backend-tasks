@@ -76,7 +76,6 @@ public class Game {
         }
     }
 
-    // TODO: связать число с количеством отрисовываемых элементов на виселице
     private int attemptCounter;
     private final WordRepresentation targetWordRepresentation;
 }
