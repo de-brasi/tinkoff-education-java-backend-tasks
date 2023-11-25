@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -117,25 +116,6 @@ public class TaskTest {
     @Test
     @DisplayName("Задача 1: пустая коллекция")
     public void test4() {
-        Animal testDogBig = new Animal(
-            "BigDog",
-            Animal.Type.DOG, Animal.Sex.M,
-            10, 100, 100,
-            true
-        );
-        Animal testDogMedium = new Animal(
-            "MediumDog",
-            Animal.Type.DOG, Animal.Sex.M,
-            10, 50, 50,
-            true
-        );
-        Animal testDogSmall = new Animal(
-            "SmallDog",
-            Animal.Type.DOG, Animal.Sex.M,
-            10, 10, 10,
-            true
-        );
-
         final List<Animal> source = new ArrayList<>();
         final var sorted = Task.sortByHeightAscendingOrder(source);
         final var expectedOrder = List.of();
@@ -1288,7 +1268,7 @@ public class TaskTest {
 
         final var res = Task.getHeaviestFish(
             List.of(
-                dog1, dog2, dog3,
+                dog1, dog2, dog3, dog4,
                 spyder1, spyder2, spyder3, spyder4
             )
         );
