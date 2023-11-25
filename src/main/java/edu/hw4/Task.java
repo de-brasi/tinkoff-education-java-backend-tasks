@@ -2,16 +2,12 @@ package edu.hw4;
 
 import edu.hw4.task19.AnimalValidator;
 import edu.hw4.task19.ValidationError;
-import org.apache.logging.log4j.util.PropertySource;
 import java.util.AbstractMap;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,7 +46,7 @@ public class Task {
         // Task-4
         return source
             .stream()
-            .sorted((lhs, rhs) -> {return lhs.name().compareTo(rhs.name());})
+            .sorted(Comparator.comparing(Animal::name))
             .toList()
             .stream()
             .findFirst()
@@ -79,10 +75,10 @@ public class Task {
             .entrySet()
             .stream()
             .map(
-                e -> new AbstractMap.SimpleEntry<Animal.Type, Animal>(
+                e -> new AbstractMap.SimpleEntry<>(
                         e.getKey(),
                         e.getValue().stream().max(Comparator.comparingInt(Animal::weight)).orElse(null)
-                    )
+                )
             )
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
