@@ -18,6 +18,7 @@ public class NonSynchronizedCitationBase {
     }
 
     public String getCitation(String keyWord) {
+        keyWord = keyWord.toLowerCase();
         if (wordsReverseIndex.containsKey(keyWord)) {
             return citations.get(
                 wordsReverseIndex.get(keyWord).iterator().next()
@@ -43,6 +44,7 @@ public class NonSynchronizedCitationBase {
             erasePunctuationMarks(citations.get(i).split(" "))
                 .forEach(
                     (String word) -> {
+                        word = word.toLowerCase();
                         if (!wordsReverseIndex.containsKey(word)) {
                             wordsReverseIndex.put(word, new HashSet<>());
                         }
