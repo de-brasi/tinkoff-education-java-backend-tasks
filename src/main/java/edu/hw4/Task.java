@@ -118,6 +118,7 @@ public class Task {
             .collect(Collectors.toList());
     }
 
+    @SuppressWarnings("MagicNumber")
     public static List<Animal> getAnimalsThatCanBiteAndHeightMoreThen100(List<Animal> source) {
         // Task-11
         return source
@@ -177,8 +178,8 @@ public class Task {
             .stream()
             .filter(Animal::bites)
             .filter(animal -> animal.type() == Animal.Type.SPIDER)
-            .count() >
-            source
+            .count()
+            > source
                 .stream()
                 .filter(Animal::bites)
                 .filter(animal -> animal.type() == Animal.Type.DOG)

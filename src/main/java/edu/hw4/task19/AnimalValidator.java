@@ -9,7 +9,7 @@ public class AnimalValidator {
     private AnimalValidator() {}
 
     public static boolean validate(Animal target) {
-        for (ValidationFunc validationFunc: validators) {
+        for (ValidationFunc validationFunc: VALIDATORS) {
             if (validationFunc.validate(target).isPresent()) {
                 return false;
             }
@@ -20,7 +20,7 @@ public class AnimalValidator {
     public static Set<ValidationError> getErrors(Animal target) {
         var errors = new HashSet<ValidationError>();
 
-        for (ValidationFunc validationFunc: validators) {
+        for (ValidationFunc validationFunc: VALIDATORS) {
             var res = validationFunc.validate(target);
             res.ifPresent(errors::add);
         }
@@ -28,7 +28,8 @@ public class AnimalValidator {
         return errors;
     }
 
-    private static final Set<ValidationFunc> validators = Set.of(
+    @SuppressWarnings("MagicNumber")
+    private static final Set<ValidationFunc> VALIDATORS = Set.of(
         animal -> {
             return !animal.bites()
                 ? Optional.empty()
@@ -47,7 +48,7 @@ public class AnimalValidator {
     );
 
     @FunctionalInterface
-    private static interface ValidationFunc {
-        public abstract Optional<ValidationError> validate(Animal animal);
+    private interface ValidationFunc {
+        Optional<ValidationError> validate(Animal animal);
     }
 }
