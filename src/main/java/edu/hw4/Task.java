@@ -202,4 +202,21 @@ public class Task {
             .filter(animal -> !AnimalValidator.validate(animal))
             .collect(Collectors.toMap(Animal::name, AnimalValidator::getErrors));
     }
+
+    public static Map<String, String> getEntityWithErrorsString(List<Animal> source) {
+        // Task-20
+        return source
+            .stream()
+            .filter(animal -> !AnimalValidator.validate(animal))
+            .collect(
+                Collectors.toMap(
+                    Animal::name,
+                    animal -> AnimalValidator.getErrors(animal)
+                        .stream()
+                        .map(ValidationError::getName)
+                        .sorted()
+                        .collect(Collectors.joining(", "))
+                )
+            );
+    }
 }

@@ -1533,4 +1533,67 @@ public class TaskTest {
             )
         );
     }
+
+    // -- Task 20 --
+    @Test
+    @DisplayName("Задача 20: пустая коллекция")
+    public void test49() {
+        final var res = Task.getEntityWithErrorsString(new ArrayList<>());
+        assertThat(res).isEqualTo(new HashMap<>());
+    }
+
+    @Test
+    @DisplayName("Задача 20: не пустая коллекция")
+    public void test50() {
+        Animal normalAnimal = new Animal(
+            "Normal",
+            Animal.Type.FISH, Animal.Sex.M,
+            1, 1, 1,
+            false
+        );
+
+        Animal canBiteAnimal = new Animal(
+            "Can Bite",
+            Animal.Type.FISH, Animal.Sex.M,
+            1, 1, 1,
+            true
+        );
+
+        Animal bigWeightAnimal = new Animal(
+            "Big Weight",
+            Animal.Type.FISH, Animal.Sex.M,
+            1, 1, 51,
+            false
+        );
+
+        Animal toHighAnimal = new Animal(
+            "To High",
+            Animal.Type.FISH, Animal.Sex.M,
+            1, 1000, 1,
+            false
+        );
+
+        Animal toHighAndCanBiteAnimal = new Animal(
+            "To High And Can Bite",
+            Animal.Type.FISH, Animal.Sex.M,
+            1, 1000, 1,
+            true
+        );
+
+        final var res = Task.getEntityWithErrorsString(
+            List.of(
+                normalAnimal, canBiteAnimal,
+                bigWeightAnimal, toHighAnimal,
+                toHighAndCanBiteAnimal
+            )
+        );
+        assertThat(res).isEqualTo(
+            Map.of(
+                canBiteAnimal.name(), "CAN_BITE",
+                bigWeightAnimal.name(), "WEIGHT_INVALID_VALUE",
+                toHighAnimal.name(), "TO_BIG",
+                toHighAndCanBiteAnimal.name(), "CAN_BITE, TO_BIG"
+            )
+        );
+    }
 }
