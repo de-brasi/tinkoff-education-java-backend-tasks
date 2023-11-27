@@ -8,12 +8,13 @@ import java.util.stream.Stream;
 public class Testing {
     public static void main(String[] args) {
         // Server
-        var serverRunFuture = CompletableFuture.runAsync(
+        var serverThread = new Thread(
             () -> {
                 var server = new Server();
-                server.Run();
+                server.Run(2);
             }
         );
+        serverThread.start();
 
         var clientTasks = Stream.generate(
             () -> CompletableFuture.runAsync(
@@ -25,7 +26,13 @@ public class Testing {
         ).limit(5).toArray(CompletableFuture[]::new);
 
         CompletableFuture.allOf(clientTasks).join();
-        serverRunFuture.cancel(true);
+        LOGGER.info("joined");
+
+        try {
+            serverThread.join();
+        } catch (InterruptedException e) {
+            LOGGER.info(e.getMessage());
+        }
     }
 
     private final static Logger LOGGER = LogManager.getLogger();

@@ -16,7 +16,7 @@ public class Client {
     public void Run() {
         try {
             Socket client = tryMakeClientSocketInLoop(CONNECTION_TIMEOUT_MILLISECONDS);
-            LOGGER.info("Client: port created");
+            LOGGER.info("Client %s: port created".formatted(Thread.currentThread().threadId()));
 
             var writer = new PrintWriter(client.getOutputStream(), true);
             var reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -24,7 +24,7 @@ public class Client {
             writer.println("личности");
             var res = reader.readLine();
 
-            LOGGER.info("Answer is: " + res);
+            LOGGER.info("Client's %s answer is: ".formatted(Thread.currentThread().threadId()) + res);
 
             client.close();
         } catch (IOException e) {
