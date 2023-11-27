@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeoutException;
 
 public class Client {
@@ -21,7 +22,7 @@ public class Client {
             var writer = new PrintWriter(client.getOutputStream(), true);
             var reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            writer.println("личности");
+            writer.println(KEY_WORDS[ThreadLocalRandom.current().nextInt(0, KEY_WORDS.length)]);
             var res = reader.readLine();
 
             LOGGER.info("Client's %s answer is: ".formatted(Thread.currentThread().threadId()) + res);
@@ -48,4 +49,6 @@ public class Client {
     private final String HOST = "localhost";
     private final int PORT = 18080;
     private final static int CONNECTION_TIMEOUT_MILLISECONDS = 100;
+
+    private final static String[] KEY_WORDS = {"личности", "оскорбления", "глупый", "интеллект", "invalid_keyword"};
 }

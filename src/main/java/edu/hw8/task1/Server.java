@@ -24,25 +24,26 @@ public class Server {
             ServerSocket server = new ServerSocket(PORT);
             ExecutorService threadPool = Executors.newFixedThreadPool(threadCount)
         ) {
-
-            Lock lock = new ReentrantLock();
-            Condition freeExecutorsExists = lock.newCondition();
-
+            // TODO: как лучше всего завершать работу серверного потока, по таймауту?
+            //  так как написано сейчас насколько нормально?
             server.setSoTimeout(1_000);
             Socket socket;
 
             while (true) {
 
-                // TODO: discard busy waiting
-                while (tasksCount.get() >= threadCount) {
-                    // busy waiting
-                    Thread.sleep(100);
-                }
+                try {
+                    lock.lock();
+                    while (tasksCount.get() >= threadCount) {
+                        freeExecutorsExists.await();
+                    }
 
-                socket = server.accept();
-                LOGGER.info("Server find free executor!");
-                threadPool.submit(new ServerRoutine(socket));
-                tasksCount.incrementAndGet();
+                    socket = server.accept();
+                    LOGGER.info("Server find free executor!");
+                    threadPool.submit(new ServerRoutine(socket));
+                    tasksCount.incrementAndGet();
+                } finally {
+                    lock.unlock();
+                }
             }
         } catch (IOException ioException) {
             LOGGER.info("Error: " + ioException.getMessage());
@@ -52,6 +53,8 @@ public class Server {
     }
 
     private final AtomicInteger tasksCount = new AtomicInteger(0);
+    Lock lock = new ReentrantLock();
+    Condition freeExecutorsExists = lock.newCondition();
     private final NonSynchronizedCitationBase citationBase = new NonSynchronizedCitationBase();
     private final int PORT = 18080;
     private final static Logger LOGGER = LogManager.getLogger();
@@ -82,6 +85,21 @@ public class Server {
                 Thread.sleep(2_000);
 
                 tasksCount.decrementAndGet();
+
+                // TODO: не уверен, что спать на кондваре в главном потоке в ожидании нотификации от потоков-воркеров -
+                //  хорошая идея.
+                //  Я вижу такую проблему - параллельно завершающие работу потоки-воркеры должны ожидать "коллег"
+                //      при синхронизации на lock, то есть будет простой на потоках в тред-пуле
+                //      (причем ощутимый, если в тред-пуле много воркеров).
+                //  Однако как по-другому реализовать ожидание свободных потоков в тред-пуле,
+                //      минуя эту проблему и не прибегая к busy-waiting в главном потоке сервера - не знаю :(
+                //  Буду благодарен за идею как разрешить эту проблему оптимально!
+                try {
+                    lock.lock();
+                    freeExecutorsExists.signal();
+                } finally {
+                    lock.unlock();
+                }
                 clientSocket.close();
             } catch (InterruptedException | IOException e) {
                 LOGGER.info(e.getMessage());
