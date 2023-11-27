@@ -1,27 +1,27 @@
 package edu.hw8.task1;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Server {
     public Server() {}
 
-    public void Run(int threadCount) {
+    @SuppressWarnings("MagicNumber")
+    public void run(int threadCount) {
         try (
-            ServerSocket server = new ServerSocket(PORT);
+            ServerSocket server = new ServerSocket(port);
             ExecutorService threadPool = Executors.newFixedThreadPool(threadCount)
         ) {
             // TODO: как лучше всего завершать работу серверного потока, по таймауту?
@@ -56,7 +56,7 @@ public class Server {
     Lock lock = new ReentrantLock();
     Condition freeExecutorsExists = lock.newCondition();
     private final NonSynchronizedCitationBase citationBase = new NonSynchronizedCitationBase();
-    private final int PORT = 18080;
+    private final int port = 18080;
     private final static Logger LOGGER = LogManager.getLogger();
 
     private class ServerRoutine implements Runnable {
@@ -65,6 +65,7 @@ public class Server {
         }
 
         @Override
+        @SuppressWarnings("MagicNumber")
         public void run() {
             LOGGER.info(
                 "Timestamp=%s. Start handling client in thread with id=%s".formatted(
@@ -73,7 +74,7 @@ public class Server {
             );
 
             try {
-                try(
+                try (
                     var reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     var writer = new PrintWriter(clientSocket.getOutputStream(), true)
                 ) {

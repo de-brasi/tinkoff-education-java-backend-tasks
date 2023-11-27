@@ -18,10 +18,10 @@ public class NonSynchronizedCitationBase {
     }
 
     public String getCitation(String keyWord) {
-        keyWord = keyWord.toLowerCase();
-        if (wordsReverseIndex.containsKey(keyWord)) {
+        String keyWordLowercase = keyWord.toLowerCase();
+        if (wordsReverseIndex.containsKey(keyWordLowercase)) {
             return citations.get(
-                wordsReverseIndex.get(keyWord).iterator().next()
+                wordsReverseIndex.get(keyWordLowercase).iterator().next()
             );
         }
         return "Пока обидной цитаты нет, но ещё не вечер!";
@@ -44,11 +44,11 @@ public class NonSynchronizedCitationBase {
             erasePunctuationMarks(citations.get(i).split(" "))
                 .forEach(
                     (String word) -> {
-                        word = word.toLowerCase();
-                        if (!wordsReverseIndex.containsKey(word)) {
-                            wordsReverseIndex.put(word, new HashSet<>());
+                        String wordLowercase = word.toLowerCase();
+                        if (!wordsReverseIndex.containsKey(wordLowercase)) {
+                            wordsReverseIndex.put(wordLowercase, new HashSet<>());
                         }
-                        wordsReverseIndex.get(word).add(finalI);
+                        wordsReverseIndex.get(wordLowercase).add(finalI);
                     }
                 );
         }
@@ -62,10 +62,10 @@ public class NonSynchronizedCitationBase {
     }
 
     private boolean notPunctuationMark(String toCheck) {
-        return !punctuationMarks.contains(toCheck);
+        return !PUNCTUATION_MARKS.contains(toCheck);
     }
 
-    private static final String punctuationMarks = "...,;:!?";
+    private static final String PUNCTUATION_MARKS = "...,;:!?";
 
     private final List<String> citations;
     private final Map<String, Set<Integer>> wordsReverseIndex;

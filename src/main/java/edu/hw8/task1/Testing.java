@@ -1,29 +1,32 @@
 package edu.hw8.task1;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Testing {
+    private Testing() {}
+
+    @SuppressWarnings("UncommentedMain")
     public static void main(String[] args) {
-        // Server
         var serverThread = new Thread(
             () -> {
                 var server = new Server();
-                server.Run(2);
+                server.run(2);
             }
         );
         serverThread.start();
 
+        final int testClientsCount = 5;
         var clientTasks = Stream.generate(
             () -> CompletableFuture.runAsync(
                 () -> {
                     var client = new Client();
-                    client.Run();
+                    client.run();
                 }
             )
-        ).limit(5).toArray(CompletableFuture[]::new);
+        ).limit(testClientsCount).toArray(CompletableFuture[]::new);
 
         CompletableFuture.allOf(clientTasks).join();
         LOGGER.info("joined");
