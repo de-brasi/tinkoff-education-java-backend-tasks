@@ -79,7 +79,7 @@ public class SingleThreadPasswordCracker implements PasswordCracker {
 
         for (var prefix: seed) {
             for (var suffix: validPasswordSymbols) {
-                res.add(prefix + String.valueOf(suffix));
+                res.add(prefix + suffix);
             }
         }
 
