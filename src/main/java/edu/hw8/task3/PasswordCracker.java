@@ -6,7 +6,7 @@ import java.util.Map;
 public interface PasswordCracker {
     void loadRecords(List<String> source);
 
-    void loadRecord(String record);
+    void loadRecord(String newRecord);
 
     Map<String, String> getCrackedRecords();
 }
