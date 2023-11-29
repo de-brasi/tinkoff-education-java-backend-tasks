@@ -1,15 +1,16 @@
-package edu.hw8.task1;
+package edu.hw8;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
+import edu.hw8.task1.Client;
+import edu.hw8.task1.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
-public class Testing {
-    private Testing() {}
-
-    @SuppressWarnings("UncommentedMain")
-    public static void main(String[] args) {
+public class Task1Test {
+    @Test
+    public void test() {
         var serverThread = new Thread(
             () -> {
                 var server = new Server();
