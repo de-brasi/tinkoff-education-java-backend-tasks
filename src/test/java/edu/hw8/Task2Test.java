@@ -3,11 +3,9 @@ package edu.hw8;
 import edu.hw8.task2.FixedThreadPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
 
 public class Task2Test {
@@ -152,7 +150,7 @@ public class Task2Test {
 
         @Override
         public void run() {
-            long res = getFibonacci(fibonacci);
+            getFibonacci(fibonacci);
         }
 
         private long getFibonacci(int toCount) {

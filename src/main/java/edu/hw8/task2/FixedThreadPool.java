@@ -45,7 +45,7 @@ public class FixedThreadPool implements ThreadPool {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         lock.lock();
 
         try {
