@@ -81,7 +81,10 @@ public class Task3Test {
                 startTime = System.nanoTime();
                 res = cracker.getCrackedRecords();
                 duration = System.nanoTime() - startTime;
-                LOGGER.info("Threads count = %s; Duration = %s".formatted(threadsCount, duration));
+                LOGGER.info(
+                    "Threads count = %s; Duration = %f"
+                        .formatted(threadsCount, duration / 1_000_000_000F ) + " seconds"
+                );
             }
 
             assertThat(expected).isEqualTo(res);
