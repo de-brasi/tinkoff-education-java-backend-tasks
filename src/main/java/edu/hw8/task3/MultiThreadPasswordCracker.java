@@ -52,7 +52,6 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
         for (var entry: records.entrySet()) {
             try {
                 cracked.put(entry.getKey(), nextPassword(entry.getValue()));
-                LOGGER.info("Password found for user: " + entry.getKey() + " -------------------");
             } catch (InterruptedException e) {
                 LOGGER.info(e);
             }
@@ -131,25 +130,10 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
             while (!passwordFound) {
                 handleInterruption();
 
-                LOGGER.info(
-                    "Thread-worker %s interruption status: %s"
-                        .formatted(
-                            Thread.currentThread().threadId(),
-                            Thread.currentThread().isInterrupted()
-                        )
-                );
-
                 for (var possiblePassword: passwordsSeed) {
 
                     String possiblePasswordHash = getMD5Hash(possiblePassword);
                     if (possiblePasswordHash.equals(hash)) {
-
-                        // TODO: debug only
-                        LOGGER.info(
-                            "Thread-worker %s found password!"
-                                .formatted(Thread.currentThread().threadId())
-                        );
-
                         passwordFound = true;
                         password = possiblePassword;
                         break;
@@ -158,14 +142,6 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
 
                 passwordsSeed = generatePasswords(passwordsSeed);
             }
-
-            // TODO: debug only
-            LOGGER.info(
-                "Thread-worker %s finish!"
-                    .formatted(
-                        Thread.currentThread().threadId()
-                    )
-            );
 
             return password;
         }
@@ -183,14 +159,6 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
                 for (var suffix: validPasswordSymbols) {
                     res.add(prefix + suffix);
                 }
-            }
-
-            // TODO: debug only
-            if (res.isEmpty()) {
-                LOGGER.info(
-                    "Thread-worker %s generate empty passwords list"
-                        .formatted(Thread.currentThread().threadId())
-                );
             }
 
             return res;
