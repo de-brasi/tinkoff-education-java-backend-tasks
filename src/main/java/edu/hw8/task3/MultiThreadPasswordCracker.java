@@ -1,7 +1,5 @@
 package edu.hw8.task3;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -15,8 +13,11 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MultiThreadPasswordCracker implements PasswordCracker {
+    @SuppressWarnings("MagicNumber")
     public MultiThreadPasswordCracker() {
         this(4);
     }
@@ -61,7 +62,7 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
     }
 
     private String nextPassword(String hash) throws InterruptedException {
-        var passwordsSeed = List.of(new String(validPasswordSymbols).split(""));
+        var passwordsSeed = List.of(new String(VALID_PASSWORD_SYMBOLS).split(""));
         var dividedSeeds = divideFairly(passwordsSeed);
         String password;
 
@@ -96,7 +97,7 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
     private final static Logger LOGGER = LogManager.getLogger();
 
     @SuppressWarnings("MagicNumber")
-    private final static char[] validPasswordSymbols = IntStream.concat(
+    private final static char[] VALID_PASSWORD_SYMBOLS = IntStream.concat(
             IntStream.rangeClosed(48, 57),
             IntStream.concat(
                 IntStream.rangeClosed('a', 'z'),
@@ -156,7 +157,7 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
             List<String> res = new ArrayList<>();
 
             for (var prefix: seed) {
-                for (var suffix: validPasswordSymbols) {
+                for (var suffix: VALID_PASSWORD_SYMBOLS) {
                     res.add(prefix + suffix);
                 }
             }
