@@ -43,10 +43,10 @@ public class Task2Test {
     @Test
     @DisplayName("Comparing 4 small Fibonacci numbers counting time in one thread and 2-threads ThreadPool")
     public void test2() {
-        final int numberToCount1 = 30;
-        final int numberToCount2 = 31;
-        final int numberToCount3 = 32;
-        final int numberToCount4 = 33;
+        final int numberToCount1 = 33;
+        final int numberToCount2 = 34;
+        final int numberToCount3 = 35;
+        final int numberToCount4 = 36;
         long consistentComputingTime;
         long parallelComputingTime;
         long startTime;
