@@ -1,17 +1,13 @@
 package edu.hw8.task3;
 
-import jdk.dynalink.beans.StaticClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -98,6 +94,7 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
     private final Map<String, String> records;
     private final int threadPoolThreadsCount;
     private final ExecutorService threadPool;
+    private final static Logger LOGGER = LogManager.getLogger();
 
     @SuppressWarnings("MagicNumber")
     private final static char[] validPasswordSymbols = IntStream.concat(
@@ -110,8 +107,6 @@ public class MultiThreadPasswordCracker implements PasswordCracker {
         .mapToObj(codePoint -> String.valueOf((char) codePoint))
         .collect(Collectors.joining())
         .toCharArray();
-
-    private final static Logger LOGGER = LogManager.getLogger();
 
 
     private static class CrackRoutine implements Callable<String> {
