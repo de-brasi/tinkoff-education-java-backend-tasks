@@ -9,17 +9,24 @@ public record FractalImage(Pixel[][] data, int width, int height) {
         return new FractalImage(newData, width, height);
     }
 
-    boolean contains(int x, int y) {
+    public boolean contains(int x, int y) {
         int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
         int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
         return (0 <= absoluteY && absoluteY < height)
             && (0 <= absoluteX && absoluteX < width);
     }
 
-    Pixel pixel(int x, int y) {
+    public Pixel pixel(int x, int y) {
         int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
         int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
         return data[absoluteY][absoluteX];
+    }
+
+    // TODO: пахнет кринжем такая работа!
+    public void changePixelTo(int x, int y, Pixel changeTo) {
+        int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
+        int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
+        data[absoluteY][absoluteX] = changeTo;
     }
 
     private int getAbsoluteValueOfCoordinate(int coordinate, Axis value) {
@@ -27,10 +34,10 @@ public record FractalImage(Pixel[][] data, int width, int height) {
 
         switch (value) {
             case VERTICAL -> {
-                axisSize = this.width;
+                axisSize = this.height;
             }
             case HORIZONTAL -> {
-                axisSize = this.height;
+                axisSize = this.width;
             }
 
             default -> {
