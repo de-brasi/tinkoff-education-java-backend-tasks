@@ -6,6 +6,7 @@ import edu.project4.utils.ImageFormat;
 import edu.project4.utils.ImageUtils;
 import edu.project4.utils.Pixel;
 import edu.project4.utils.Point;
+import edu.project4.variationgenerators.Transformation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.nio.file.Path;
