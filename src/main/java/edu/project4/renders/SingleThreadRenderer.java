@@ -10,9 +10,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Random;
 
-public class SingleThreadRender implements Renderer {
+public class SingleThreadRenderer implements Renderer {
     @Override
-    public FractalImage render(FractalImage canvas,
+    public FractalImage render(
+        FractalImage canvas,
         // TODO: как то ассоциировать цвет с вариацией(преобразованием)
         List<Transformation> variations,
         int samples, short iterPerSample,
