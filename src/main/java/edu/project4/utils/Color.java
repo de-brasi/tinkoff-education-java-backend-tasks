@@ -53,6 +53,12 @@ public class Color {
         this.blue = blue;
     }
 
+    public void mixColorWith(Color another) {
+        red = ((red + another.red) / 2 ) % 256;
+        green = ((green + another.green) / 2) % 256;
+        blue = ((blue + another.blue) / 2) % 256;
+    }
+
     private int red;
     private int green;
     private int blue;
