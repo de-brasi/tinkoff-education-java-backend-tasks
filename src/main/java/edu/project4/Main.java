@@ -1,5 +1,6 @@
 package edu.project4;
 
+import edu.project4.renders.SingleThreadRenderer;
 import edu.project4.utils.Color;
 import edu.project4.utils.ImageFormat;
 import edu.project4.utils.ImageUtils;
@@ -9,11 +10,66 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
+        FractalImage canvas = FractalImage.create(1920, 1080);
+
+        // TODO: с вариациями - как то добавить поддержку вероятности вытащить ту или иную вариацию
+        // TODO: добавить афинные преобразования
+        List<Transformation> variations = List.of(
+            // TODO: почему то не работает
+            // Sinusoidal
+            (Point source) -> {
+                return new Point(500 * Math.sin(source.x()), 500 * Math.sin(source.y()));
+            },
+
+            // TODO: почему то не работает
+            // Spherical
+            (Point source) -> {
+                double newX = source.x() / (Math.pow(source.x(), 2) + Math.pow(source.y(), 2));
+                double newY = source.y() / (Math.pow(source.x(), 2) + Math.pow(source.y(), 2));
+                return new Point(120 * newX, 120 * newY);
+            },
+
+            // TODO: почему то не работает
+            // Polar
+            (Point source) -> {
+                double newX = Math.atan(source.y() / source.x()) / Math.PI;
+                double newY = Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2)) - 1;
+                return new Point(200 * newX, 200 * newY);
+            },
+
+            // Heart
+            (Point source) -> {
+                double newX =
+                    Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2))
+                        * Math.sin(
+                        Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2))
+                            * Math.atan(source.y()) / source.x()
+                    );
+                double newY =
+                    -1 * Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2))
+                        * Math.cos(
+                        Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2))
+                            * Math.atan(source.y()) / source.x()
+                    );
+                return new Point(10 * newX, 10 * newY);
+            }
+        );
+
+        SingleThreadRenderer renderer = new SingleThreadRenderer();
+        long seed = 100;
+        canvas = renderer.render(canvas, variations, 10_000, (short) 100, seed);
+
+        Path output = Paths.get("").toAbsolutePath().getParent().resolve("example_image");
+        ImageUtils.save(canvas, output, ImageFormat.PNG);
+    }
+
+    public static void draftPrinting() {
         // TODO:
         //  1) --done-- отрисовать что-то и превратить в png;
         //  2) --done-- научиться получать коэффициенты для аффинных преобразований;
@@ -26,7 +82,7 @@ public class Main {
         // ---------------------------------------------
         // -------------- Создание холста --------------
         // ---------------------------------------------
-        int canvasWidth = 512;
+        int canvasWidth = 1920;
         int canvasHeight = 1080;
 
         final Pixel[][] canvasData = new Pixel[canvasHeight][canvasWidth];
@@ -110,8 +166,8 @@ public class Main {
         };
 
         //   -------------- Основной код --------------
-        final long dotsCount = 100_000;
-        final int iterationsPerDot = 100;
+        final long samples = 100_000;
+        final int iterPerSample = 100;
 
         final double xMin = -100;
         final double xMax = 100;
@@ -125,18 +181,18 @@ public class Main {
 
         Pixel curPixel;
 
-        int affineTransformIndex;
+        int affineTransformIndex = 0;
 
         int totalHitCount = 0;
 
         // TODO: симметрия
-        for (int i = 0; i < dotsCount; i++) {
-            logProcessDebugOnly(i, dotsCount);
+        for (int i = 0; i < samples; i++) {
+            logProcessDebugOnly(i, samples);
 
             newPoint = Point.of(random.nextDouble(xMin, xMax), random.nextDouble(yMin, yMax));
 
             // TODO: проверить, а что если не скипать!
-            for (int j = 0; j < 20; j++) {
+            for (int j = 0; j < 1000; j++) {
                 newPoint = doAffineTransformation(
                     newPoint,
                     affineCoefficients[random.nextInt(0, affineCoefficients.length)]
@@ -146,7 +202,7 @@ public class Main {
 //                newPoint = nonLinearTransformations[1].apply(newPoint);
             }
 
-            for (int j = 0; j < iterationsPerDot; j++) {
+            for (int j = 0; j < iterPerSample; j++) {
                 affineTransformIndex = random.nextInt(0, affineCoefficients.length);
 
                 newPoint = doAffineTransformation(
@@ -181,7 +237,7 @@ public class Main {
 
         LOGGER.info(
             "DONE! Total hit count: " + totalHitCount
-                + "; hit rate: " + (float) totalHitCount / (dotsCount * (iterationsPerDot - 20))
+                + "; hit rate: " + (float) totalHitCount / (samples * (iterPerSample - 20))
         );
     }
 
