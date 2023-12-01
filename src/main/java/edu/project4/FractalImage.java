@@ -11,7 +11,8 @@ public record FractalImage(Pixel[][] data, int width, int height) {
     boolean contains(int x, int y) {
         int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
         int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
-        return (0 <= absoluteY && absoluteY < height) && (0 <= absoluteX && absoluteX < width);
+        return (0 <= absoluteY && absoluteY < height)
+            && (0 <= absoluteX && absoluteX < width);
     }
 
     Pixel pixel(int x, int y) {
