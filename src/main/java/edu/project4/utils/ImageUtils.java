@@ -27,7 +27,7 @@ public final class ImageUtils {
             for (int x = 0; x < width; x++) {
                 Color curPixelColor = source.data()[y][x].color();
                 int rgb = (curPixelColor.r() << 16) | (curPixelColor.g() << 8) | curPixelColor.b();
-                res.setRGB(x, y, rgb);
+                res.setRGB(x, (height - y) - 1, rgb);
             }
         }
 
@@ -38,7 +38,7 @@ public final class ImageUtils {
         try {
             File output = filename.toFile();
             ImageIO.write(bufferedImage, format.getStringRepresentation(), output);
-            System.out.println("Изображение успешно сохранено в " + output.getAbsolutePath());
+            LOGGER.info("Изображение успешно сохранено в " + output.getAbsolutePath());
         } catch (IOException e) {
             LOGGER.info(e);
         }
