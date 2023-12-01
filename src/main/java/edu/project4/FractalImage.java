@@ -1,11 +1,21 @@
 package edu.project4;
 
+import edu.project4.utils.Color;
 import edu.project4.utils.Pixel;
 
 public record FractalImage(Pixel[][] data, int width, int height) {
     public static FractalImage create(int width, int height) {
-        // TODO: стоит добавить create с базовым цветом (в аргументе) и crate с цветом по-умолчанию
+        Color whiteColor = Color.of(255, 255, 255);
+        return createWithBaseColor(width, height, whiteColor);
+    }
+
+    public static FractalImage createWithBaseColor(int width, int height, Color base) {
         Pixel[][] newData = new Pixel[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                newData[i][j] = new Pixel(Color.of(base), 0);
+            }
+        }
         return new FractalImage(newData, width, height);
     }
 
