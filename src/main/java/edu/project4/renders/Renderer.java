@@ -1,7 +1,7 @@
 package edu.project4.renders;
 
 import edu.project4.FractalImage;
-import edu.project4.Transformation;
+import edu.project4.variationgenerators.Transformation;
 import java.util.List;
 
 @FunctionalInterface
