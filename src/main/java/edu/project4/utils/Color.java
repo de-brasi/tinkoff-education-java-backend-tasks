@@ -5,6 +5,10 @@ public class Color {
         return new Color(r, g, b);
     }
 
+    public static Color of(Color another) {
+        return new Color(another.r(), another.g(), another.b());
+    }
+
     public Color() {
         red = 0;
         green = 0;
