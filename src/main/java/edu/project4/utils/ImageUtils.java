@@ -25,8 +25,8 @@ public final class ImageUtils {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                Pixel curPixel = source.data()[y][x];
-                int rgb = (curPixel.r() << 16) | (curPixel.g() << 8) | curPixel.b();
+                Color curPixelColor = source.data()[y][x].color();
+                int rgb = (curPixelColor.r() << 16) | (curPixelColor.g() << 8) | curPixelColor.b();
                 res.setRGB(x, y, rgb);
             }
         }
