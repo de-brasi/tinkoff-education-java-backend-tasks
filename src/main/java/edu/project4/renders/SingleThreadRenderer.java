@@ -34,10 +34,9 @@ public class SingleThreadRenderer implements Renderer {
         int xCoordinate;
         int yCoordinate;
 
-        int variationIndex = 0;
-
         // TODO: симметрия
         for (int i = 0; i < samples; i++) {
+            logProcessDebugOnly(i, samples);
             newPoint = Point.of(random.nextDouble(xMin, xMax), random.nextDouble(yMin, yMax));
 
             // TODO: конфигурировать сколько действий на "раздувание" координаты
@@ -50,7 +49,7 @@ public class SingleThreadRenderer implements Renderer {
 
             for (int j = 0; j < iterPerSample; j++) {
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
-                newPoint = variations.get(random.nextInt(0, variationIndex)).apply(newPoint);
+                newPoint = variations.get(random.nextInt(0, variations.size())).apply(newPoint);
 
                 // TODO: применить НЕ линейное преобразование, или как?;
 
@@ -78,6 +77,16 @@ public class SingleThreadRenderer implements Renderer {
         // TODO: потом в вызывающем коде сохранять файл по какому-то пути
         return canvas;
     }
+
+    private void logProcessDebugOnly(long i, long max) {
+        long step = max / 100;
+        if (i >= (prevPivotDebugOnly + 1) * (step + 1)) {
+            ++prevPivotDebugOnly;
+            LOGGER.info("Render status: " + prevPivotDebugOnly + "%");
+        }
+    }
+
+    private long prevPivotDebugOnly = 0;
 
     private final static Logger LOGGER = LogManager.getLogger();
 }
