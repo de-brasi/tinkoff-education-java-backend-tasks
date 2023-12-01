@@ -4,6 +4,7 @@ import edu.project4.utils.Pixel;
 
 public record FractalImage(Pixel[][] data, int width, int height) {
     public static FractalImage create(int width, int height) {
+        // TODO: стоит добавить create с базовым цветом (в аргументе) и crate с цветом по-умолчанию
         Pixel[][] newData = new Pixel[height][width];
         return new FractalImage(newData, width, height);
     }
