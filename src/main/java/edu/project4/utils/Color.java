@@ -1,6 +1,10 @@
 package edu.project4.utils;
 
 public class Color {
+    public static Color of(int r, int g, int b) {
+        return new Color(r, g, b);
+    }
+
     public Color() {
         red = 0;
         green = 0;
