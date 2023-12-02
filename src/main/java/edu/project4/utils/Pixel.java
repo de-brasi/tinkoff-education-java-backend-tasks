@@ -23,6 +23,8 @@ public class Pixel {
         return color;
     }
 
+    public double normal = 0;
+
     private Color color;
     private int hitCount;
 }
