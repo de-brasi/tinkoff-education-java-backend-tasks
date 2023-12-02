@@ -19,7 +19,6 @@ public class SingleThreadRenderer implements Renderer {
         int samples, short iterPerSample,
         long seed)
     {
-        // TODO: разобраться на что влияет сид, и сюда ли надо передавать seed
         final Random random = new Random(seed);
 
         // TODO: конфигурировать это
@@ -37,19 +36,23 @@ public class SingleThreadRenderer implements Renderer {
         // TODO: симметрия
         for (int i = 0; i < samples; i++) {
             logProcessDebugOnly(i, samples);
-            newPoint = Point.of(random.nextDouble(xMin, xMax), random.nextDouble(yMin, yMax));
+            newPoint = Point.of(
+                random.nextDouble(xMin, xMax),
+                random.nextDouble(yMin, yMax)
+            );
 
             // TODO: конфигурировать сколько действий на "раздувание" координаты
             //  и какие действия - линейные или нелинейные преобразования!
             // TODO: проверить, а что если не скипать!
             for (int j = 0; j < 100; j++) {
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
-                newPoint = Point.of(random.nextDouble(xMin, xMax), random.nextDouble(yMin, yMax));
+                newPoint = variations.get(random.nextInt(0, variations.size())).apply(newPoint);
             }
 
             for (int j = 0; j < iterPerSample; j++) {
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
-                newPoint = variations.get(random.nextInt(0, variations.size())).apply(newPoint);
+                var transformation = variations.get(random.nextInt(0, variations.size()));
+                newPoint = transformation.apply(newPoint);
 
                 // TODO: применить НЕ линейное преобразование, или как?;
 
@@ -60,21 +63,22 @@ public class SingleThreadRenderer implements Renderer {
                     curPixel = canvas.pixel(xCoordinate, yCoordinate);
 
                     // TODO: нужен пересчет попаданий нормальный - не дело каждый раз новый Pixel создавать
-                    if (curPixel.hitCount() == 0) {
+                    if (curPixel.getHitCount() == 0) {
                         // TODO: нужно продумать как подмешивать цвет, ассоциированный с новым преобразованием
-                        canvas.changePixelTo(xCoordinate, yCoordinate, new Pixel(Color.of(12, 123, 100), 1));
+                        curPixel.hit().setColor(transformation.getColor());
+//                        canvas.changePixelTo(xCoordinate, yCoordinate, new Pixel(Color.of(transformation.getColor()), 1));
                     } else {
                         // TODO: нужно продумать как подмешивать цвет, ассоциированный с новым преобразованием
                         // TODO: разобраться, почему не работает смешивание
 //                        curPixel.color().mixColorWith(affineColors[affineTransformIndex]);
-                        canvas.changePixelTo(xCoordinate, yCoordinate, new Pixel(Color.of(12, 123, 100), 1));
+//                        canvas.changePixelTo(xCoordinate, yCoordinate, new Pixel(Color.of(transformation.getColor()), 1));
+                        curPixel.hit().getColor().mixColorWith(transformation.getColor());
                     }
 
                 }
             }
         }
 
-        // TODO: потом в вызывающем коде сохранять файл по какому-то пути
         return canvas;
     }
 
