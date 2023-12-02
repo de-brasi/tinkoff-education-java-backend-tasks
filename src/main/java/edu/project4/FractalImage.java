@@ -13,7 +13,7 @@ public record FractalImage(Pixel[][] data, int width, int height) {
         Pixel[][] newData = new Pixel[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                newData[i][j] = new Pixel(Color.of(base), 0);
+                newData[i][j] = new Pixel(Color.of(base));
             }
         }
         return new FractalImage(newData, width, height);
