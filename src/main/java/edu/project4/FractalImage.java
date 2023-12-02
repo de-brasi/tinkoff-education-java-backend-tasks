@@ -19,17 +19,21 @@ public record FractalImage(Pixel[][] data, int width, int height) {
         return new FractalImage(newData, width, height);
     }
 
-    public boolean contains(int x, int y) {
+    public boolean containsCoordinate(int x, int y) {
         int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
         int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
         return (0 <= absoluteY && absoluteY < height)
             && (0 <= absoluteX && absoluteX < width);
     }
 
-    public Pixel pixel(int x, int y) {
+    public Pixel coordinate(int x, int y) {
         int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
         int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
         return data[absoluteY][absoluteX];
+    }
+
+    public Pixel pixel(int x, int y) {
+        return data[y][x];
     }
 
     // TODO: пахнет кринжем такая работа!
