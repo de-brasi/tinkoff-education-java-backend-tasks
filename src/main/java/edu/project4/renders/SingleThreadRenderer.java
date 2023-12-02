@@ -57,8 +57,8 @@ public class SingleThreadRenderer implements Renderer {
                 xCoordinate = (int) Math.round(newPoint.x());
                 yCoordinate = (int) Math.round(newPoint.y());
 
-                if (canvas.contains(xCoordinate, yCoordinate)) {
-                    curPixel = canvas.pixel(xCoordinate, yCoordinate);
+                if (canvas.containsCoordinate(xCoordinate, yCoordinate)) {
+                    curPixel = canvas.coordinate(xCoordinate, yCoordinate);
 
                     if (curPixel.getHitCount() == 0) {
                         curPixel.hit().setColor(transformation.getColor());
