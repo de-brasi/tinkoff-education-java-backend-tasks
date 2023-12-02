@@ -44,7 +44,7 @@ public class SingleThreadRenderer implements Renderer {
             // TODO: конфигурировать сколько действий на "раздувание" координаты
             //  и какие действия - линейные или нелинейные преобразования!
             // TODO: проверить, а что если не скипать!
-            for (int j = 0; j < 100; j++) {
+            for (int j = 0; j < 20; j++) {
 
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
                 newPoint = transformationsManipulator.getRandom().apply(newPoint);
