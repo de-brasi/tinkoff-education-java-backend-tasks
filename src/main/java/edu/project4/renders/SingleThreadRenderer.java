@@ -4,6 +4,7 @@ import edu.project4.FractalImage;
 import edu.project4.variationgenerators.Transformation;
 import edu.project4.utils.Pixel;
 import edu.project4.utils.Point;
+import edu.project4.variationgenerators.TransformationsManipulator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;
@@ -17,6 +18,7 @@ public class SingleThreadRenderer implements Renderer {
         int samples, short iterPerSample,
         long seed)
     {
+        var transformationsManipulator = new TransformationsManipulator(variations);
         final Random random = new Random(seed);
 
         // TODO: конфигурировать это
@@ -43,13 +45,16 @@ public class SingleThreadRenderer implements Renderer {
             //  и какие действия - линейные или нелинейные преобразования!
             // TODO: проверить, а что если не скипать!
             for (int j = 0; j < 100; j++) {
+
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
-                newPoint = variations.get(random.nextInt(0, variations.size())).apply(newPoint);
+                newPoint = transformationsManipulator.getRandom().apply(newPoint);
+
             }
 
             for (int j = 0; j < iterPerSample; j++) {
+
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
-                var transformation = variations.get(random.nextInt(0, variations.size()));
+                var transformation = transformationsManipulator.getRandom();
                 newPoint = transformation.apply(newPoint);
 
                 // TODO: применить НЕ линейное преобразование, или как?;
