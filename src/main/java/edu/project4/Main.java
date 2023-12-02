@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
-        FractalImage canvas = FractalImage.create(1920, 1080);
+        FractalImage canvas = FractalImage.createWithBaseColor(1920, 1080, Color.of(0, 0, 128));
 
         // TODO: с вариациями - как то добавить поддержку вероятности вытащить ту или иную вариацию
         List<Transformation> variations = List.of(
@@ -128,7 +128,7 @@ public class Main {
 
         SingleThreadRenderer renderer = new SingleThreadRenderer();
         long seed = 100;
-        canvas = renderer.render(canvas, variations, 100_000, (short) 100, seed);
+        canvas = renderer.render(canvas, variations, 50_000, (short) 1000, seed);
 
         Path output = Paths.get("").toAbsolutePath().getParent().resolve("example_image");
         ImageUtils.save(canvas, output, ImageFormat.PNG);
