@@ -19,30 +19,30 @@ public class Main {
         // TODO: с вариациями - как то добавить поддержку вероятности вытащить ту или иную вариацию
         List<Transformation> variations = List.of(
             NonLinearTransformationsGenerator
-                .getSinusoidalTransformation(500, 1000)
+                .getSinusoidalTransformation(1920, 1080)
                 .withColor(
                     Color.of(0, 191, 255)
                 ),
             NonLinearTransformationsGenerator
-                .getSphericalTransformation(120, 200)
+                .getSphericalTransformation(1920, 1080)
                 .withColor(
                     Color.of(255, 215, 0)
                 ),
-            NonLinearTransformationsGenerator
-                .getPolarTransformation(300, 300)
-                .withColor(
-                    Color.of(238, 130, 238)
-                ),
-            NonLinearTransformationsGenerator
-               .getHeartTransformation(200, 200)
-               .withColor(
-                   Color.of(255, 69, 0)
-               ),
-            NonLinearTransformationsGenerator
-                .getDiskTransformation()
-                .withColor(
-                    Color.of(0, 100, 0)
-                ),
+//            NonLinearTransformationsGenerator
+//                .getPolarTransformation(300, 300)
+//                .withColor(
+//                    Color.of(238, 130, 238)
+//                ),
+//            NonLinearTransformationsGenerator
+//               .getHeartTransformation(200, 200)
+//               .withColor(
+//                   Color.of(255, 69, 0)
+//               ),
+//            NonLinearTransformationsGenerator
+//                .getDiskTransformation()
+//                .withColor(
+//                    Color.of(0, 100, 0)
+//                ),
 
             LinearTransformationsGenerator
                 .getRandomCompressiveTransformation()
@@ -52,72 +52,12 @@ public class Main {
             LinearTransformationsGenerator
                 .getRandomCompressiveTransformation()
                 .withColor(
-                    Color.of(128, 0, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
                     Color.of(0, 128, 128)
                 ),
             LinearTransformationsGenerator
                 .getRandomCompressiveTransformation()
                 .withColor(
                     Color.of(255, 255, 0)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(128, 0, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(128, 0, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(128, 0, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(0, 128, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(255, 255, 0)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(128, 0, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(128, 0, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(128, 0, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(0, 128, 128)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(255, 255, 0)
-                ),
-            LinearTransformationsGenerator
-                .getRandomCompressiveTransformation()
-                .withColor(
-                    Color.of(128, 0, 128)
                 )
         );
 
