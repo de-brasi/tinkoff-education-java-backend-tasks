@@ -2,7 +2,6 @@ package edu.project4.renders;
 
 import edu.project4.FractalImage;
 import edu.project4.variationgenerators.Transformation;
-import edu.project4.utils.Color;
 import edu.project4.utils.Pixel;
 import edu.project4.utils.Point;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,6 @@ public class SingleThreadRenderer implements Renderer {
     @Override
     public FractalImage render(
         FractalImage canvas,
-        // TODO: как то ассоциировать цвет с вариацией(преобразованием)
         List<Transformation> variations,
         int samples, short iterPerSample,
         long seed)
@@ -62,16 +60,9 @@ public class SingleThreadRenderer implements Renderer {
                 if (canvas.contains(xCoordinate, yCoordinate)) {
                     curPixel = canvas.pixel(xCoordinate, yCoordinate);
 
-                    // TODO: нужен пересчет попаданий нормальный - не дело каждый раз новый Pixel создавать
                     if (curPixel.getHitCount() == 0) {
-                        // TODO: нужно продумать как подмешивать цвет, ассоциированный с новым преобразованием
                         curPixel.hit().setColor(transformation.getColor());
-//                        canvas.changePixelTo(xCoordinate, yCoordinate, new Pixel(Color.of(transformation.getColor()), 1));
                     } else {
-                        // TODO: нужно продумать как подмешивать цвет, ассоциированный с новым преобразованием
-                        // TODO: разобраться, почему не работает смешивание
-//                        curPixel.color().mixColorWith(affineColors[affineTransformIndex]);
-//                        canvas.changePixelTo(xCoordinate, yCoordinate, new Pixel(Color.of(transformation.getColor()), 1));
                         curPixel.hit().getColor().mixColorWith(transformation.getColor());
                     }
 
