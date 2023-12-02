@@ -27,4 +27,5 @@ public class ColorShortcuts {
     public final static Color GOLD = Color.of(255, 215, 0);
     public final static Color STEEL_BLUE = Color.of(70, 130, 180);
     public final static Color MIDNIGHT_BLUE = Color.of(25, 25, 112);
+    public final static Color DEEP_SKY_BLUE = Color.of(0, 191, 255);
 }
