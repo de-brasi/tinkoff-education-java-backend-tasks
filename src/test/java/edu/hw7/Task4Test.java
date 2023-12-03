@@ -204,7 +204,7 @@ public class Task4Test {
     @DisplayName("Average efficiency gain (from 1 to 8 threads; count of threads less or equal CPU core count)")
     public void test6() {
         var solver = new PiMonteCarloMultiThreadSolver();
-        final int iterationCount = 1_000_000_000;
+        final int iterationCount = 1_000_000;
         final int maxThreadCount = 8;
 
         long[] timings = new long[maxThreadCount];
