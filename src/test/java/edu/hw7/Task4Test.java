@@ -201,10 +201,10 @@ public class Task4Test {
     }
 
     @Test
-    @DisplayName("Average efficiency gain (from 1 to 8 threads; count of threads less or equal CPU core count)")
+    @DisplayName("Average efficiency gain (from 1 to 4 threads; count of threads less or equal CPU core count)")
     public void test6() {
         var solver = new PiMonteCarloMultiThreadSolver();
-        final int iterationCount = 1_000_000;
+        final int iterationCount = 100_000_000;
         final int maxThreadCount = 4;
 
         long[] timings = new long[maxThreadCount];
@@ -222,7 +222,9 @@ public class Task4Test {
 
         double commonTimingDifference = 0;
         for (int i = 1; i < timings.length; i++) {
-            commonTimingDifference += (timings[i - 1] - timings[i]);
+            var diff = timings[i - 1] - timings[i];
+            assertThat(0D).isLessThanOrEqualTo(diff);
+            commonTimingDifference += (diff);
         }
 
         double avgGain = commonTimingDifference / (timings.length - 1);
