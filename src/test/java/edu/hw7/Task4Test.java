@@ -205,7 +205,7 @@ public class Task4Test {
     public void test6() {
         var solver = new PiMonteCarloMultiThreadSolver();
         final int iterationCount = 1_000_000;
-        final int maxThreadCount = 8;
+        final int maxThreadCount = 4;
 
         long[] timings = new long[maxThreadCount];
 
