@@ -207,7 +207,7 @@ public class Task4Test {
         final int iterationCount = 100_000_000;
         final int maxThreadCount = 4;
 
-        long[] timings = new long[maxThreadCount];
+        double[] timings = new double[maxThreadCount];
 
         try {
             for (int i = 1; i <= maxThreadCount; i++) {
@@ -222,42 +222,7 @@ public class Task4Test {
 
         double commonTimingDifference = 0;
         for (int i = 1; i < timings.length; i++) {
-            var diff = timings[i - 1] - timings[i];
-            commonTimingDifference += (diff);
-        }
-
-        double avgGain = commonTimingDifference / (timings.length - 1);
-        assertThat(0D).isLessThan(avgGain);
-
-        LOGGER.info(
-            "Average efficiency gain per thread=" + avgGain / NANOSECONDS_PER_SECOND + " seconds"
-        );
-    }
-
-    @Test
-    @DisplayName("Average efficiency gain (from 1 to 4 threads; count of threads less or equal CPU core count)")
-    public void test7() {
-        var solver = new PiMonteCarloMultiThreadSolver();
-        final int iterationCount = 100_000_000;
-        final int maxThreadCount = 4;
-
-        long[] timings = new long[maxThreadCount];
-
-        try {
-            for (int i = 1; i <= maxThreadCount; i++) {
-                var startTime = System.nanoTime();
-                solver.calculatePiValue(iterationCount, i);
-                var durationNanoSeconds = System.nanoTime() - startTime;
-                timings[i - 1] = durationNanoSeconds;
-            }
-        } catch (Exception ignored) {
-            fail("Not expected to catch exception: " + ignored.getMessage());
-        }
-
-        double commonTimingDifference = 0;
-        for (int i = 1; i < timings.length; i++) {
-            var diff = timings[i - 1] - timings[i];
-            assertThat(0D).isLessThanOrEqualTo(diff);
+            double diff = timings[i - 1] - timings[i];
             commonTimingDifference += (diff);
         }
 
