@@ -9,9 +9,49 @@ public class AsciiInterface extends CommandLineGameInterface {
     }
 
     @Override
-    @SuppressWarnings({"RegexpSinglelineJava", "MultipleStringLiterals"})
     protected void showInviteInputMessage() {
-        System.out.print(
+        userInteractionInterface.showTitle();
+        userInteractionInterface.showGallowsToUser();
+        userInteractionInterface.showAttemptsCountToUser();
+        userInteractionInterface.showInvitationToSolveTheWord();
+    }
+
+    @Override
+    protected void showGameState() {
+        userInteractionInterface.showGallowsToUser();
+        userInteractionInterface.showAttemptsCountToUser();
+        userInteractionInterface.showInvitationToSolveTheWord();
+    }
+
+    @Override
+    protected void showResponseMessage(GameResponse response) {
+        switch (response) {
+            case WIN -> {
+                userInteractionInterface.showWinMessage();
+                userInteractionInterface.showWordsStateToUser();
+            }
+            case LOSS -> {
+                gallows.continueTheExecution();
+                userInteractionInterface.showGallowsToUser();
+                userInteractionInterface.showLostMessage();
+            }
+            case SUCCESSFUL_ATTEMPT -> {
+                userInteractionInterface.showHitMessage();
+                userInteractionInterface.showWordsStateToUser();
+            }
+            case FAILURE_ATTEMPT -> gallows.continueTheExecution();
+            case REQUEST_IGNORED -> userInteractionInterface.sayToUserAboutIncorrectInput();
+            case null, default -> {
+            }
+        }
+    }
+
+
+    protected class UserInteractionInterface {
+        UserInteractionInterface() {}
+
+        public void showTitle() {
+            System.out.print(
                 """
                         ██╗  ██╗ █████╗ ███╗   ██╗ ██████╗ ███╗   ███╗ █████╗ ███╗   ██╗
                         ██║  ██║██╔══██╗████╗  ██║██╔════╝ ████╗ ████║██╔══██╗████╗  ██║
@@ -20,114 +60,100 @@ public class AsciiInterface extends CommandLineGameInterface {
                         ██║  ██║██║  ██║██║ ╚████║╚██████╔╝██║ ╚═╝ ██║██║  ██║██║ ╚████║
                         ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
                         """
-        );
-        System.out.println(gallows.getGallows());
-        System.out.println("You have " + game.getAttemptCount() + " attempts.");
-        System.out.println("Guess a letter or word with length " + game.getWordLength() + ":");
-    }
-
-    @Override
-    @SuppressWarnings("RegexpSinglelineJava")
-    protected void showGameState() {
-        System.out.println(gallows.getGallows());
-        System.out.println("You have " + game.getAttemptCount() + " attempts.");
-        System.out.println("Guess a letter or word with length " + game.getWordLength() + ":");
-    }
-
-    @Override
-    @SuppressWarnings("RegexpSinglelineJava")
-    protected void showResponseMessage(GameResponse response) {
-        switch (response) {
-            case WIN -> {
-                printYouWinMessage();
-                System.out.println("The word is: " + game.getGuessedWordState());
-            }
-            case LOSS -> {
-                gallows.continueTheExecution();
-                System.out.println(gallows.getGallows());
-                printYouLostMessage();
-            }
-            case SUCCESSFUL_ATTEMPT -> {
-                System.out.println("Hit! The word is: " + game.getGuessedWordState());
-            }
-            case FAILURE_ATTEMPT -> {
-                gallows.continueTheExecution();
-            }
-            case REQUEST_IGNORED -> {
-                System.out.println("Your input is incorrect! Try once again.");
-            }
-            case null, default -> {
-            }
+            );
         }
-    }
 
-    @SuppressWarnings("RegexpSinglelineJava")
-    private static void printYouWinMessage() {
-        System.out.print(
-            """
-                    ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██╗███╗   ██╗██╗
-                    ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██║████╗  ██║██║
-                     ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║██╔██╗ ██║██║
-                      ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║██║╚██╗██║╚═╝
-                       ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║██╗
-                       ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═╝
-
-                                            ,////,
-                                            /// 6|
-                                            //  _|
-                                           _/_,-'
-                                      _.-/'/   \\   ,/;,
-                                   ,-' /'  \\_   \\ / _/
-                                   `\\ /     _/\\  ` /
-                                     |     /,  `\\_/
-                                     |     \\'
-                         /\\_        /`      /\\
-                       /' /_``--.__/\\  `,. /  \\
-                      |_/`  `-._     `\\/  `\\   `.
-                                `-.__/'     `\\   |
-                                              `\\  \\
-                                                `\\ \\
-                                                  \\_\\__
-                                                   \\___)
-
+        public void showWinMessage() {
+            System.out.print(
                 """
-        );
-    }
+                        ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██╗███╗   ██╗██╗
+                        ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██║████╗  ██║██║
+                         ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║██╔██╗ ██║██║
+                          ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║██║╚██╗██║╚═╝
+                           ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║██╗
+                           ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═╝
 
-    @SuppressWarnings("RegexpSinglelineJava")
-    private static void printYouLostMessage() {
-        System.out.print(
-            """
-                    ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗      ██████╗ ███████╗████████╗██╗
-                    ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║     ██╔═══██╗██╔════╝╚══██╔══╝██║
-                     ╚████╔╝ ██║   ██║██║   ██║    ██║     ██║   ██║███████╗   ██║   ██║
-                      ╚██╔╝  ██║   ██║██║   ██║    ██║     ██║   ██║╚════██║   ██║   ╚═╝
-                       ██║   ╚██████╔╝╚██████╔╝    ███████╗╚██████╔╝███████║   ██║   ██╗
-                       ╚═╝    ╚═════╝  ╚═════╝     ╚══════╝ ╚═════╝ ╚══════╝   ╚═╝   ╚═╝
+                                                ,////,
+                                                /// 6|
+                                                //  _|
+                                               _/_,-'
+                                          _.-/'/   \\   ,/;,
+                                       ,-' /'  \\_   \\ / _/
+                                       `\\ /     _/\\  ` /
+                                         |     /,  `\\_/
+                                         |     \\'
+                             /\\_        /`      /\\
+                           /' /_``--.__/\\  `,. /  \\
+                          |_/`  `-._     `\\/  `\\   `.
+                                    `-.__/'     `\\   |
+                                                  `\\  \\
+                                                    `\\ \\
+                                                      \\_\\__
+                                                       \\___)
 
-                                ⠀⠀⠀     ⠀⠀⠀⠀⠀⠀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀
-                                    ⠀⠀⠀⠀⠀⠀⣠⣔⡿⠛⠒⠒⡕⢄⠀⠀⠀⠀⠀⠀
-                                    ⠀⠀⠀⠀⣀⣴⣳⠃⠀⠀⠀⠀⠘⢎⡦⣄⠀⠀⠀⠀
-                                    ⠀⠀⠀⣜⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠢⣳⠀⠀⠀
-                                    ⠀⠀⢸⣸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⡆⠀⠀
-                                    ⠀⠀⠘⡏⢀⢴⠶⣤⢄⢲⣲⠦⣦⣤⡤⡀⡇⠇⠀⠀
-                                    ⠀⠀⠀⣧⠀⣾⢀⣸⡸⠘⢸⠀⣿⠀⣸⡏⣧⠀⠀⠀
-                                    ⠀⠀⠀⢹⠀⣿⠿⡯⡀⢀⣼⢀⣿⠛⠉⠀⢻⠀⠀⠀
-                                    ⠀⠀⠀⣿⠐⠛⠂⠘⠛⠒⠛⠊⠛⠂⠀⢸⢸⠀⠀⠀
-                                    ⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡼⠀⠀⠀
-                                    ⠀⠀⠀⢻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡆⠀⠀⠀
-                                    ⠀⠀⢀⢾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡷⡀⠀⠀
-                                    ⠀⣠⠃⠘⠊⠉⠛⠛⠋⠩⠩⠭⠍⠛⠛⠛⠃⠐⡄⠀
-                                    ⠀⣯⡉⠉⢉⡉⠉⠉⠉⠉⠉⠉⣉⣉⣉⣉⣉⣉⣹⠀
-                                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-                                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-                                    ⡴⡤⡤⣤⡤⡤⣤⣤⢠⣤⣤⠀⢰⡄⣤⣶⡴⢶⣶⡴
+                    """
+            );
+        }
+
+        public void showLostMessage() {
+            System.out.print(
                 """
-        );
+                        ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗      ██████╗ ███████╗████████╗██╗
+                        ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║     ██╔═══██╗██╔════╝╚══██╔══╝██║
+                         ╚████╔╝ ██║   ██║██║   ██║    ██║     ██║   ██║███████╗   ██║   ██║
+                          ╚██╔╝  ██║   ██║██║   ██║    ██║     ██║   ██║╚════██║   ██║   ╚═╝
+                           ██║   ╚██████╔╝╚██████╔╝    ███████╗╚██████╔╝███████║   ██║   ██╗
+                           ╚═╝    ╚═════╝  ╚═════╝     ╚══════╝ ╚═════╝ ╚══════╝   ╚═╝   ╚═╝
+
+                                    ⠀⠀⠀     ⠀⠀⠀⠀⠀⠀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀
+                                        ⠀⠀⠀⠀⠀⠀⣠⣔⡿⠛⠒⠒⡕⢄⠀⠀⠀⠀⠀⠀
+                                        ⠀⠀⠀⠀⣀⣴⣳⠃⠀⠀⠀⠀⠘⢎⡦⣄⠀⠀⠀⠀
+                                        ⠀⠀⠀⣜⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠢⣳⠀⠀⠀
+                                        ⠀⠀⢸⣸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⡆⠀⠀
+                                        ⠀⠀⠘⡏⢀⢴⠶⣤⢄⢲⣲⠦⣦⣤⡤⡀⡇⠇⠀⠀
+                                        ⠀⠀⠀⣧⠀⣾⢀⣸⡸⠘⢸⠀⣿⠀⣸⡏⣧⠀⠀⠀
+                                        ⠀⠀⠀⢹⠀⣿⠿⡯⡀⢀⣼⢀⣿⠛⠉⠀⢻⠀⠀⠀
+                                        ⠀⠀⠀⣿⠐⠛⠂⠘⠛⠒⠛⠊⠛⠂⠀⢸⢸⠀⠀⠀
+                                        ⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡼⠀⠀⠀
+                                        ⠀⠀⠀⢻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡆⠀⠀⠀
+                                        ⠀⠀⢀⢾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡷⡀⠀⠀
+                                        ⠀⣠⠃⠘⠊⠉⠛⠛⠋⠩⠩⠭⠍⠛⠛⠛⠃⠐⡄⠀
+                                        ⠀⣯⡉⠉⢉⡉⠉⠉⠉⠉⠉⠉⣉⣉⣉⣉⣉⣉⣹⠀
+                                        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                                        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                                        ⡴⡤⡤⣤⡤⡤⣤⣤⢠⣤⣤⠀⢰⡄⣤⣶⡴⢶⣶⡴
+                    """
+            );
+        }
+
+        public void showWordsStateToUser() {
+            System.out.println("The word is: " + game.getGuessedWordState());
+        }
+
+        public void showGallowsToUser() {
+            System.out.println(gallows.getGallows());
+        }
+
+        public void sayToUserAboutIncorrectInput() {
+            System.out.println("Your input is incorrect! Try once again.");
+        }
+
+        public void showHitMessage() {
+            System.out.println("Hit!");
+        }
+
+        public void showAttemptsCountToUser() {
+            System.out.println("You have " + game.getAttemptCount() + " attempts.");
+        }
+
+        public void showInvitationToSolveTheWord() {
+            System.out.println("Guess a letter or word with length " + game.getWordLength() + ":");
+        }
     }
 
     private static final int ATTEMPTS_COUNT = 9;
     private final Gallows gallows = new Gallows();
+    private final UserInteractionInterface userInteractionInterface = new UserInteractionInterface();
 
     private static class Gallows {
         /*
