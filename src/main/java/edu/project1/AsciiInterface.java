@@ -2,6 +2,7 @@ package edu.project1;
 
 import edu.project1.engine.Game;
 import edu.project1.engine.GameResponse;
+import java.io.PrintStream;
 
 public class AsciiInterface extends CommandLineGameInterface {
     public AsciiInterface() {
@@ -48,10 +49,16 @@ public class AsciiInterface extends CommandLineGameInterface {
 
 
     protected class UserInteractionInterface {
-        UserInteractionInterface() {}
+        UserInteractionInterface() {
+            stream = System.out;
+        }
+
+        UserInteractionInterface(PrintStream stream) {
+            this.stream = stream;
+        }
 
         public void showTitle() {
-            System.out.print(
+            stream.print(
                 """
                         ██╗  ██╗ █████╗ ███╗   ██╗ ██████╗ ███╗   ███╗ █████╗ ███╗   ██╗
                         ██║  ██║██╔══██╗████╗  ██║██╔════╝ ████╗ ████║██╔══██╗████╗  ██║
@@ -64,7 +71,7 @@ public class AsciiInterface extends CommandLineGameInterface {
         }
 
         public void showWinMessage() {
-            System.out.print(
+            stream.print(
                 """
                         ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██╗███╗   ██╗██╗
                         ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██║████╗  ██║██║
@@ -96,7 +103,7 @@ public class AsciiInterface extends CommandLineGameInterface {
         }
 
         public void showLostMessage() {
-            System.out.print(
+            stream.print(
                 """
                         ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗      ██████╗ ███████╗████████╗██╗
                         ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║     ██╔═══██╗██╔════╝╚══██╔══╝██║
@@ -127,28 +134,30 @@ public class AsciiInterface extends CommandLineGameInterface {
         }
 
         public void showWordsStateToUser() {
-            System.out.println("The word is: " + game.getGuessedWordState());
+            stream.println("The word is: " + game.getGuessedWordState());
         }
 
         public void showGallowsToUser() {
-            System.out.println(gallows.getGallows());
+            stream.println(gallows.getGallows());
         }
 
         public void sayToUserAboutIncorrectInput() {
-            System.out.println("Your input is incorrect! Try once again.");
+            stream.println("Your input is incorrect! Try once again.");
         }
 
         public void showHitMessage() {
-            System.out.println("Hit!");
+            stream.println("Hit!");
         }
 
         public void showAttemptsCountToUser() {
-            System.out.println("You have " + game.getAttemptCount() + " attempts.");
+            stream.println("You have " + game.getAttemptCount() + " attempts.");
         }
 
         public void showInvitationToSolveTheWord() {
-            System.out.println("Guess a letter or word with length " + game.getWordLength() + ":");
+            stream.println("Guess a letter or word with length " + game.getWordLength() + ":");
         }
+
+        private final PrintStream stream;
     }
 
     private static final int ATTEMPTS_COUNT = 9;
