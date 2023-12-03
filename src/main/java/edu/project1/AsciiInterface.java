@@ -211,28 +211,22 @@ public class AsciiInterface extends CommandLineGameInterface {
                 gallows[executionSteps + 1][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS] = ROPE;
             } else {
                 switch (executionSteps) {
-                    case HANGMAN_ROPE_LENGTH -> {
+                    case HANGMAN_ROPE_LENGTH ->
                         gallows[HANGMAN_ROPE_LENGTH + 1][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS] = HEAD;
-                    }
-                    case HANGMAN_ROPE_LENGTH + 1 -> {
+                    case HANGMAN_ROPE_LENGTH + 1 ->
                         gallows[HANGMAN_ROPE_LENGTH + 2][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS - 1] =
                             LEFT_HAND;
-                    }
-                    case HANGMAN_ROPE_LENGTH + 2 -> {
+                    case HANGMAN_ROPE_LENGTH + 2 ->
                         gallows[HANGMAN_ROPE_LENGTH + 2][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS] = BODY;
-                    }
-                    case HANGMAN_ROPE_LENGTH + 3 -> {
+                    case HANGMAN_ROPE_LENGTH + 3 ->
                         gallows[HANGMAN_ROPE_LENGTH + 2][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS + 1] =
                             RIGHT_HAND;
-                    }
-                    case HANGMAN_ROPE_LENGTH + 4 -> {
+                    case HANGMAN_ROPE_LENGTH + 4 ->
                         gallows[HANGMAN_ROPE_LENGTH + 3][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS - 1] =
                             LEFT_LEG;
-                    }
-                    case HANGMAN_ROPE_LENGTH + 5 -> {
+                    case HANGMAN_ROPE_LENGTH + 5 ->
                         gallows[HANGMAN_ROPE_LENGTH + 3][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS + 1] =
                             RIGHT_LEG;
-                    }
                     default -> {
                     }
                 }
