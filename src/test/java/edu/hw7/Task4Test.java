@@ -220,13 +220,13 @@ public class Task4Test {
             fail("Not expected to catch exception: " + ignored.getMessage());
         }
 
-        long commonTimingDifference = 0;
+        double commonTimingDifference = 0;
         for (int i = 1; i < timings.length; i++) {
             commonTimingDifference += (timings[i - 1] - timings[i]);
         }
 
-        var avgGain = commonTimingDifference / (timings.length - 1);
-        assertThat(0L).isLessThan(avgGain);
+        double avgGain = commonTimingDifference / (timings.length - 1);
+        assertThat(0D).isLessThan(avgGain);
 
         LOGGER.info(
             "Average efficiency gain per thread=" + avgGain / NANOSECONDS_PER_SECOND + " seconds"
