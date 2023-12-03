@@ -48,6 +48,11 @@ public class AsciiInterface extends CommandLineGameInterface {
     }
 
 
+    private static final int ATTEMPTS_COUNT = 9;
+    private final Gallows gallows = new Gallows();
+    private final UserInteractionInterface userInteractionInterface = new UserInteractionInterface();
+
+
     protected class UserInteractionInterface {
         UserInteractionInterface() {
             stream = System.out;
@@ -160,10 +165,6 @@ public class AsciiInterface extends CommandLineGameInterface {
         private final PrintStream stream;
     }
 
-    private static final int ATTEMPTS_COUNT = 9;
-    private final Gallows gallows = new Gallows();
-    private final UserInteractionInterface userInteractionInterface = new UserInteractionInterface();
-
     private static class Gallows {
         /*
             ╔════════════╗
@@ -220,22 +221,36 @@ public class AsciiInterface extends CommandLineGameInterface {
                 gallows[executionSteps + 1][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS] = ROPE;
             } else {
                 switch (executionSteps) {
-                    case HANGMAN_ROPE_LENGTH ->
-                        gallows[HANGMAN_ROPE_LENGTH + 1][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS] = HEAD;
-                    case HANGMAN_ROPE_LENGTH + 1 ->
-                        gallows[HANGMAN_ROPE_LENGTH + 2][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS - 1] =
-                            LEFT_HAND;
-                    case HANGMAN_ROPE_LENGTH + 2 ->
-                        gallows[HANGMAN_ROPE_LENGTH + 2][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS] = BODY;
-                    case HANGMAN_ROPE_LENGTH + 3 ->
-                        gallows[HANGMAN_ROPE_LENGTH + 2][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS + 1] =
-                            RIGHT_HAND;
-                    case HANGMAN_ROPE_LENGTH + 4 ->
-                        gallows[HANGMAN_ROPE_LENGTH + 3][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS - 1] =
-                            LEFT_LEG;
-                    case HANGMAN_ROPE_LENGTH + 5 ->
-                        gallows[HANGMAN_ROPE_LENGTH + 3][OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS + 1] =
-                            RIGHT_LEG;
+                    case HANGMAN_ROPE_LENGTH -> {
+                        int headRowIndex = HANGMAN_ROPE_LENGTH + 1;
+                        int headColIndex = OFFSET_BEFORE_GALLOWS + 1 + OFFSET_AFTER_GALLOWS;
+                        gallows[headRowIndex][headColIndex] = HEAD;
+                    }
+                    case HANGMAN_ROPE_LENGTH + 1 -> {
+                        int lHandRowIndex = HANGMAN_ROPE_LENGTH + 2;
+                        int lHandColIndex = OFFSET_BEFORE_GALLOWS + OFFSET_AFTER_GALLOWS;
+                        gallows[lHandRowIndex][lHandColIndex] = LEFT_HAND;
+                    }
+                    case HANGMAN_ROPE_LENGTH + 2 -> {
+                        int bodyRowIndex = HANGMAN_ROPE_LENGTH + 2;
+                        int bodyColIndex = OFFSET_BEFORE_GALLOWS + OFFSET_AFTER_GALLOWS + 1;
+                        gallows[bodyRowIndex][bodyColIndex] = BODY;
+                    }
+                    case HANGMAN_ROPE_LENGTH + 3 -> {
+                        int rHandRowIndex = HANGMAN_ROPE_LENGTH + 2;
+                        int rHandColIndex = OFFSET_BEFORE_GALLOWS + OFFSET_AFTER_GALLOWS + 2;
+                        gallows[rHandRowIndex][rHandColIndex] = RIGHT_HAND;
+                    }
+                    case HANGMAN_ROPE_LENGTH + 4 -> {
+                        int lLegRowIndex = HANGMAN_ROPE_LENGTH + 3;
+                        int lLegColIndex = OFFSET_BEFORE_GALLOWS + OFFSET_AFTER_GALLOWS;
+                        gallows[lLegRowIndex][lLegColIndex] = LEFT_LEG;
+                    }
+                    case HANGMAN_ROPE_LENGTH + 5 -> {
+                        int rLegRowIndex = HANGMAN_ROPE_LENGTH + 3;
+                        int rLegColIndex = OFFSET_BEFORE_GALLOWS + OFFSET_AFTER_GALLOWS + 2;
+                        gallows[rLegRowIndex][rLegColIndex] = RIGHT_LEG;
+                    }
                     default -> {
                     }
                 }
