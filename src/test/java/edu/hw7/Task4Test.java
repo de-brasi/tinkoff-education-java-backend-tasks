@@ -201,37 +201,38 @@ public class Task4Test {
     }
 
     @Test
-    @DisplayName("Average efficiency gain (from 1 to 4 threads; count of threads less or equal CPU core count)")
+    @DisplayName("Average efficiency gain (from 1 to 8 threads; count of threads less or equal CPU core count)")
     public void test6() {
         var solver = new PiMonteCarloMultiThreadSolver();
-        final int iterationCount = 100_000_000;
-        final int maxThreadCount = 4;
-
-        double[] timings = new double[maxThreadCount];
+        final int iterationCount = 10_000_000;
+        final int maxThreadCount = 8;
 
         try {
-            for (int i = 1; i <= maxThreadCount; i++) {
-                var startTime = System.nanoTime();
+            var startTime = System.nanoTime();
+            solver.calculatePiValue(iterationCount, 1);
+            var durationNanoSeconds = System.nanoTime() - startTime;
+
+            double prevDuration = durationNanoSeconds;
+            double commonDurationGain = 0;
+
+            for (int i = 2; i <= maxThreadCount; i++) {
+                startTime = System.nanoTime();
                 solver.calculatePiValue(iterationCount, i);
-                var durationNanoSeconds = System.nanoTime() - startTime;
-                timings[i - 1] = durationNanoSeconds;
+                durationNanoSeconds = System.nanoTime() - startTime;
+
+                commonDurationGain += (prevDuration - durationNanoSeconds);
+                prevDuration = durationNanoSeconds;
             }
+
+            double avgGain = commonDurationGain / (maxThreadCount - 1);
+            assertThat(0D).isLessThan(avgGain);
+
+            LOGGER.info(
+                "Average efficiency gain per thread=" + avgGain / NANOSECONDS_PER_SECOND + " seconds"
+            );
         } catch (Exception ignored) {
             fail("Not expected to catch exception: " + ignored.getMessage());
         }
-
-        double commonTimingDifference = 0;
-        for (int i = 1; i < timings.length; i++) {
-            double diff = timings[i - 1] - timings[i];
-            commonTimingDifference += (diff);
-        }
-
-        double avgGain = commonTimingDifference / (timings.length - 1);
-        assertThat(0D).isLessThan(avgGain);
-
-        LOGGER.info(
-            "Average efficiency gain per thread=" + avgGain / NANOSECONDS_PER_SECOND + " seconds"
-        );
     }
 
     private static float getRelativeBias(float experimentValue, float realValue) {
