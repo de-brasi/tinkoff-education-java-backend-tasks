@@ -12,12 +12,17 @@ public class Task4Test {
     public void test1() {
         var solver = new PiMonteCarloSingleThreadSolver();
 
-        var pi10_000Simulations = solver.calculatePiValue(10_000);
-        var pi100_000Simulations = solver.calculatePiValue(100_000);
-        var pi1_000_000Simulations = solver.calculatePiValue(1_000_000);
-        var pi10_000_000Simulations = solver.calculatePiValue(10_000_000);
-
         try {
+            var pi10_000Simulations = solver.calculatePiValue(10_000);
+            var pi100_000Simulations = solver.calculatePiValue(100_000);
+            var pi1_000_000Simulations = solver.calculatePiValue(1_000_000);
+            var pi10_000_000Simulations = solver.calculatePiValue(10_000_000);
+
+            assertThat(Math.abs(pi10_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi100_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi1_000_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi10_000_000Simulations - PI)).isLessThan(0.1F);
+
             LOGGER.info(
                 "Single thread solution; "
                     + "Simulations count=10_000; "
@@ -54,12 +59,17 @@ public class Task4Test {
 
         final int threadsCount = 2;
 
-        var pi10_000Simulations = solver.calculatePiValue(10_000, threadsCount);
-        var pi100_000Simulations = solver.calculatePiValue(100_000, threadsCount);
-        var pi1_000_000Simulations = solver.calculatePiValue(1_000_000, threadsCount);
-        var pi10_000_000Simulations = solver.calculatePiValue(10_000_000, threadsCount);
-
         try {
+            var pi10_000Simulations = solver.calculatePiValue(10_000, threadsCount);
+            var pi100_000Simulations = solver.calculatePiValue(100_000, threadsCount);
+            var pi1_000_000Simulations = solver.calculatePiValue(1_000_000, threadsCount);
+            var pi10_000_000Simulations = solver.calculatePiValue(10_000_000, threadsCount);
+
+            assertThat(Math.abs(pi10_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi100_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi1_000_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi10_000_000Simulations - PI)).isLessThan(0.1F);
+
             LOGGER.info(
                 "2 threads solution; "
                     + "Simulations count=10_000; "
@@ -96,12 +106,17 @@ public class Task4Test {
 
         final int threadsCount = 10;
 
-        var pi10_000Simulations = solver.calculatePiValue(10_000, threadsCount);
-        var pi100_000Simulations = solver.calculatePiValue(100_000, threadsCount);
-        var pi1_000_000Simulations = solver.calculatePiValue(1_000_000, threadsCount);
-        var pi10_000_000Simulations = solver.calculatePiValue(10_000_000, threadsCount);
-
         try {
+            var pi10_000Simulations = solver.calculatePiValue(10_000, threadsCount);
+            var pi100_000Simulations = solver.calculatePiValue(100_000, threadsCount);
+            var pi1_000_000Simulations = solver.calculatePiValue(1_000_000, threadsCount);
+            var pi10_000_000Simulations = solver.calculatePiValue(10_000_000, threadsCount);
+
+            assertThat(Math.abs(pi10_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi100_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi1_000_000Simulations - PI)).isLessThan(0.1F);
+            assertThat(Math.abs(pi10_000_000Simulations - PI)).isLessThan(0.1F);
+
             LOGGER.info(
                 "10 threads solution; "
                     + "Simulations count=10_000; "
@@ -136,12 +151,17 @@ public class Task4Test {
     public void test4() {
         var solver = new PiMonteCarloMultiThreadSolver();
         final int iterationCount = 10_000_000;
+        double prevDuration = Double.POSITIVE_INFINITY;
 
         try {
             for (int i = 1; i <= 10; i++) {
                 var startTime = System.nanoTime();
                 solver.calculatePiValue(iterationCount, i);
-                var durationNanoSeconds = System.nanoTime() - startTime;
+                double durationNanoSeconds = System.nanoTime() - startTime;
+
+                assertThat(durationNanoSeconds).isLessThanOrEqualTo(prevDuration);
+                durationNanoSeconds = prevDuration;
+
                 LOGGER.info(
                     "Thread counts=" + i + ";"
                         + "\tIteration counts=" + iterationCount + ";"
@@ -158,12 +178,17 @@ public class Task4Test {
     public void test5() {
         var solver = new PiMonteCarloMultiThreadSolver();
         final int iterationCount = 1_000_000_000;
+        double prevDuration = Double.POSITIVE_INFINITY;
 
         try {
             for (int i = 1; i <= 8; i++) {
                 var startTime = System.nanoTime();
                 solver.calculatePiValue(iterationCount, i);
-                var durationNanoSeconds = System.nanoTime() - startTime;
+                double durationNanoSeconds = System.nanoTime() - startTime;
+
+                assertThat(durationNanoSeconds).isLessThanOrEqualTo(prevDuration);
+                durationNanoSeconds = prevDuration;
+
                 LOGGER.info(
                     "Thread counts=" + i + ";"
                         + "\tIteration counts=" + iterationCount + ";"
@@ -200,10 +225,11 @@ public class Task4Test {
             commonTimingDifference += (timings[i - 1] - timings[i]);
         }
 
+        var avgGain = commonTimingDifference / (timings.length - 1);
+        assertThat(0L).isLessThan(avgGain);
+
         LOGGER.info(
-            "Average efficiency gain per thread=" +
-            commonTimingDifference / (timings.length - 1) / NANOSECONDS_PER_SECOND
-            + " seconds"
+            "Average efficiency gain per thread=" + avgGain / NANOSECONDS_PER_SECOND + " seconds"
         );
     }
 
