@@ -27,7 +27,7 @@ public class Main {
                 .getSphericalTransformation()
                 .withColor(ColorShortcuts.DARK_RED),
             NonLinearTransformationsGenerator
-                .getSphericalTransformation()
+                .getSphericalTransformation(200, 200)
                 .withColor(ColorShortcuts.YELLOW),
             LinearTransformationsGenerator
                 .getRandomNonCompressiveTransformation()
