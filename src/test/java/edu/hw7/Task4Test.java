@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
-public class Task4Test {
+public class    Task4Test {
     @Test
     @DisplayName("Single thread solution evaluation")
     public void test1() {
@@ -187,7 +187,7 @@ public class Task4Test {
                 double durationNanoSeconds = System.nanoTime() - startTime;
 
                 assertThat(durationNanoSeconds).isLessThanOrEqualTo(prevDuration);
-                durationNanoSeconds = prevDuration;
+                prevDuration = durationNanoSeconds;
 
                 LOGGER.info(
                     "Thread counts=" + i + ";"
