@@ -28,7 +28,6 @@ public interface Transformation extends Function<Point, Point> {
 
     default Transformation linear() {
         var sourceTransformation = this;
-        var typeOfTransformation = Type.LINEAR;
 
         return new Transformation() {
             @Override
@@ -48,14 +47,13 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Type getType() {
-                return typeOfTransformation;
+                return Type.LINEAR;
             }
         };
     }
 
     default Transformation nonLinear() {
         var sourceTransformation = this;
-        var typeOfTransformation = Type.NON_LINEAR;
         return new Transformation() {
             @Override
             public Point apply(Point point) {
@@ -74,7 +72,7 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Type getType() {
-                return typeOfTransformation;
+                return Type.LINEAR;
             }
         };
     }
@@ -84,7 +82,7 @@ public interface Transformation extends Function<Point, Point> {
     }
 
     default Transformation.Type getType() {
-        return null;
+        return Type.ANY;
     }
 
     enum Type {
