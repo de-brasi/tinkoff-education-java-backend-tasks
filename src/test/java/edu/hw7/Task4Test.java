@@ -198,6 +198,8 @@ public class    Task4Test {
             }
         } catch (Exception ignored) {
             fail("Not expected to catch exception: " + ignored.getMessage());
+        } catch (AssertionError error) {
+            fail("Assertion! Count of processors: " + maxThreadCount);
         }
     }
 
@@ -233,6 +235,8 @@ public class    Task4Test {
             );
         } catch (Exception ignored) {
             fail("Not expected to catch exception: " + ignored.getMessage());
+        } catch (AssertionError error) {
+            fail("Assertion! Count of processors: " + maxThreadCount);
         }
     }
 
