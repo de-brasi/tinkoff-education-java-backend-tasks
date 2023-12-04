@@ -42,11 +42,12 @@ public class Main {
         long seed = 200;
         Domain domain = new Domain(-100, 100, -100, 100);
         RendererRunningConfig config = new RendererRunningConfig(
+            1_000_000,
             (short) 20, Transformation.Type.LINEAR,
             (short) 100, Transformation.Type.NON_LINEAR,
             0
         );
-        canvas = renderer.render(canvas, variations, domain, config, 1_000_000, (short) 100, seed);
+        canvas = renderer.render(canvas, variations, domain, config, seed);
         new SingleThreadLogarithmicGammaCorrector().process(canvas, 2);
 
         Path output = Paths.get("").toAbsolutePath().getParent().resolve("example_image");
