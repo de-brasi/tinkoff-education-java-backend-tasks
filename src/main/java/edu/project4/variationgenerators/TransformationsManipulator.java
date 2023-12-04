@@ -12,6 +12,16 @@ public class TransformationsManipulator {
         return transformations.get(random.nextInt(0, transformations.size()));
     }
 
+    public Transformation getRandomLinear() {
+        // TODO
+        return transformations.get(random.nextInt(0, transformations.size()));
+    }
+
+    public Transformation getRandomNonLinear() {
+        // TODO
+        return transformations.get(random.nextInt(0, transformations.size()));
+    }
+
     private final List<Transformation> transformations;
     private final Random random = new Random();
 }
