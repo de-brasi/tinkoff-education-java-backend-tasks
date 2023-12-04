@@ -19,7 +19,7 @@ public class SingleThreadRenderer implements Renderer {
         List<Transformation> variations,
         Domain domain,
         RendererRunningConfig config,
-        int samples, long seed
+        long seed
     )
     {
         var transformationsManipulator = new TransformationsManipulator(variations);
@@ -32,8 +32,8 @@ public class SingleThreadRenderer implements Renderer {
         int yCoordinate;
 
         // TODO: симметрия
-        for (int i = 0; i < samples; i++) {
-            logProcessDebugOnly(i, samples);
+        for (int i = 0; i < config.samplesCount(); i++) {
+            logProcessDebugOnly(i, config.samplesCount());
             newPoint = Point.of(
                 random.nextDouble(domain.xMin(), domain.xMax()),
                 random.nextDouble(domain.yMin(), domain.yMax())
