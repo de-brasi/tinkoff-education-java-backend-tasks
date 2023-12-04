@@ -3,8 +3,8 @@ package edu.project4.variationgenerators;
 import edu.project4.utils.Point;
 import java.util.Random;
 
-public class LinearTransformationsGenerator {
-    private LinearTransformationsGenerator() {}
+public class LinearTransformationsBuilder {
+    private LinearTransformationsBuilder() {}
 
     public static Transformation getTransformation(double a, double b, double c, double d, double e, double f) {
         AffineTransformationCoefficients coefficients = new AffineTransformationCoefficients(a, b, c, d, e, f);

@@ -2,10 +2,10 @@ package edu.project4.variationgenerators;
 
 import edu.project4.utils.Point;
 
-public class NonLinearTransformationsGenerator {
+public class NonLinearTransformationsBuilder {
     // TODO: сделать вариант с рандомными коэффициентами
 
-    private NonLinearTransformationsGenerator() {}
+    private NonLinearTransformationsBuilder() {}
 
     public static Transformation getSinusoidalTransformation() {
         return getSinusoidalTransformation(1, 1);
