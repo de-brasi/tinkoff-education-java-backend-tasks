@@ -39,23 +39,16 @@ public class SingleThreadRenderer implements Renderer {
                 random.nextDouble(domain.yMin(), domain.yMax())
             );
 
-            // TODO: конфигурировать сколько действий на "раздувание" координаты
-            //  и какие действия - линейные или нелинейные преобразования!
-            // TODO: проверить, а что если не скипать!
             for (int j = 0; j < config.missedIterationsCount(); j++) {
-
-                // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
-                newPoint = transformationsManipulator.getRandom().apply(newPoint);
-
+                newPoint = transformationsManipulator.getRandomLinear().apply(newPoint);
+                newPoint = transformationsManipulator.getRandomNonLinear().apply(newPoint);
             }
 
             for (int j = 0; j < config.mainIterationsCount(); j++) {
+                newPoint = transformationsManipulator.getRandomLinear().apply(newPoint);
 
-                // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
-                var transformation = transformationsManipulator.getRandom();
+                var transformation = transformationsManipulator.getRandomNonLinear();
                 newPoint = transformation.apply(newPoint);
-
-                // TODO: применить НЕ линейное преобразование, или как?;
 
                 xCoordinate = (int) Math.round(newPoint.x());
                 yCoordinate = (int) Math.round(newPoint.y());
