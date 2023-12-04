@@ -13,6 +13,6 @@ public interface Renderer {
         List<Transformation> variations,
         Domain domain,
         RendererRunningConfig config,
-        int samples, short iterPerSample, long seed
+        int samples, long seed
     );
 }

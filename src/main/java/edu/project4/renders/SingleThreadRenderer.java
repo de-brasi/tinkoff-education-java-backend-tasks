@@ -19,8 +19,8 @@ public class SingleThreadRenderer implements Renderer {
         List<Transformation> variations,
         Domain domain,
         RendererRunningConfig config,
-        int samples, short iterPerSample,
-        long seed)
+        int samples, long seed
+    )
     {
         var transformationsManipulator = new TransformationsManipulator(variations);
         final Random random = new Random(seed);
@@ -42,14 +42,14 @@ public class SingleThreadRenderer implements Renderer {
             // TODO: конфигурировать сколько действий на "раздувание" координаты
             //  и какие действия - линейные или нелинейные преобразования!
             // TODO: проверить, а что если не скипать!
-            for (int j = 0; j < 20; j++) {
+            for (int j = 0; j < config.missedIterationsCount(); j++) {
 
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
                 newPoint = transformationsManipulator.getRandom().apply(newPoint);
 
             }
 
-            for (int j = 0; j < iterPerSample; j++) {
+            for (int j = 0; j < config.mainIterationsCount(); j++) {
 
                 // TODO: конфигурировать, какие преобразования применять, а какие нет и в каком порядке
                 var transformation = transformationsManipulator.getRandom();
