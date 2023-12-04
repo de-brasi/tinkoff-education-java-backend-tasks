@@ -7,8 +7,8 @@ import edu.project4.utils.Domain;
 import edu.project4.utils.ImageFormat;
 import edu.project4.utils.ImageUtils;
 import edu.project4.utils.RendererRunningConfig;
-import edu.project4.variationgenerators.LinearTransformationsGenerator;
-import edu.project4.variationgenerators.NonLinearTransformationsGenerator;
+import edu.project4.variationgenerators.LinearTransformationsBuilder;
+import edu.project4.variationgenerators.NonLinearTransformationsBuilder;
 import edu.project4.variationgenerators.Transformation;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,25 +21,25 @@ public class Main {
 
         // TODO: с вариациями - как то добавить поддержку вероятности вытащить ту или иную вариацию
         List<Transformation> variations = List.of(
-            NonLinearTransformationsGenerator
+            NonLinearTransformationsBuilder
                 .getHeartTransformation()
                 .withColor(ColorShortcuts.HOT_PINK),
-            NonLinearTransformationsGenerator
+            NonLinearTransformationsBuilder
                 .getSphericalTransformation()
                 .withColor(ColorShortcuts.DARK_RED),
-            NonLinearTransformationsGenerator
+            NonLinearTransformationsBuilder
                 .getSphericalTransformation(200, 200)
                 .withColor(ColorShortcuts.YELLOW),
-            LinearTransformationsGenerator
+            LinearTransformationsBuilder
                 .getRandomNonCompressiveTransformation()
                 .withColor(ColorShortcuts.SILVER),
-            LinearTransformationsGenerator
+            LinearTransformationsBuilder
                 .getRandomNonCompressiveTransformation()
                 .withColor(ColorShortcuts.SILVER)
         );
 
         // TODO: почему null
-        var some = variations.get(0).getType();
+        var type = variations.get(0).getType();
 
         SingleThreadRenderer renderer = new SingleThreadRenderer();
         long seed = 200;
