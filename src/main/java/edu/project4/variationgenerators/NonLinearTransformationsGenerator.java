@@ -12,12 +12,14 @@ public class NonLinearTransformationsGenerator {
     }
 
     public static Transformation getSinusoidalTransformation(double xScale, double yScale) {
-        return (Point source) -> {
+        Transformation result = (Point source) -> {
             return new Point(
                 xScale * Math.sin(source.x()),
                 yScale * Math.sin(source.y())
             );
         };
+
+        return result.nonLinear();
     }
 
     public static Transformation getSphericalTransformation() {
@@ -25,7 +27,7 @@ public class NonLinearTransformationsGenerator {
     }
 
     public static Transformation getSphericalTransformation(double xScale, double yScale) {
-        return (Point source) -> {
+        Transformation result = (Point source) -> {
             double newX = source.x() / (Math.pow(source.x(), 2) + Math.pow(source.y(), 2));
             double newY = source.y() / (Math.pow(source.x(), 2) + Math.pow(source.y(), 2));
             return new Point(
@@ -33,6 +35,8 @@ public class NonLinearTransformationsGenerator {
                 yScale * newY
             );
         };
+
+        return result.nonLinear();
     }
 
     public static Transformation getPolarTransformation() {
@@ -40,7 +44,7 @@ public class NonLinearTransformationsGenerator {
     }
 
     public static Transformation getPolarTransformation(double xScale, double yScale) {
-        return (Point source) -> {
+        Transformation result = (Point source) -> {
             double newX = Math.atan(source.y() / source.x()) / Math.PI;
             double newY = Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2)) - 1;
             return new Point(
@@ -48,6 +52,8 @@ public class NonLinearTransformationsGenerator {
                 yScale * newY
             );
         };
+
+        return result.nonLinear();
     }
 
     public static Transformation getHeartTransformation() {
@@ -55,7 +61,7 @@ public class NonLinearTransformationsGenerator {
     }
 
     public static Transformation getHeartTransformation(double xScale, double yScale) {
-        return (Point source) -> {
+        Transformation result = (Point source) -> {
             double newX =
                 Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2))
                     * Math.sin(
@@ -73,6 +79,8 @@ public class NonLinearTransformationsGenerator {
                 yScale * newY
             );
         };
+
+        return result.nonLinear();
     }
 
     public static Transformation getDiskTransformation() {
@@ -80,7 +88,7 @@ public class NonLinearTransformationsGenerator {
     }
 
     public static Transformation getDiskTransformation(double xScale, double yScale) {
-        return (Point source) -> {
+        Transformation result = (Point source) -> {
             double newX = (1 / Math.PI)
                 * Math.atan(source.y() / source.x())
                 * Math.sin(Math.PI * Math.sqrt(Math.pow(source.x(), 2) + Math.pow(source.y(), 2)));
@@ -92,5 +100,7 @@ public class NonLinearTransformationsGenerator {
                 yScale * newY
             );
         };
+
+        return result.nonLinear();
     }
 }

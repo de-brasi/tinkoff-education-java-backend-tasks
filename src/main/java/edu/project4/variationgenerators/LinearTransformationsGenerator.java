@@ -9,10 +9,12 @@ public class LinearTransformationsGenerator {
     public static Transformation getTransformation(double a, double b, double c, double d, double e, double f) {
         AffineTransformationCoefficients coefficients = new AffineTransformationCoefficients(a, b, c, d, e, f);
 
-        return point -> new Point(
+        Transformation result = point -> new Point(
             point.x() * coefficients.a() + point.y() * coefficients.b() + coefficients.c(),
             point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
         );
+
+        return result.linear();
     }
 
     public static Transformation getRandomTransformation() {
@@ -40,10 +42,12 @@ public class LinearTransformationsGenerator {
 
         // TODO: WARNING!!!
         // TODO: выяснить вообще как происходит вызов статической функции класса из параллельных потоков.
-        return point -> new Point(
+        Transformation result = point -> new Point(
             point.x() * coefficients.a() + point.y() * coefficients.b() + coefficients.c(),
             point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
         );
+
+        return result.linear();
     }
 
     public static Transformation getRandomNonCompressiveTransformation() {
@@ -56,10 +60,12 @@ public class LinearTransformationsGenerator {
             );
 
         AffineTransformationCoefficients coefficients = generateRandomCoefficients(predicate);
-        return point -> new Point(
+        Transformation result = point -> new Point(
             point.x() * coefficients.a() + point.y() * coefficients.b() + coefficients.c(),
             point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
         );
+
+        return result.linear();
     }
 
     private static AffineTransformationCoefficients generateRandomCoefficients(CoefficientsGeneratorPredicate predicate) {
