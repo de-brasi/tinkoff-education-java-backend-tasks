@@ -179,9 +179,10 @@ public class    Task4Test {
         var solver = new PiMonteCarloMultiThreadSolver();
         final int iterationCount = 1_000_000_000;
         double prevDuration = Double.POSITIVE_INFINITY;
+        final int maxThreadCount = Runtime.getRuntime().availableProcessors();
 
         try {
-            for (int i = 1; i <= 8; i++) {
+            for (int i = 1; i <= maxThreadCount; i++) {
                 var startTime = System.nanoTime();
                 solver.calculatePiValue(iterationCount, i);
                 double durationNanoSeconds = System.nanoTime() - startTime;
@@ -205,7 +206,7 @@ public class    Task4Test {
     public void test6() {
         var solver = new PiMonteCarloMultiThreadSolver();
         final int iterationCount = 10_000_000;
-        final int maxThreadCount = 8;
+        final int maxThreadCount = Runtime.getRuntime().availableProcessors();
 
         try {
             var startTime = System.nanoTime();
