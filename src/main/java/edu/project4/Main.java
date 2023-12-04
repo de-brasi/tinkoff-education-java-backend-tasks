@@ -2,8 +2,8 @@ package edu.project4;
 
 import edu.project4.postprocessors.SingleThreadLogarithmicGammaCorrector;
 import edu.project4.renders.SingleThreadRenderer;
-import edu.project4.utils.Color;
 import edu.project4.utils.ColorShortcuts;
+import edu.project4.utils.Domain;
 import edu.project4.utils.ImageFormat;
 import edu.project4.utils.ImageUtils;
 import edu.project4.variationgenerators.LinearTransformationsGenerator;
@@ -39,7 +39,8 @@ public class Main {
 
         SingleThreadRenderer renderer = new SingleThreadRenderer();
         long seed = 200;
-        canvas = renderer.render(canvas, variations, 1_000_000, (short) 100, seed);
+        Domain domain = new Domain(-100, 100, -100, 100);
+        canvas = renderer.render(canvas, variations, domain, 1_000_000, (short) 100, seed);
         new SingleThreadLogarithmicGammaCorrector().process(canvas, 2);
 
         Path output = Paths.get("").toAbsolutePath().getParent().resolve("example_image");
