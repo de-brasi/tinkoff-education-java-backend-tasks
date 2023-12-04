@@ -1,6 +1,7 @@
 package edu.project4.renders;
 
 import edu.project4.FractalImage;
+import edu.project4.utils.Domain;
 import edu.project4.variationgenerators.Transformation;
 import edu.project4.utils.Pixel;
 import edu.project4.utils.Point;
@@ -15,17 +16,12 @@ public class SingleThreadRenderer implements Renderer {
     public FractalImage render(
         FractalImage canvas,
         List<Transformation> variations,
+        Domain domain,
         int samples, short iterPerSample,
         long seed)
     {
         var transformationsManipulator = new TransformationsManipulator(variations);
         final Random random = new Random(seed);
-
-        // TODO: конфигурировать это
-        final double xMin = -100;
-        final double xMax = 100;
-        final double yMin = -100;
-        final double yMax = 100;
 
         Point newPoint;
         Pixel curPixel;
@@ -37,8 +33,8 @@ public class SingleThreadRenderer implements Renderer {
         for (int i = 0; i < samples; i++) {
             logProcessDebugOnly(i, samples);
             newPoint = Point.of(
-                random.nextDouble(xMin, xMax),
-                random.nextDouble(yMin, yMax)
+                random.nextDouble(domain.xMin(), domain.xMax()),
+                random.nextDouble(domain.yMin(), domain.yMax())
             );
 
             // TODO: конфигурировать сколько действий на "раздувание" координаты
