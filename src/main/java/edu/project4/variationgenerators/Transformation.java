@@ -18,11 +18,18 @@ public interface Transformation extends Function<Point, Point> {
             public Color getColor() {
                 return toSet;
             }
+
+            @Override
+            public Type getType() {
+                return sourceTransformation.getType();
+            }
         };
     }
 
     default Transformation linear() {
         var sourceTransformation = this;
+        var typeOfTransformation = Type.LINEAR;
+
         return new Transformation() {
             @Override
             public Point apply(Point point) {
@@ -41,13 +48,14 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Type getType() {
-                return Type.LINEAR;
+                return typeOfTransformation;
             }
         };
     }
 
     default Transformation nonLinear() {
         var sourceTransformation = this;
+        var typeOfTransformation = Type.NON_LINEAR;
         return new Transformation() {
             @Override
             public Point apply(Point point) {
@@ -66,7 +74,7 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Type getType() {
-                return Type.NON_LINEAR;
+                return typeOfTransformation;
             }
         };
     }
@@ -76,7 +84,7 @@ public interface Transformation extends Function<Point, Point> {
     }
 
     default Transformation.Type getType() {
-        return Type.ANY;
+        return null;
     }
 
     enum Type {

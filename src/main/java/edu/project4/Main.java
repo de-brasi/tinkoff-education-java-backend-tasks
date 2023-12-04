@@ -38,6 +38,9 @@ public class Main {
                 .withColor(ColorShortcuts.SILVER)
         );
 
+        // TODO: почему null
+        var some = variations.get(0).getType();
+
         SingleThreadRenderer renderer = new SingleThreadRenderer();
         long seed = 200;
         Domain domain = new Domain(-100, 100, -100, 100);
