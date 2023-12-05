@@ -1,15 +1,14 @@
 package edu.project4.variationgenerators;
 
+import edu.project4.utils.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class TransformationsManipulator {
     public TransformationsManipulator(List<Transformation> variations) {
-        transformations = new ArrayList<>(variations);
-
-        linearTransformations = new ArrayList<>();
-        nonLinearTransformations = new ArrayList<>();
+        ArrayList<Transformation> linearTransformations = new ArrayList<>();
+        ArrayList<Transformation> nonLinearTransformations = new ArrayList<>();
 
         for (var variation: variations) {
             if (variation.getType() == Transformation.Type.LINEAR) {
@@ -18,10 +17,10 @@ public class TransformationsManipulator {
                 nonLinearTransformations.add(variation);
             }
         }
-    }
 
-    public Transformation getRandom() {
-        return transformations.get(random.nextInt(0, transformations.size()));
+        linearGetter = new RandomWeightedTransformationsGetter(linearTransformations);
+        nonLinearGetter = new RandomWeightedTransformationsGetter(nonLinearTransformations);
+        anyGetter = new RandomWeightedTransformationsGetter(variations);
     }
 
     public Transformation getRandom(Transformation.Type type) {
@@ -33,28 +32,48 @@ public class TransformationsManipulator {
         };
     }
 
+    public Transformation getRandom() {
+        return anyGetter.getRandom();
+    }
+
     public Transformation getRandomLinear() {
-        // TODO: проверять что-то есть, иначе возвращать идемпотентную трансформацию
-        return linearTransformations.get(
-            random.nextInt(
-                0,
-                linearTransformations.size()
-            )
-        );
+        return linearGetter.getRandom();
     }
 
     public Transformation getRandomNonLinear() {
-        // TODO: проверять что-то есть, иначе возвращать идемпотентную трансформацию
-        return nonLinearTransformations.get(
-            random.nextInt(
-                0,
-                nonLinearTransformations.size()
-            )
-        );
+        return nonLinearGetter.getRandom();
     }
 
-    private final ArrayList<Transformation> transformations;
-    private final ArrayList<Transformation> linearTransformations;
-    private final ArrayList<Transformation> nonLinearTransformations;
     private final Random random = new Random();
+    private final RandomWeightedTransformationsGetter linearGetter;
+    private final RandomWeightedTransformationsGetter nonLinearGetter;
+    private final RandomWeightedTransformationsGetter anyGetter;
+
+    private static class RandomWeightedTransformationsGetter {
+        RandomWeightedTransformationsGetter(List<Transformation> transformations) {
+            totalWeight = transformations.stream().mapToInt(Transformation::getWeight).sum();
+            this.transformations = new ArrayList<>();
+
+            for (var transformation: transformations) {
+                for (int i = 0; i < transformation.getWeight(); i++) {
+                    this.transformations.add(transformation);
+                }
+            }
+        }
+
+        public Transformation getRandom() {
+            if (transformations.isEmpty()) {
+                return idempotentOperation;
+            }
+
+            return transformations.get(
+                random.nextInt(0, totalWeight)
+            );
+        }
+
+        private final int totalWeight;
+        private final List<Transformation> transformations;
+        private final Random random = new Random();
+        private final Transformation idempotentOperation = (Point point) -> {return point;};
+    }
 }
