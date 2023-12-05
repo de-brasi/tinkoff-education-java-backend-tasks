@@ -45,13 +45,27 @@ public class SingleThreadRenderer implements Renderer {
             }
 
             for (int j = 0; j < config.mainIterationsCount(); j++) {
-                newPoint = transformationsManipulator.getRandomLinear().apply(newPoint);
-
-                var transformation = transformationsManipulator.getRandomNonLinear();
+                var transformation = transformationsManipulator.getRandomLinear();
                 newPoint = transformation.apply(newPoint);
+                newPoint = transformationsManipulator.getRandomNonLinear().apply(newPoint);
 
-                xCoordinate = (int) Math.round(newPoint.x());
-                yCoordinate = (int) Math.round(newPoint.y());
+                if (
+                    !(domain.xMin() <= newPoint.x() && newPoint.x() <= domain.xMax())
+                        || !(domain.yMin() <= newPoint.y() && newPoint.y() <= domain.yMax())
+                ) {
+                    continue;
+                }
+
+                xCoordinate = canvas.width() - (int) Math.round(
+                    (domain.xMax() - newPoint.x())
+                        / (domain.xMax() - domain.xMin())
+                        * canvas.width()
+                );
+                yCoordinate = canvas.height() - (int) Math.round(
+                    (domain.yMax() - newPoint.y())
+                        / (domain.yMax() - domain.yMin())
+                        * canvas.height()
+                );
 
                 if (canvas.containsCoordinate(xCoordinate, yCoordinate)) {
                     curPixel = canvas.coordinate(xCoordinate, yCoordinate);
