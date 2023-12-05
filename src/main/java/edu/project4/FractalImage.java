@@ -20,49 +20,16 @@ public record FractalImage(Pixel[][] data, int width, int height) {
     }
 
     public boolean containsCoordinate(int x, int y) {
-        int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
-        int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
-        return (0 <= absoluteY && absoluteY < height)
-            && (0 <= absoluteX && absoluteX < width);
+        return (0 <= y && y < height)
+            && (0 <= x && x < width);
     }
 
     public Pixel coordinate(int x, int y) {
-        int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
-        int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
-        return data[absoluteY][absoluteX];
+        return data[y][x];
     }
 
     public Pixel pixel(int x, int y) {
         return data[y][x];
-    }
-
-    // TODO: пахнет кринжем такая работа!
-    public void changePixelTo(int x, int y, Pixel changeTo) {
-        int absoluteX = getAbsoluteValueOfCoordinate(x, Axis.HORIZONTAL);
-        int absoluteY = getAbsoluteValueOfCoordinate(y, Axis.VERTICAL);
-        data[absoluteY][absoluteX] = changeTo;
-    }
-
-    private int getAbsoluteValueOfCoordinate(int coordinate, Axis value) {
-        int axisSize;
-
-        switch (value) {
-            case VERTICAL -> {
-                axisSize = this.height;
-            }
-            case HORIZONTAL -> {
-                axisSize = this.width;
-            }
-
-            default -> {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        int zeroCoordinate = (axisSize % 2 == 0) ? (axisSize / 2) : (axisSize / 2 + 1);
-        int zeroCoordinateIndex = zeroCoordinate - 1;
-
-        return zeroCoordinateIndex + coordinate;
     }
 
     private enum Axis {
