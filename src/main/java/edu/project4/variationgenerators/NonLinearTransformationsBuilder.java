@@ -19,7 +19,7 @@ public class NonLinearTransformationsBuilder {
             );
         };
 
-        return result.nonLinear();
+        return result.withType(Transformation.Type.NON_LINEAR);
     }
 
     public static Transformation getSphericalTransformation() {
@@ -36,7 +36,7 @@ public class NonLinearTransformationsBuilder {
             );
         };
 
-        return result.nonLinear();
+        return result.withType(Transformation.Type.NON_LINEAR);
     }
 
     public static Transformation getPolarTransformation() {
@@ -53,7 +53,7 @@ public class NonLinearTransformationsBuilder {
             );
         };
 
-        return result.nonLinear();
+        return result.withType(Transformation.Type.NON_LINEAR);
     }
 
     public static Transformation getHeartTransformation() {
@@ -80,7 +80,7 @@ public class NonLinearTransformationsBuilder {
             );
         };
 
-        return result.nonLinear();
+        return result.withType(Transformation.Type.NON_LINEAR);
     }
 
     public static Transformation getDiskTransformation() {
@@ -101,6 +101,6 @@ public class NonLinearTransformationsBuilder {
             );
         };
 
-        return result.nonLinear();
+        return result.withType(Transformation.Type.NON_LINEAR);
     }
 }

@@ -48,9 +48,9 @@ public class Main {
         long seed = 200;
         Domain domain = new Domain(-100, 100, -100, 100);
         RendererRunningConfig config = new RendererRunningConfig(
-            2_000_000,
+            1_000_000,
             (short) 10, Transformation.Type.LINEAR,
-            (short) 400, Transformation.Type.NON_LINEAR,
+            (short) 100, Transformation.Type.NON_LINEAR,
             0
         );
         canvas = renderer.render(canvas, variations, domain, config, seed);

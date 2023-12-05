@@ -14,7 +14,7 @@ public class LinearTransformationsBuilder {
             point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
         );
 
-        return result.linear();
+        return result.withType(Transformation.Type.LINEAR);
     }
 
     public static Transformation getRandomTransformation() {
@@ -47,7 +47,7 @@ public class LinearTransformationsBuilder {
             point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
         );
 
-        return result.linear();
+        return result.withType(Transformation.Type.LINEAR);
     }
 
     public static Transformation getRandomNonCompressiveTransformation() {
@@ -65,7 +65,7 @@ public class LinearTransformationsBuilder {
             point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
         );
 
-        return result.linear();
+        return result.withType(Transformation.Type.LINEAR);
     }
 
     private static AffineTransformationCoefficients generateRandomCoefficients(CoefficientsGeneratorPredicate predicate) {
