@@ -69,13 +69,6 @@ public class LinearTransformationsBuilder {
     }
 
     private static AffineTransformationCoefficients generateRandomCoefficients(CoefficientsGeneratorPredicate predicate) {
-        // TODO: настроить ограничения на рандом коэффициентов и сдвига -
-        //      возможно стоит настроить это через конструктор или сеттер,
-        //      а при вызове ссылаться на поля класса
-
-        // TODO: настроить поддержку таймаута -
-        //  возможно принять его в конструкторе (сколько время ждать), или через сеттер
-
         double a;
         double b;
         double c;
@@ -89,8 +82,8 @@ public class LinearTransformationsBuilder {
             d = random.nextDouble(-1, 1);
             e = random.nextDouble(-1, 1);
 
-            f = random.nextDouble(-500, 500.0);
-            c = random.nextDouble(-550, 500.0);
+            f = random.nextDouble(-2, 2);
+            c = random.nextDouble(-2, 2);
         } while (!predicate.validArguments(a, b, d, e));
 
         return new AffineTransformationCoefficients(a, b, c, d, e, f);
