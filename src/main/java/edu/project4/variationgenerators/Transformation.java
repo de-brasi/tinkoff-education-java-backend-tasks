@@ -9,6 +9,8 @@ public interface Transformation extends Function<Point, Point> {
     default Transformation withColor(Color toSet) {
         var sourceTransformation = this;
         var type = this.getType();
+        var weight = this.getWeight();
+
         return new Transformation() {
             @Override
             public Point apply(Point point) {
@@ -24,12 +26,18 @@ public interface Transformation extends Function<Point, Point> {
             public Type getType() {
                 return type;
             }
+
+            @Override
+            public int getWeight() {
+                return weight;
+            }
         };
     }
 
     default Transformation linear() {
         var sourceTransformation = this;
         var color = this.getColor();
+        var weight = this.getWeight();
 
         return new Transformation() {
             @Override
@@ -45,6 +53,11 @@ public interface Transformation extends Function<Point, Point> {
             @Override
             public Type getType() {
                 return Type.LINEAR;
+            }
+
+            @Override
+            public int getWeight() {
+                return weight;
             }
         };
     }
@@ -52,6 +65,7 @@ public interface Transformation extends Function<Point, Point> {
     default Transformation nonLinear() {
         var sourceTransformation = this;
         var color = this.getColor();
+        var weight = this.getWeight();
         return new Transformation() {
             @Override
             public Point apply(Point point) {
@@ -65,7 +79,41 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Type getType() {
-                return Type.LINEAR;
+                return Type.NON_LINEAR;
+            }
+
+            @Override
+            public int getWeight() {
+                return weight;
+            }
+        };
+    }
+
+    default Transformation withWeight(int weight) {
+        var sourceTransformation = this;
+        var color = this.getColor();
+        var type = this.getType();
+
+        return new Transformation() {
+            @Override
+            public Point apply(Point point) {
+                return sourceTransformation.apply(point);
+            }
+
+            @Override
+            public Color getColor() {
+                return color;
+            }
+
+            @Override
+            public Type getType() {
+                return type;
+            }
+
+
+            @Override
+            public int getWeight() {
+                return weight;
             }
         };
     }
@@ -76,6 +124,10 @@ public interface Transformation extends Function<Point, Point> {
 
     default Transformation.Type getType() {
         return Type.ANY;
+    }
+
+    default int getWeight() {
+        return 1;
     }
 
     enum Type {
