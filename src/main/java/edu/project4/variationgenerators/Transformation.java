@@ -34,35 +34,7 @@ public interface Transformation extends Function<Point, Point> {
         };
     }
 
-    default Transformation linear() {
-        var sourceTransformation = this;
-        var color = this.getColor();
-        var weight = this.getWeight();
-
-        return new Transformation() {
-            @Override
-            public Point apply(Point point) {
-                return sourceTransformation.apply(point);
-            }
-
-            @Override
-            public Color getColor() {
-                return color;
-            }
-
-            @Override
-            public Type getType() {
-                return Type.LINEAR;
-            }
-
-            @Override
-            public int getWeight() {
-                return weight;
-            }
-        };
-    }
-
-    default Transformation nonLinear() {
+    default Transformation withType(Type type) {
         var sourceTransformation = this;
         var color = this.getColor();
         var weight = this.getWeight();
@@ -79,7 +51,7 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Type getType() {
-                return Type.NON_LINEAR;
+                return type;
             }
 
             @Override
