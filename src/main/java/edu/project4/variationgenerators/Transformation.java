@@ -38,6 +38,7 @@ public interface Transformation extends Function<Point, Point> {
         var sourceTransformation = this;
         var color = this.getColor();
         var weight = this.getWeight();
+
         return new Transformation() {
             @Override
             public Point apply(Point point) {
