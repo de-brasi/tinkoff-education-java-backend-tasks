@@ -8,6 +8,7 @@ import java.util.function.Function;
 public interface Transformation extends Function<Point, Point> {
     default Transformation withColor(Color toSet) {
         var sourceTransformation = this;
+        var type = this.getType();
         return new Transformation() {
             @Override
             public Point apply(Point point) {
@@ -21,13 +22,14 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Type getType() {
-                return sourceTransformation.getType();
+                return type;
             }
         };
     }
 
     default Transformation linear() {
         var sourceTransformation = this;
+        var color = this.getColor();
 
         return new Transformation() {
             @Override
@@ -37,12 +39,7 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Color getColor() {
-                return sourceTransformation.getColor();
-            }
-
-            @Override
-            public Transformation withColor(Color toSet) {
-                return sourceTransformation.withColor(toSet);
+                return color;
             }
 
             @Override
@@ -54,6 +51,7 @@ public interface Transformation extends Function<Point, Point> {
 
     default Transformation nonLinear() {
         var sourceTransformation = this;
+        var color = this.getColor();
         return new Transformation() {
             @Override
             public Point apply(Point point) {
@@ -62,12 +60,7 @@ public interface Transformation extends Function<Point, Point> {
 
             @Override
             public Color getColor() {
-                return sourceTransformation.getColor();
-            }
-
-            @Override
-            public Transformation withColor(Color toSet) {
-                return sourceTransformation.withColor(toSet);
+                return color;
             }
 
             @Override
