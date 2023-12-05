@@ -31,7 +31,6 @@ public class SingleThreadRenderer implements Renderer {
         int xCoordinate;
         int yCoordinate;
 
-        // TODO: симметрия
         for (int i = 0; i < config.samplesCount(); i++) {
             logProcessDebugOnly(i, config.samplesCount());
             newPoint = Point.of(
@@ -49,38 +48,58 @@ public class SingleThreadRenderer implements Renderer {
                 newPoint = transformation.apply(newPoint);
                 newPoint = transformationsManipulator.getRandomNonLinear().apply(newPoint);
 
-                if (
-                    !(domain.xMin() <= newPoint.x() && newPoint.x() <= domain.xMax())
-                        || !(domain.yMin() <= newPoint.y() && newPoint.y() <= domain.yMax())
-                ) {
-                    continue;
-                }
+                double theta2Degree = 0.0;
+                double theta2Rad;
+                int symmetry = config.symmetry();
+                final Point origin = new Point(0, 0);
 
-                xCoordinate = canvas.width() - (int) Math.round(
-                    (domain.xMax() - newPoint.x())
-                        / (domain.xMax() - domain.xMin())
-                        * canvas.width()
-                );
-                yCoordinate = canvas.height() - (int) Math.round(
-                    (domain.yMax() - newPoint.y())
-                        / (domain.yMax() - domain.yMin())
-                        * canvas.height()
-                );
+                for (int s = 0; s <= symmetry; theta2Degree += (360D / symmetry), ++s) {
+                    theta2Rad = (theta2Degree * Math.PI) / 180;
+                    newPoint = rotate(newPoint, origin, theta2Rad);
 
-                if (canvas.containsCoordinate(xCoordinate, yCoordinate)) {
-                    curPixel = canvas.coordinate(xCoordinate, yCoordinate);
-
-                    if (curPixel.getHitCount() == 0) {
-                        curPixel.hit().setColor(transformation.getColor());
-                    } else {
-                        curPixel.hit().getColor().mixColorWith(transformation.getColor());
+                    if (
+                        !(domain.xMin() <= newPoint.x() && newPoint.x() <= domain.xMax())
+                            || !(domain.yMin() <= newPoint.y() && newPoint.y() <= domain.yMax())
+                    ) {
+                        continue;
                     }
 
+                    xCoordinate = canvas.width() - (int) Math.round(
+                        (domain.xMax() - newPoint.x())
+                            / (domain.xMax() - domain.xMin())
+                            * canvas.width()
+                    );
+                    yCoordinate = canvas.height() - (int) Math.round(
+                        (domain.yMax() - newPoint.y())
+                            / (domain.yMax() - domain.yMin())
+                            * canvas.height()
+                    );
+
+                    if (canvas.containsCoordinate(xCoordinate, yCoordinate)) {
+                        curPixel = canvas.coordinate(xCoordinate, yCoordinate);
+
+                        if (curPixel.getHitCount() == 0) {
+                            curPixel.hit().setColor(transformation.getColor());
+                        } else {
+                            curPixel.hit().getColor().mixColorWith(transformation.getColor());
+                        }
+
+                    }
                 }
             }
         }
 
         return canvas;
+    }
+
+    private Point rotate(Point source, Point origin, double radians) {
+        double newX = (origin.x() - source.x()) * Math.cos(radians)
+            - (source.y() - origin.y()) * Math.sin(radians)
+            + origin.x();
+        double newY = (source.y() - origin.y()) * Math.sin(radians)
+            + (source.y() - origin.y()) * Math.cos(radians)
+            + origin.y();
+        return new Point(newX, newY);
     }
 
     private void logProcessDebugOnly(long i, long max) {
