@@ -17,37 +17,40 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         FractalImage canvas =
-            FractalImage.createWithBaseColor(2048, 1080, ColorShortcuts.MIDNIGHT_BLUE);
+            FractalImage.createWithBaseColor(1920, 1080, ColorShortcuts.MIDNIGHT_BLUE);
 
         // TODO: с вариациями - как то добавить поддержку вероятности вытащить ту или иную вариацию
         List<Transformation> variations = List.of(
             NonLinearTransformationsBuilder
-                .getHeartTransformation()
-                .withColor(ColorShortcuts.HOT_PINK),
+                .getSphericalTransformation(1920, 1080)
+                .withColor(ColorShortcuts.HOT_PINK)
+                .withWeight(1),
             NonLinearTransformationsBuilder
-                .getSphericalTransformation()
-                .withColor(ColorShortcuts.DARK_RED),
+                .getPolarTransformation()
+                .withColor(ColorShortcuts.DARK_RED)
+                .withWeight(1),
             NonLinearTransformationsBuilder
-                .getSphericalTransformation(200, 200)
-                .withColor(ColorShortcuts.YELLOW),
+                .getDiskTransformation(1920, 1080)
+                .withColor(ColorShortcuts.YELLOW)
+                .withWeight(1),
             LinearTransformationsBuilder
-                .getRandomNonCompressiveTransformation()
-                .withColor(ColorShortcuts.SILVER),
-            LinearTransformationsBuilder
-                .getRandomNonCompressiveTransformation()
+                .getRandomCompressiveTransformation()
                 .withColor(ColorShortcuts.SILVER)
+                .withWeight(1),
+            LinearTransformationsBuilder
+                .getRandomCompressiveTransformation()
+                .withColor(ColorShortcuts.SILVER)
+                .withWeight(1)
         );
 
-        // TODO: почему null
-        var type = variations.get(0).getType();
 
         SingleThreadRenderer renderer = new SingleThreadRenderer();
         long seed = 200;
         Domain domain = new Domain(-100, 100, -100, 100);
         RendererRunningConfig config = new RendererRunningConfig(
-            1_000_000,
-            (short) 20, Transformation.Type.LINEAR,
-            (short) 100, Transformation.Type.NON_LINEAR,
+            2_000_000,
+            (short) 10, Transformation.Type.LINEAR,
+            (short) 400, Transformation.Type.NON_LINEAR,
             0
         );
         canvas = renderer.render(canvas, variations, domain, config, seed);
