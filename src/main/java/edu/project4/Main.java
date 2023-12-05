@@ -2,6 +2,7 @@ package edu.project4;
 
 import edu.project4.postprocessors.SingleThreadLogarithmicGammaCorrector;
 import edu.project4.renders.SingleThreadRenderer;
+import edu.project4.utils.Color;
 import edu.project4.utils.ColorShortcuts;
 import edu.project4.utils.Domain;
 import edu.project4.utils.ImageFormat;
@@ -17,41 +18,42 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         FractalImage canvas =
-            FractalImage.createWithBaseColor(1920, 1080, ColorShortcuts.MIDNIGHT_BLUE);
+            FractalImage.createWithBaseColor(3840, 2160, Color.of(14, 14, 78));
 
-        // TODO: с вариациями - как то добавить поддержку вероятности вытащить ту или иную вариацию
         List<Transformation> variations = List.of(
             NonLinearTransformationsBuilder
-                .getSphericalTransformation(1920, 1080)
-                .withColor(ColorShortcuts.HOT_PINK)
-                .withWeight(1),
+                .getHeartTransformation()
+                .withWeight(2),
             NonLinearTransformationsBuilder
-                .getPolarTransformation()
-                .withColor(ColorShortcuts.DARK_RED)
-                .withWeight(1),
-            NonLinearTransformationsBuilder
-                .getDiskTransformation(1920, 1080)
-                .withColor(ColorShortcuts.YELLOW)
-                .withWeight(1),
+                .getSinusoidalTransformation(1.8, 1.8)
+                .withWeight(6),
+//            LinearTransformationsBuilder
+//                .getRandomCompressiveTransformation()
+//                .withColor(ColorShortcuts.DARK_RED)
+//                .withWeight(8),
             LinearTransformationsBuilder
                 .getRandomCompressiveTransformation()
-                .withColor(ColorShortcuts.SILVER)
-                .withWeight(1),
+                .withColor(ColorShortcuts.MEDIUM_VIOLET_RED)
+                .withWeight(6),
             LinearTransformationsBuilder
                 .getRandomCompressiveTransformation()
-                .withColor(ColorShortcuts.SILVER)
-                .withWeight(1)
+                .withColor(ColorShortcuts.GOLD)
+                .withWeight(5),
+            LinearTransformationsBuilder
+                .getRandomCompressiveTransformation()
+                .withColor(ColorShortcuts.STEEL_BLUE)
+                .withWeight(4)
         );
 
 
         SingleThreadRenderer renderer = new SingleThreadRenderer();
-        long seed = 200;
-        Domain domain = new Domain(-100, 100, -100, 100);
+        long seed = 100;
+        Domain domain = new Domain(-1.7, 1.7, -1, 1);
         RendererRunningConfig config = new RendererRunningConfig(
-            1_000_000,
-            (short) 10, Transformation.Type.LINEAR,
+            500_000,
+            (short) 20, Transformation.Type.LINEAR,
             (short) 100, Transformation.Type.NON_LINEAR,
-            0
+            4
         );
         canvas = renderer.render(canvas, variations, domain, config, seed);
         new SingleThreadLogarithmicGammaCorrector().process(canvas, 2);
