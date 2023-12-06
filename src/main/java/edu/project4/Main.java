@@ -50,10 +50,7 @@ public class Main {
         long seed = 100;
         Domain domain = new Domain(-1.7, 1.7, -1, 1);
         RendererRunningConfig config = new RendererRunningConfig(
-            500_000,
-            (short) 20, Transformation.Type.LINEAR,
-            (short) 100, Transformation.Type.NON_LINEAR,
-            4
+            500_000, (short) 20, (short) 100, 4
         );
         canvas = renderer.render(canvas, variations, domain, config, seed);
         new SingleThreadLogarithmicGammaCorrector().process(canvas, 2);
