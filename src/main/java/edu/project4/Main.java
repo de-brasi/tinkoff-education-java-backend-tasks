@@ -16,33 +16,46 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Main {
+    private Main() {}
+
+    @SuppressWarnings("MagicNumber")
     public static void main(String[] args) {
         FractalImage canvas =
-            FractalImage.createWithBaseColor(1920, 1080, Color.of(14, 14, 78));
+            FractalImage.createWithBaseColor(3840, 2160, Color.of(14, 14, 78));
 
         List<Transformation> variations = List.of(
             NonLinearTransformationsBuilder
                 .getHeartTransformation()
                 .withWeight(12),
             NonLinearTransformationsBuilder
+                .getSphericalTransformation()
+                .withWeight(6),
+            NonLinearTransformationsBuilder
+                .getSinusoidalTransformation(1.8, 1.8)
+                .withWeight(6),
+            NonLinearTransformationsBuilder
                 .getPolarTransformation()
                 .withWeight(2),
             LinearTransformationsBuilder
                 .getRandomCompressiveTransformation()
                 .withColor(ColorShortcuts.DARK_RED)
-                .withWeight(8),
+                .withWeight(16),
             LinearTransformationsBuilder
                 .getRandomCompressiveTransformation()
-                .withColor(ColorShortcuts.MEDIUM_VIOLET_RED)
-                .withWeight(6),
+                .withColor(ColorShortcuts.DEEP_SKY_BLUE)
+                .withWeight(2),
             LinearTransformationsBuilder
                 .getRandomCompressiveTransformation()
-                .withColor(ColorShortcuts.GOLD)
-                .withWeight(5),
+                .withColor(ColorShortcuts.RED)
+                .withWeight(2),
             LinearTransformationsBuilder
                 .getRandomCompressiveTransformation()
-                .withColor(ColorShortcuts.STEEL_BLUE)
-                .withWeight(4)
+                .withColor(ColorShortcuts.MAROON)
+                .withWeight(2),
+            LinearTransformationsBuilder
+                .getRandomCompressiveTransformation()
+                .withColor(ColorShortcuts.FUCHSIA)
+                .withWeight(6)
         );
 
 
@@ -50,7 +63,7 @@ public class Main {
         long seed = 100;
         Domain domain = new Domain(-1.7, 1.7, -1, 1);
         RendererRunningConfig config = new RendererRunningConfig(
-            1_000_000, (short) 20, (short) 200, 3
+            10_000_000, (short) 100, (short) 1000, 1
         );
         canvas = renderer.render(canvas, variations, domain, config, seed);
         new SingleThreadLogarithmicGammaCorrector().process(canvas, 2);
