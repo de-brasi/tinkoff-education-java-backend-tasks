@@ -10,12 +10,10 @@ public class NonLinearTransformationsBuilder {
     }
 
     public static Transformation getSinusoidalTransformation(double xScale, double yScale) {
-        Transformation result = (Point source) -> {
-            return new Point(
-                xScale * Math.sin(source.x()),
-                yScale * Math.sin(source.y())
-            );
-        };
+        Transformation result = (Point source) -> new Point(
+            xScale * Math.sin(source.x()),
+            yScale * Math.sin(source.y())
+        );
 
         return result.withType(Transformation.Type.NON_LINEAR);
     }
