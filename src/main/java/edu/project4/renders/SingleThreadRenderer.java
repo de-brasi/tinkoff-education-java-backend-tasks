@@ -2,15 +2,15 @@ package edu.project4.renders;
 
 import edu.project4.FractalImage;
 import edu.project4.utils.Domain;
-import edu.project4.utils.RendererRunningConfig;
-import edu.project4.variationgenerators.Transformation;
 import edu.project4.utils.Pixel;
 import edu.project4.utils.Point;
+import edu.project4.utils.RendererRunningConfig;
+import edu.project4.variationgenerators.Transformation;
 import edu.project4.variationgenerators.TransformationsManipulator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Random;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SingleThreadRenderer implements Renderer {
     @Override
@@ -20,8 +20,7 @@ public class SingleThreadRenderer implements Renderer {
         Domain domain,
         RendererRunningConfig config,
         long seed
-    )
-    {
+    ) {
         var transformationsManipulator = new TransformationsManipulator(variations);
         final Random random = new Random(seed);
 
@@ -74,7 +73,7 @@ public class SingleThreadRenderer implements Renderer {
                 int symmetryX;
                 int symmetryY;
 
-                for (int s = 0; s <= symmetry; theta2Degree += (360D / symmetry), ++s) {
+                for (int s = 0; s <= symmetry; theta2Degree += (COMPLETE_TURN_DEG / symmetry), ++s) {
                     symmetryPoint = rotate(new Point(xCoordinate, yCoordinate), origin, theta2Degree);
 
                     symmetryX = (int) Math.round(symmetryPoint.x());
@@ -98,7 +97,7 @@ public class SingleThreadRenderer implements Renderer {
     }
 
     private Point rotate(Point source, Point origin, double thetaDegree) {
-        double theta2Rad = (thetaDegree * Math.PI) / 180;
+        double theta2Rad = (thetaDegree * Math.PI) / HALF_TURN_DEG;
         double newX = (source.x() - origin.x()) * Math.cos(theta2Rad)
             - (source.y() - origin.y()) * Math.sin(theta2Rad)
             + origin.x();
@@ -108,6 +107,7 @@ public class SingleThreadRenderer implements Renderer {
         return new Point(newX, newY);
     }
 
+    @SuppressWarnings("MagicNumber")
     private void logProcessDebugOnly(long i, long max) {
         long step = max / 100;
         if (i >= (prevPivotDebugOnly + 1) * (step + 1)) {
@@ -119,4 +119,7 @@ public class SingleThreadRenderer implements Renderer {
     private long prevPivotDebugOnly = 0;
 
     private final static Logger LOGGER = LogManager.getLogger();
+
+    private static final double COMPLETE_TURN_DEG = 360D;
+    private static final double HALF_TURN_DEG = 180;
 }
