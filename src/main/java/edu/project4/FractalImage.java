@@ -5,7 +5,7 @@ import edu.project4.utils.Pixel;
 
 public record FractalImage(Pixel[][] data, int width, int height) {
     public static FractalImage create(int width, int height) {
-        Color whiteColor = Color.of(255, 255, 255);
+        Color whiteColor = Color.of(DEFAULT_FONT);
         return createWithBaseColor(width, height, whiteColor);
     }
 
@@ -35,4 +35,6 @@ public record FractalImage(Pixel[][] data, int width, int height) {
     private enum Axis {
         VERTICAL, HORIZONTAL
     }
+
+    private final static Color DEFAULT_FONT = Color.of(255, 255, 255);
 }
