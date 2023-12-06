@@ -1,7 +1,7 @@
 package edu.project4;
 
 import edu.project4.postprocessors.SingleThreadLogarithmicGammaCorrector;
-import edu.project4.renders.SingleThreadRenderer;
+import edu.project4.renders.MultiThreadRenderer;
 import edu.project4.utils.Color;
 import edu.project4.utils.ColorShortcuts;
 import edu.project4.utils.Domain;
@@ -18,19 +18,19 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         FractalImage canvas =
-            FractalImage.createWithBaseColor(3840, 2160, Color.of(14, 14, 78));
+            FractalImage.createWithBaseColor(1920, 1080, Color.of(14, 14, 78));
 
         List<Transformation> variations = List.of(
             NonLinearTransformationsBuilder
                 .getHeartTransformation()
-                .withWeight(2),
+                .withWeight(12),
             NonLinearTransformationsBuilder
-                .getSinusoidalTransformation(1.8, 1.8)
-                .withWeight(6),
-//            LinearTransformationsBuilder
-//                .getRandomCompressiveTransformation()
-//                .withColor(ColorShortcuts.DARK_RED)
-//                .withWeight(8),
+                .getPolarTransformation()
+                .withWeight(2),
+            LinearTransformationsBuilder
+                .getRandomCompressiveTransformation()
+                .withColor(ColorShortcuts.DARK_RED)
+                .withWeight(8),
             LinearTransformationsBuilder
                 .getRandomCompressiveTransformation()
                 .withColor(ColorShortcuts.MEDIUM_VIOLET_RED)
@@ -46,11 +46,11 @@ public class Main {
         );
 
 
-        SingleThreadRenderer renderer = new SingleThreadRenderer();
+        MultiThreadRenderer renderer = new MultiThreadRenderer();
         long seed = 100;
         Domain domain = new Domain(-1.7, 1.7, -1, 1);
         RendererRunningConfig config = new RendererRunningConfig(
-            500_000, (short) 20, (short) 100, 4
+            1_000_000, (short) 20, (short) 200, 3
         );
         canvas = renderer.render(canvas, variations, domain, config, seed);
         new SingleThreadLogarithmicGammaCorrector().process(canvas, 2);
