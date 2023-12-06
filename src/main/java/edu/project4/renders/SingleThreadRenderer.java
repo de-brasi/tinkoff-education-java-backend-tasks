@@ -48,29 +48,29 @@ public class SingleThreadRenderer implements Renderer {
                 newPoint = transformation.apply(newPoint);
                 newPoint = transformationsManipulator.getRandomNonLinear().apply(newPoint);
 
+                if (
+                    !(domain.xMin() <= newPoint.x() && newPoint.x() <= domain.xMax())
+                        || !(domain.yMin() <= newPoint.y() && newPoint.y() <= domain.yMax())
+                ) {
+                    continue;
+                }
+
+                // TODO: понять в чем ошибка с симметрией
                 double theta2Degree = 0.0;
-                double theta2Rad;
                 int symmetry = config.symmetry();
-                final Point origin = new Point(0, 0);
+                final Point origin = new Point(canvas.width(), canvas.height());
+                Point symmetryPoint;
 
                 for (int s = 0; s <= symmetry; theta2Degree += (360D / symmetry), ++s) {
-                    theta2Rad = (theta2Degree * Math.PI) / 180;
-                    newPoint = rotate(newPoint, origin, theta2Rad);
-
-                    if (
-                        !(domain.xMin() <= newPoint.x() && newPoint.x() <= domain.xMax())
-                            || !(domain.yMin() <= newPoint.y() && newPoint.y() <= domain.yMax())
-                    ) {
-                        continue;
-                    }
+                    symmetryPoint = rotate(newPoint, origin, theta2Degree);
 
                     xCoordinate = canvas.width() - (int) Math.round(
-                        (domain.xMax() - newPoint.x())
+                        (domain.xMax() - symmetryPoint.x())
                             / (domain.xMax() - domain.xMin())
                             * canvas.width()
                     );
                     yCoordinate = canvas.height() - (int) Math.round(
-                        (domain.yMax() - newPoint.y())
+                        (domain.yMax() - symmetryPoint.y())
                             / (domain.yMax() - domain.yMin())
                             * canvas.height()
                     );
@@ -92,12 +92,13 @@ public class SingleThreadRenderer implements Renderer {
         return canvas;
     }
 
-    private Point rotate(Point source, Point origin, double radians) {
-        double newX = (origin.x() - source.x()) * Math.cos(radians)
-            - (source.y() - origin.y()) * Math.sin(radians)
+    private Point rotate(Point source, Point origin, double thetaDegree) {
+        double theta2Rad = (thetaDegree * Math.PI) / 180;
+        double newX = (source.x() - origin.x()) * Math.cos(thetaDegree)
+            - (source.y() - origin.y()) * Math.sin(thetaDegree)
             + origin.x();
-        double newY = (source.y() - origin.y()) * Math.sin(radians)
-            + (source.y() - origin.y()) * Math.cos(radians)
+        double newY = (source.x() - origin.x()) * Math.sin(thetaDegree)
+            + (source.y() - origin.y()) * Math.cos(thetaDegree)
             + origin.y();
         return new Point(newX, newY);
     }
