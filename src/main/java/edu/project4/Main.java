@@ -2,6 +2,7 @@ package edu.project4;
 
 import edu.project4.postprocessors.SingleThreadLogarithmicGammaCorrector;
 import edu.project4.renders.MultiThreadRenderer;
+import edu.project4.renders.SingleThreadRenderer;
 import edu.project4.utils.Color;
 import edu.project4.utils.ColorShortcuts;
 import edu.project4.utils.Domain;
@@ -29,10 +30,10 @@ public class Main {
                 .withWeight(12),
             NonLinearTransformationsBuilder
                 .getSphericalTransformation()
-                .withWeight(6),
+                .withWeight(1),
             NonLinearTransformationsBuilder
                 .getSinusoidalTransformation(1.8, 1.8)
-                .withWeight(6),
+                .withWeight(3),
             NonLinearTransformationsBuilder
                 .getPolarTransformation()
                 .withWeight(2),
@@ -59,11 +60,12 @@ public class Main {
         );
 
 
-        MultiThreadRenderer renderer = new MultiThreadRenderer();
+//        MultiThreadRenderer renderer = new MultiThreadRenderer();
+        SingleThreadRenderer renderer = new SingleThreadRenderer();
         long seed = 100;
         Domain domain = new Domain(-1.7, 1.7, -1, 1);
         RendererRunningConfig config = new RendererRunningConfig(
-            10_000_000, (short) 100, (short) 1000, 1
+            5_000_000, (short) 50, (short) 200, 1
         );
         canvas = renderer.render(canvas, variations, domain, config, seed);
         new SingleThreadLogarithmicGammaCorrector().process(canvas, 2);
