@@ -19,7 +19,7 @@ public class LinearTransformationsBuilder {
     }
 
     public static Transformation getRandomTransformation() {
-        return (random.nextInt() % 2 == 0)
+        return (RANDOM.nextInt() % 2 == 0)
             ? getRandomCompressiveTransformation()
             : getRandomNonCompressiveTransformation();
     }
@@ -30,7 +30,7 @@ public class LinearTransformationsBuilder {
                 Math.pow(a, 2) + Math.pow(d, 2) < 1
                     && Math.pow(b, 2) + Math.pow(e, 2) < 1
                     && Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(d, 2) + Math.pow(e, 2)
-                    < 1 + Math.pow(a*e - b*d, 2)
+                    < 1 + Math.pow(a * e - b * d, 2)
             );
 
         try {
@@ -53,7 +53,7 @@ public class LinearTransformationsBuilder {
                 Math.pow(a, 2) + Math.pow(d, 2) >= 1
                     || Math.pow(b, 2) + Math.pow(e, 2) >= 1
                     || Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(d, 2) + Math.pow(e, 2)
-                    >= 1 + Math.pow(a*e - b*d, 2)
+                    >= 1 + Math.pow(a * e - b * d, 2)
             );
 
         try {
@@ -69,8 +69,10 @@ public class LinearTransformationsBuilder {
         }
     }
 
-    private static AffineTransformationCoefficients generateRandomCoefficients
-        (CoefficientsGeneratorPredicate predicate, long timeout) throws TimeoutException {
+    @SuppressWarnings("MagicNumber")
+    private static AffineTransformationCoefficients generateRandomCoefficients(
+        CoefficientsGeneratorPredicate predicate, long timeout
+    ) throws TimeoutException {
         double a;
         double b;
         double c;
@@ -84,13 +86,13 @@ public class LinearTransformationsBuilder {
         do {
             curTime = System.nanoTime();
 
-            a = random.nextDouble(-1, 1);
-            b = random.nextDouble(-1, 1);
-            d = random.nextDouble(-1, 1);
-            e = random.nextDouble(-1, 1);
+            a = RANDOM.nextDouble(-1, 1);
+            b = RANDOM.nextDouble(-1, 1);
+            d = RANDOM.nextDouble(-1, 1);
+            e = RANDOM.nextDouble(-1, 1);
 
-            f = random.nextDouble(-2, 2);
-            c = random.nextDouble(-2, 2);
+            f = RANDOM.nextDouble(-2, 2);
+            c = RANDOM.nextDouble(-2, 2);
         } while (
             !predicate.validArguments(a, b, d, e)
                 && (curTime - startTime) <= timeout * NANOSECONDS_PER_MILLISECONDS
@@ -104,16 +106,15 @@ public class LinearTransformationsBuilder {
     }
 
 
+    private final static Random RANDOM = new Random();
+
+    private final static int TIMEOUT_MILLISECONDS = 1_000;
+    private final static int NANOSECONDS_PER_MILLISECONDS = 1_000_000;
+
     @FunctionalInterface
     private interface CoefficientsGeneratorPredicate {
         boolean validArguments(double a, double b, double d, double e);
     }
 
-
     private record AffineTransformationCoefficients(double a, double b, double c, double d, double e, double f) {}
-
-
-    private final static Random random = new Random();
-    private final static int TIMEOUT_MILLISECONDS = 1_000;
-    private final static int NANOSECONDS_PER_MILLISECONDS = 1_000_000;
 }
