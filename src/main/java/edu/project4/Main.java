@@ -2,7 +2,6 @@ package edu.project4;
 
 import edu.project4.postprocessors.SingleThreadLogarithmicGammaCorrector;
 import edu.project4.renders.MultiThreadRenderer;
-import edu.project4.renders.SingleThreadRenderer;
 import edu.project4.utils.Color;
 import edu.project4.utils.ColorShortcuts;
 import edu.project4.utils.Domain;
