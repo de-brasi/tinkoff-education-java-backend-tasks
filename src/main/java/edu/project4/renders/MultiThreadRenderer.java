@@ -110,28 +110,33 @@ public class MultiThreadRenderer implements Renderer {
                         continue;
                     }
 
-                    // TODO: понять в чем ошибка с симметрией
                     double theta2Degree = 0.0;
                     int symmetry = config.symmetry();
-                    final Point origin = new Point(canvas.width(), canvas.height());
+                    final Point origin = new Point(canvas.width() / 2D, canvas.height() / 2D);
                     Point symmetryPoint;
 
+                    xCoordinate = canvas.width() - (int) Math.round(
+                        (domain.xMax() - newPoint.x())
+                            / (domain.xMax() - domain.xMin())
+                            * canvas.width()
+                    );
+                    yCoordinate = canvas.height() - (int) Math.round(
+                        (domain.yMax() - newPoint.y())
+                            / (domain.yMax() - domain.yMin())
+                            * canvas.height()
+                    );
+
+                    int symmetryX;
+                    int symmetryY;
+
                     for (int s = 0; s <= symmetry; theta2Degree += (360D / symmetry), ++s) {
-                        symmetryPoint = rotate(newPoint, origin, theta2Degree);
+                        symmetryPoint = rotate(new Point(xCoordinate, yCoordinate), origin, theta2Degree);
 
-                        xCoordinate = canvas.width() - (int) Math.round(
-                            (domain.xMax() - symmetryPoint.x())
-                                / (domain.xMax() - domain.xMin())
-                                * canvas.width()
-                        );
-                        yCoordinate = canvas.height() - (int) Math.round(
-                            (domain.yMax() - symmetryPoint.y())
-                                / (domain.yMax() - domain.yMin())
-                                * canvas.height()
-                        );
+                        symmetryX = (int) Math.round(symmetryPoint.x());
+                        symmetryY = (int) Math.round(symmetryPoint.y());
 
-                        if (canvas.containsCoordinate(xCoordinate, yCoordinate)) {
-                            curPixel = canvas.coordinate(xCoordinate, yCoordinate);
+                        if (canvas.containsCoordinate(symmetryX, symmetryY)) {
+                            curPixel = canvas.coordinate(symmetryX, symmetryY);
 
                             synchronized (curPixel) {
                                 if (curPixel.getHitCount() == 0) {
@@ -149,11 +154,11 @@ public class MultiThreadRenderer implements Renderer {
 
         private Point rotate(Point source, Point origin, double thetaDegree) {
             double theta2Rad = (thetaDegree * Math.PI) / 180;
-            double newX = (source.x() - origin.x()) * Math.cos(thetaDegree)
-                - (source.y() - origin.y()) * Math.sin(thetaDegree)
+            double newX = (source.x() - origin.x()) * Math.cos(theta2Rad)
+                - (source.y() - origin.y()) * Math.sin(theta2Rad)
                 + origin.x();
-            double newY = (source.x() - origin.x()) * Math.sin(thetaDegree)
-                + (source.y() - origin.y()) * Math.cos(thetaDegree)
+            double newY = (source.x() - origin.x()) * Math.sin(theta2Rad)
+                + (source.y() - origin.y()) * Math.cos(theta2Rad)
                 + origin.y();
             return new Point(newX, newY);
         }
