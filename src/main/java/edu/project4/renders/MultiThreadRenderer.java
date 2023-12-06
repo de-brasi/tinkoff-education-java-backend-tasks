@@ -35,7 +35,6 @@ public class MultiThreadRenderer implements Renderer {
             List<Future<?>> futures = new ArrayList<>();
 
             for (int i = 0; i < threadsCount; i++) {
-                // TODO: сделать код элегантнее с помощью submitAll
                 var threadLocalConfig = new RendererRunningConfig(
                     config.samplesCount() / threadsCount,
                     config.missedIterationsCount(),
@@ -49,14 +48,16 @@ public class MultiThreadRenderer implements Renderer {
                 futures.add(newFuture);
             }
 
-            for (var future: futures) {
-                try {
-                    future.get();
-                } catch (InterruptedException | ExecutionException exception) {
-                    LOGGER.info(exception);
-                    throw new RuntimeException(exception);
+            futures.forEach(
+                future -> {
+                    try {
+                        future.get();
+                    } catch (InterruptedException | ExecutionException exception) {
+                        LOGGER.info(exception);
+                        throw new RuntimeException(exception);
+                    }
                 }
-            }
+            );
         }
         return canvas;
     }
