@@ -60,8 +60,7 @@ public class Main {
         );
 
 
-//        MultiThreadRenderer renderer = new MultiThreadRenderer();
-        SingleThreadRenderer renderer = new SingleThreadRenderer();
+        MultiThreadRenderer renderer = new MultiThreadRenderer();
         long seed = 100;
         Domain domain = new Domain(-1.7, 1.7, -1, 1);
         RendererRunningConfig config = new RendererRunningConfig(
