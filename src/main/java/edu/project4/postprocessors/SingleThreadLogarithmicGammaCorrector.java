@@ -27,7 +27,7 @@ final public class SingleThreadLogarithmicGammaCorrector implements ImageProcess
                 }
 
                 currentPixel.normal /= max;
-                double correctionCoefficient = Math.pow(currentPixel.normal, (1.0/gamma));
+                double correctionCoefficient = Math.pow(currentPixel.normal, (1.0 / gamma));
 
                 int newRed = (int) Math.round(
                     currentPixel.getColor().r() * correctionCoefficient
