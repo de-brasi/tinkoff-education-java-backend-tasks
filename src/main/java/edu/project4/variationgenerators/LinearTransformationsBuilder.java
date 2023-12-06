@@ -1,7 +1,7 @@
 package edu.project4.variationgenerators;
 
-import edu.project4.utils.Point;
 import java.util.Random;
+import java.util.concurrent.TimeoutException;
 
 public class LinearTransformationsBuilder {
     private LinearTransformationsBuilder() {}
@@ -9,10 +9,11 @@ public class LinearTransformationsBuilder {
     public static Transformation getTransformation(double a, double b, double c, double d, double e, double f) {
         AffineTransformationCoefficients coefficients = new AffineTransformationCoefficients(a, b, c, d, e, f);
 
-        Transformation result = point -> new Point(
-            point.x() * coefficients.a() + point.y() * coefficients.b() + coefficients.c(),
-            point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
-        );
+        Transformation result = point ->
+            point.withCoefficients(
+                coefficients.a(), coefficients.b(), coefficients.c(),
+                coefficients.d(), coefficients.e(), coefficients.f()
+            );
 
         return result.withType(Transformation.Type.LINEAR);
     }
@@ -32,22 +33,18 @@ public class LinearTransformationsBuilder {
                     < 1 + Math.pow(a*e - b*d, 2)
             );
 
-        AffineTransformationCoefficients coefficients = generateRandomCoefficients(predicate);
+        try {
+            AffineTransformationCoefficients coefficients = generateRandomCoefficients(predicate, TIMEOUT_MILLISECONDS);
 
-        // TODO: узнать, что если я верну объект типа Transformation
-        //  в виде point -> applyCoefficients(point, coefficients).
-        //  То есть будет использоваться статическая функция.
-        //  В таком случае вызов объекта Transformation в разных потоках
-        //  должен будет синхронизироваться между вызовами над тем же объектом в параллельных потоках?
+            Transformation result = point -> point.withCoefficients(
+                coefficients.a(), coefficients.b(), coefficients.c(),
+                coefficients.d(), coefficients.e(), coefficients.f()
+            );
 
-        // TODO: WARNING!!!
-        // TODO: выяснить вообще как происходит вызов статической функции класса из параллельных потоков.
-        Transformation result = point -> new Point(
-            point.x() * coefficients.a() + point.y() * coefficients.b() + coefficients.c(),
-            point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
-        );
-
-        return result.withType(Transformation.Type.LINEAR);
+            return result.withType(Transformation.Type.LINEAR);
+        } catch (TimeoutException timeoutException) {
+            throw new RuntimeException(timeoutException);
+        }
     }
 
     public static Transformation getRandomNonCompressiveTransformation() {
@@ -59,16 +56,21 @@ public class LinearTransformationsBuilder {
                     >= 1 + Math.pow(a*e - b*d, 2)
             );
 
-        AffineTransformationCoefficients coefficients = generateRandomCoefficients(predicate);
-        Transformation result = point -> new Point(
-            point.x() * coefficients.a() + point.y() * coefficients.b() + coefficients.c(),
-            point.x() * coefficients.d() + point.y() * coefficients.e() + coefficients.f()
-        );
+        try {
+            AffineTransformationCoefficients coefficients = generateRandomCoefficients(predicate, TIMEOUT_MILLISECONDS);
+            Transformation result = point -> point.withCoefficients(
+                coefficients.a(), coefficients.b(), coefficients.c(),
+                coefficients.d(), coefficients.e(), coefficients.f()
+            );
 
-        return result.withType(Transformation.Type.LINEAR);
+            return result.withType(Transformation.Type.LINEAR);
+        } catch (TimeoutException timeoutException) {
+            throw new RuntimeException(timeoutException);
+        }
     }
 
-    private static AffineTransformationCoefficients generateRandomCoefficients(CoefficientsGeneratorPredicate predicate) {
+    private static AffineTransformationCoefficients generateRandomCoefficients
+        (CoefficientsGeneratorPredicate predicate, long timeout) throws TimeoutException {
         double a;
         double b;
         double c;
@@ -76,7 +78,12 @@ public class LinearTransformationsBuilder {
         double e;
         double f;
 
+        var startTime = System.nanoTime();
+        var curTime = startTime;
+
         do {
+            curTime = System.nanoTime();
+
             a = random.nextDouble(-1, 1);
             b = random.nextDouble(-1, 1);
             d = random.nextDouble(-1, 1);
@@ -84,7 +91,14 @@ public class LinearTransformationsBuilder {
 
             f = random.nextDouble(-2, 2);
             c = random.nextDouble(-2, 2);
-        } while (!predicate.validArguments(a, b, d, e));
+        } while (
+            !predicate.validArguments(a, b, d, e)
+                && (curTime - startTime) <= timeout * NANOSECONDS_PER_MILLISECONDS
+        );
+
+        if ((curTime - startTime) > timeout * NANOSECONDS_PER_MILLISECONDS) {
+            throw new TimeoutException("TimeoutException when generate coefficients for linear transformation");
+        }
 
         return new AffineTransformationCoefficients(a, b, c, d, e, f);
     }
@@ -100,4 +114,6 @@ public class LinearTransformationsBuilder {
 
 
     private final static Random random = new Random();
+    private final static int TIMEOUT_MILLISECONDS = 1_000;
+    private final static int NANOSECONDS_PER_MILLISECONDS = 1_000_000;
 }
