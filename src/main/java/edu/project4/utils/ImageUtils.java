@@ -1,13 +1,13 @@
 package edu.project4.utils;
 
 import edu.project4.FractalImage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import javax.imageio.ImageIO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class ImageUtils {
     private ImageUtils() {}
@@ -17,6 +17,7 @@ public final class ImageUtils {
         tryToSaveImageInFormat(bufferedImage, filename, format);
     }
 
+    @SuppressWarnings("MagicNumber")
     private static BufferedImage createBufferImageAndSetColors(FractalImage source) {
         int width = source.width();
         int height = source.height();
