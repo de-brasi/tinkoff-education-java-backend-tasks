@@ -74,6 +74,6 @@ public class TransformationsManipulator {
         private final int totalWeight;
         private final List<Transformation> transformations;
         private final Random random = new Random();
-        private final Transformation idempotentOperation = (Point point) -> {return point;};
+        private final Transformation idempotentOperation = (Point point) -> point;
     }
 }
