@@ -3,8 +3,6 @@ package edu.project4.variationgenerators;
 import edu.project4.utils.Point;
 
 public class NonLinearTransformationsBuilder {
-    // TODO: сделать вариант с рандомными коэффициентами
-
     private NonLinearTransformationsBuilder() {}
 
     public static Transformation getSinusoidalTransformation() {
