@@ -7,11 +7,11 @@ public class Square extends Rectangle {
 
     @Override
     public Rectangle setWidth(int width) {
-        return super.setWidth(width);
+        return new Square(width);
     }
 
     @Override
     public Rectangle setHeight(int height) {
-        return super.setHeight(height);
+        return new Square(height);
     }
 }
