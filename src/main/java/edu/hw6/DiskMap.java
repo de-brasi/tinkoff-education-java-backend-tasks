@@ -15,12 +15,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DiskMap extends HashMap<String, String> {
-    private final String separator = ":";
-    private final String filenamePrefix = "DiskMap_file_";
-    private final String fileExtension = ".txt";
-    private final String fileName;
-    private final File file;
-
     public DiskMap() {
         fileName = filenamePrefix + UUID.randomUUID() + fileExtension;
         file = new File(fileName);
@@ -86,4 +80,10 @@ public class DiskMap extends HashMap<String, String> {
             throw new IllegalArgumentException("Invalid file: " + file);
         }
     }
+
+    private final String separator = ":";
+    private final String filenamePrefix = "DiskMap_file_";
+    private final String fileExtension = ".txt";
+    private final String fileName;
+    private final File file;
 }
