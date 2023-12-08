@@ -15,13 +15,11 @@ import java.util.regex.Pattern;
 public class HackerNews {
     private HackerNews() {}
 
-    @SuppressWarnings("MultipleStringLiterals")
     public static long[] hackerNewsTopStories() {
         try {
             var request = HttpRequest.newBuilder()
                 .uri(new URI("https://hacker-news.firebaseio.com/v0/topstories.json"))
                 .GET()
-                .header("AcceptEncoding", "gzip")
                 .build();
             var response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -39,7 +37,6 @@ public class HackerNews {
             var request = HttpRequest.newBuilder()
                 .uri(new URI("https://hacker-news.firebaseio.com/v0/item/" + id + ".json"))
                 .GET()
-                .header("AcceptEncoding", "gzip")
                 .build();
             var response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
