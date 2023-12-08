@@ -30,7 +30,7 @@ public class HackerNews {
                 .mapToLong(Long::parseLong)
                 .toArray();
         } catch (URISyntaxException | IOException | InterruptedException e) {
-            return new long[0];
+            throw new RuntimeException(e);
         }
     }
 
@@ -48,7 +48,7 @@ public class HackerNews {
 
             return (matcher.find()) ? matcher.group(1) : "";
         } catch (URISyntaxException | IOException | InterruptedException e) {
-            return "";
+            throw new RuntimeException(e);
         }
     }
 
