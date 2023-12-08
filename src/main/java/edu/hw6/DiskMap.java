@@ -55,9 +55,6 @@ public class DiskMap extends HashMap<String, String> {
                 bufferedWriter.newLine();
             }
 
-            bufferedWriter.close();
-            fileOutputStream.close();
-            outputStreamWriter.close();
             return true;
         } catch (IOException ioException) {
             return false;
@@ -78,9 +75,6 @@ public class DiskMap extends HashMap<String, String> {
                 this.put(keyAndValue[key], keyAndValue[value]);
             }
 
-            bufferedReader.close();
-            fileInputStream.close();
-            inputStreamReader.close();
             return true;
         } catch (IOException ioException) {
             return false;
