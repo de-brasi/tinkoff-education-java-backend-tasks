@@ -24,7 +24,7 @@ public class MultiThreadDfsMazeSolver implements Solver {
         }
     }
 
-    private static final Direction[] directions = new Direction[] {
+    private static final Direction[] DIRECTIONS = new Direction[] {
         Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT
     };
 
@@ -46,7 +46,7 @@ public class MultiThreadDfsMazeSolver implements Solver {
                 return new ArrayDeque<>(List.of(finish));
             }
 
-            var traversalTasks = Arrays.stream(directions)
+            var traversalTasks = Arrays.stream(DIRECTIONS)
                 .map(this::visitDestination)
                 .filter(Objects::nonNull)
                 .toList();
@@ -103,10 +103,10 @@ public class MultiThreadDfsMazeSolver implements Solver {
                 return pivotResult;
             } else if (pivotResult == null) {
                 return shortestFromOtherTasksResults.get();
-            } else if (pivotResult.size() < shortestFromOtherTasksResults.get().size()) {
-                return pivotResult;
             } else {
-                return shortestFromOtherTasksResults.get();
+                return (pivotResult.size() < shortestFromOtherTasksResults.get().size())
+                    ? pivotResult
+                    : shortestFromOtherTasksResults.get();
             }
         }
 

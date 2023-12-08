@@ -5,6 +5,9 @@ import edu.project2.prettyprinter.PrettyPrinter;
 import edu.project2.util.Coordinate;
 
 public class SolverDemonstration {
+    private SolverDemonstration() {}
+
+    @SuppressWarnings("UncommentedMain")
     public static void main(String[] args) {
         final var randomGenerator = new RandomizedDFSGenerator();
         final var multiThreadDfsSolver = new MultiThreadDfsMazeSolver();
