@@ -8,17 +8,16 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("ConstantName")
 public class Task3 {
     private Task3() {
         // not allowed
     }
 
-    public static final AbstractFilter isDirectory = Files::isDirectory;
-    public static final AbstractFilter isRegularFile = Files::isRegularFile;
-    public static final AbstractFilter isHidden = Files::isHidden;
-    public static final AbstractFilter isReadable = Files::isReadable;
-    public static final AbstractFilter isWritable = Files::isWritable;
+    public static final AbstractFilter IS_DIRECTORY = Files::isDirectory;
+    public static final AbstractFilter IS_REGULAR_FILE = Files::isRegularFile;
+    public static final AbstractFilter IS_HIDDEN = Files::isHidden;
+    public static final AbstractFilter IS_READABLE = Files::isReadable;
+    public static final AbstractFilter IS_WRITABLE = Files::isWritable;
 
     public static AbstractFilter sizeLessThan(int size) {
         return path -> {

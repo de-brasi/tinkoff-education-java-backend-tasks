@@ -21,7 +21,7 @@ public class Task3Test {
     public void test1(@TempDir Path tempDir) throws IOException {
         Path tempFolder = tempDir.resolve("tempFolder");
         Files.createDirectory(tempFolder);
-        assertThat(Task3.isDirectory.accept(tempFolder)).isTrue();
+        assertThat(Task3.IS_DIRECTORY.accept(tempFolder)).isTrue();
     }
 
     @Test
@@ -29,7 +29,7 @@ public class Task3Test {
     public void test2(@TempDir Path tempDir) throws IOException {
         Path tempFile = tempDir.resolve("tempFile.png");
         Files.createFile(tempFile);
-        assertThat(Task3.isRegularFile.accept(tempFile)).isTrue();
+        assertThat(Task3.IS_REGULAR_FILE.accept(tempFile)).isTrue();
     }
 
     @Test
@@ -37,7 +37,7 @@ public class Task3Test {
     public void test3(@TempDir Path tempDir) throws IOException {
         Path tempFile = tempDir.resolve(".hiddenFile");
         Files.createFile(tempFile);
-        assertThat(Task3.isHidden.accept(tempFile)).isTrue();
+        assertThat(Task3.IS_HIDDEN.accept(tempFile)).isTrue();
     }
 
     @Test
@@ -45,7 +45,7 @@ public class Task3Test {
     public void test4(@TempDir Path tempDir) throws IOException {
         Path tempFile = tempDir.resolve("tempReadableFile.txt");
         Files.createFile(tempFile);
-        assertThat(Task3.isReadable.accept(tempFile)).isTrue();
+        assertThat(Task3.IS_READABLE.accept(tempFile)).isTrue();
     }
 
     @Test
@@ -56,7 +56,7 @@ public class Task3Test {
         Set<PosixFilePermission> nonReadablePermissions = EnumSet.noneOf(PosixFilePermission.class);
         Files.createFile(tempFile, PosixFilePermissions.asFileAttribute(nonReadablePermissions));
 
-        assertThat(Task3.isReadable.accept(tempFile)).isFalse();
+        assertThat(Task3.IS_READABLE.accept(tempFile)).isFalse();
     }
 
     @Test
@@ -117,7 +117,7 @@ public class Task3Test {
         assertThat(
             Task3
                 .magicNumber(0x89, 'P', 'N', 'G')
-                .and(Task3.isReadable)
+                .and(Task3.IS_READABLE)
                 .and(Task3.globMatches("*.txt"))
                 .and(Task3.regexContains("^(.*)mpFi(.*)$"))
                 .and(sizeEqual(signature.length))
