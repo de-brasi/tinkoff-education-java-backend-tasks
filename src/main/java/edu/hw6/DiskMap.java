@@ -22,33 +22,33 @@ public class DiskMap extends HashMap<String, String> {
     private final File file;
 
     public DiskMap() {
-        fileName = filenamePrefix + String.valueOf(UUID.randomUUID()) + fileExtension;
+        fileName = filenamePrefix + UUID.randomUUID() + fileExtension;
         file = new File(fileName);
     }
 
     public DiskMap(Map<String, String> map) {
         super(map);
-        fileName = filenamePrefix + String.valueOf(UUID.randomUUID()) + fileExtension;
+        fileName = filenamePrefix + UUID.randomUUID() + fileExtension;
         file = new File(fileName);
     }
 
     public DiskMap(String pathToFile) {
-        fileName = filenamePrefix + String.valueOf(UUID.fromString(pathToFile)) + fileExtension;
-        file = new File(fileName);
+        fileName = pathToFile;
+        file = new File(pathToFile);
         validateFile(file);
     }
 
     public DiskMap(Map<String, String> map, String pathToFile) {
         super(map);
-        fileName = filenamePrefix + String.valueOf(UUID.fromString(pathToFile)) + fileExtension;
+        fileName = filenamePrefix + UUID.fromString(pathToFile) + fileExtension;
         file = new File(fileName);
         validateFile(file);
     }
 
     public boolean loadToDisk() {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
+             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+             BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter)) {
 
             for (var entry : this.entrySet()) {
                 bufferedWriter.write(entry.getKey() + separator + entry.getValue());
@@ -62,9 +62,9 @@ public class DiskMap extends HashMap<String, String> {
     }
 
     public boolean uploadFromDisk() {
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
 
             String line;
             String[] keyAndValue;
@@ -83,7 +83,7 @@ public class DiskMap extends HashMap<String, String> {
 
     private void validateFile(File file) {
         if (!file.isFile()) {
-            throw new IllegalArgumentException("Invalid file name");
+            throw new IllegalArgumentException("Invalid file: " + file);
         }
     }
 }
