@@ -13,13 +13,13 @@ public class FileSystemSearcher {
     private FileSystemSearcher() {}
 
     public static List<Path> findDirectoriesWithMoreThanFiles(int filesCount, Path root) {
-        try (final ForkJoinPool forkJoinPool = new ForkJoinPool()) {
+        try (ForkJoinPool forkJoinPool = new ForkJoinPool()) {
             return forkJoinPool.invoke(new DirectorySearchTask(root, filesCount));
         }
     }
 
     public static List<Path> findFiles(Predicate<Path> predicate, Path root) {
-        try (final ForkJoinPool forkJoinPool = new ForkJoinPool()) {
+        try (ForkJoinPool forkJoinPool = new ForkJoinPool()) {
             return forkJoinPool.invoke(new FileSearchTask(root, predicate));
         }
     }
