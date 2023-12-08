@@ -5,7 +5,7 @@ import edu.project2.util.Coordinate;
 import edu.project2.util.Direction;
 import edu.project2.util.Maze;
 import edu.project2.util.Solver;
-import org.apache.logging.log4j.util.PropertySource;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -20,7 +20,7 @@ public class MultiThreadDfsMazeSolver implements Solver {
         maze.resetCells();
 
         try (ForkJoinPool forkJoinPool = new ForkJoinPool()) {
-            return forkJoinPool.invoke(new MazeSolverTask(maze, start, end));
+            return new ArrayList<>(forkJoinPool.invoke(new MazeSolverTask(maze, start, end)));
         }
     }
 
@@ -33,7 +33,7 @@ public class MultiThreadDfsMazeSolver implements Solver {
             && (0 <= toCheck.col() && toCheck.col() < toCheckIn.getWidth());
     }
 
-    private static class MazeSolverTask extends RecursiveTask<ArrayList<Coordinate>> {
+    private static class MazeSolverTask extends RecursiveTask<ArrayDeque<Coordinate>> {
         MazeSolverTask(Maze maze, Coordinate startCoordinate, Coordinate targetCoordinate) {
             this.maze = maze;
             this.start = startCoordinate;
@@ -41,9 +41,9 @@ public class MultiThreadDfsMazeSolver implements Solver {
         }
 
         @Override
-        protected ArrayList<Coordinate> compute() {
+        protected ArrayDeque<Coordinate> compute() {
             if (start.equals(finish)) {
-                return new ArrayList<>(List.of(finish));
+                return new ArrayDeque<>(List.of(finish));
             }
 
             var traversalTasks = Arrays.stream(directions)
@@ -54,9 +54,8 @@ public class MultiThreadDfsMazeSolver implements Solver {
             var res = awaitAndChoseBestSolution(traversalTasks);
 
             if (res != null) {
-                var answer = new ArrayList<>(List.of(start));
-                answer.addAll(res);
-                return answer;
+                res.addFirst(start);
+                return res;
             } else {
                 return null;
             }
@@ -83,7 +82,7 @@ public class MultiThreadDfsMazeSolver implements Solver {
             return new MazeSolverTask(maze, nextStepCoordinate, finish);
         }
 
-        private ArrayList<Coordinate> awaitAndChoseBestSolution(List<MazeSolverTask> tasks) {
+        private ArrayDeque<Coordinate> awaitAndChoseBestSolution(List<MazeSolverTask> tasks) {
             if (tasks.isEmpty()) {
                 return null;
             }
@@ -97,7 +96,7 @@ public class MultiThreadDfsMazeSolver implements Solver {
             var shortestFromOtherTasksResults = otherTasksResult.stream()
                 .filter(Objects::nonNull)
                 .min(
-                    Comparator.comparing(ArrayList::size)
+                    Comparator.comparing(ArrayDeque::size)
                 );
 
             if (shortestFromOtherTasksResults.isEmpty()) {
