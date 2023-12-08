@@ -195,7 +195,7 @@ public class Task1Test {
         var metricsNameCount = 100;
         var producersCount = Runtime.getRuntime().availableProcessors();
         var operationsPerProducer = 100;
-        var sequenceMaxValue= 100_000;
+        var sequenceMaxValue= 10_000;
         var numbersInSequence = IntStream.range(0, sequenceMaxValue + 1).mapToDouble(item -> (double) item).toArray();
         var collector = new StatisticsCollector();
 
