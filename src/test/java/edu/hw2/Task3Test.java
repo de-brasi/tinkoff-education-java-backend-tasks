@@ -25,7 +25,8 @@ public class Task3Test {
         var executor = new PopularCommandExecutor(1000, ConnectionManagerType.FAULTY);
         try {
             executor.updatePackages();
-            fail("Unexpected to be executed!");
-        } catch (ConnectionException ignored) {}
+        } catch (ConnectionException ignored) {
+            fail("Too little chance for that!");
+        }
     }
 }
