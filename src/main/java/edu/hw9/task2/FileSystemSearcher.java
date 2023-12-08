@@ -20,9 +20,10 @@ public class FileSystemSearcher {
         }
     }
 
-    public static List<Path> findFiles(int filesCount, Predicate<Path> predicate) {
-        // TODO:
-        return List.of();
+    public static List<Path> findFiles(Predicate<Path> predicate, Path root) {
+        try (final ForkJoinPool forkJoinPool = new ForkJoinPool()) {
+            return forkJoinPool.invoke(new FileSearchTask(root, predicate));
+        }
     }
 
     private static class DirectorySearchTask extends RecursiveTask<List<Path>> {
@@ -102,5 +103,76 @@ public class FileSystemSearcher {
 
         final Path root;
         final int filesCountCondition;
+    }
+
+    private static class FileSearchTask extends RecursiveTask<List<Path>> {
+        FileSearchTask(Path root, Predicate<Path> predicate) {
+            this.root = root;
+            this.predicate = predicate;
+        }
+
+        @Override
+        protected List<Path> compute() {
+            if (root.toFile().isFile() && predicate.test(root)) {
+                return List.of(root);
+            } else {
+                try (var children = Files.list(root)) {
+                    if (children.findAny().isEmpty()) {
+                        return null;
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            List<Path> res;
+            try (var children = Files.list(root)) {
+                var content = children.toList();
+                var filesInRootDirectory = content
+                    .stream()
+                    .filter(path -> path.toFile().isFile())
+                    .filter(predicate);
+                var subDirectoriesInRootDirectory = content
+                    .stream()
+                    .filter(
+                        path -> path.toFile().isDirectory()
+                    )
+                    .map(item -> new FileSearchTask(item, predicate))
+                    .toList();
+
+                res = new ArrayList<>(filesInRootDirectory.toList());
+
+                if (!subDirectoriesInRootDirectory.isEmpty()) {
+                    var pivotTask = subDirectoriesInRootDirectory.get(0);
+                    pivotTask.fork();
+
+                    var otherTaskResults = subDirectoriesInRootDirectory
+                        .stream()
+                        .skip(1)
+                        .map(FileSearchTask::compute)
+                        .toList();
+
+                    var pivotResult = pivotTask.join();
+
+                    if (pivotResult != null) {
+                        res.addAll(pivotResult);
+                    }
+
+                    for (var otherRes: otherTaskResults) {
+                        if (otherRes != null) {
+                            res.addAll(otherRes);
+                        }
+                    }
+                }
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return res;
+        }
+
+        private final Path root;
+        private final Predicate<Path> predicate;
     }
 }
