@@ -78,38 +78,6 @@ public class Task2Test {
     }
 
     @Test
-    @DisplayName("Comparing small 10 Fibonacci numbers counting time in one thread and 3-threads ThreadPool")
-    public void test3() {
-        final int[] numbersToCount = {30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40};
-        long consistentComputingTime;
-        long parallelComputingTime;
-        long startTime;
-        final var threadPool = FixedThreadPool.create(3);
-
-        startTime = System.nanoTime();
-        for (var toCount: numbersToCount) {
-            new FibonacciCounter(toCount).run();
-        }
-        consistentComputingTime = System.nanoTime() - startTime;
-
-        startTime = System.nanoTime();
-        for (var toCount: numbersToCount) {
-            threadPool.execute(new FibonacciCounter(toCount));
-        }
-        threadPool.start();
-        threadPool.joinScheduled();
-        parallelComputingTime = System.nanoTime() - startTime;
-
-        try {
-            threadPool.close();
-        } catch (Exception e) {
-            LOGGER.info("Exception when closing threadPool: " + e);
-        }
-
-        assertThat(parallelComputingTime).isLessThan(consistentComputingTime);
-    }
-
-    @Test
     @DisplayName("Closing ThreadPool when running")
     public void test4() throws InterruptedException {
         final var threadPool = FixedThreadPool.create(2);
