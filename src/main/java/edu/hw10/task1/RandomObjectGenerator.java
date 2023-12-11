@@ -96,12 +96,12 @@ public class RandomObjectGenerator {
 
     private Object createRandomBaseTypeObj(Class<?> classObj, AnnotationsRestrictions restrictions) {
         return switch (classObj.getName()) {
-            case "java.lang.String" -> {
+            case SupportedTypes.STRING -> {
                 var res = UUID.randomUUID().toString();
                 assert !restrictions.notNull || res != null;
                 yield res;
             }
-            case "java.lang.Integer" -> {
+            case SupportedTypes.INTEGER -> {
                 int origin = restrictions.getMinValue();
                 int maxPossible = restrictions.getMaxValue();
                 yield random.nextInt(origin, maxPossible + 1);
@@ -116,17 +116,13 @@ public class RandomObjectGenerator {
         }
 
         String className = toCheck.getName();
-        return className.equals("java.lang.String") || className.equals("java.lang.Integer");
+        return className.equals(SupportedTypes.STRING) || className.equals(SupportedTypes.INTEGER);
     }
 
     private final Random random = new Random();
 
     private static class AnnotationsRestrictions {
-        AnnotationsRestrictions() {
-            minValue = 0;
-            maxValue = 1_000_000;
-            notNull = false;
-        }
+        AnnotationsRestrictions() {}
 
         public static AnnotationsRestrictions getDefault() {
             return new AnnotationsRestrictions();
@@ -152,8 +148,16 @@ public class RandomObjectGenerator {
             return maxValue;
         }
 
-        private Integer minValue;
-        private Integer maxValue;
-        private boolean notNull;
+        @SuppressWarnings("MagicNumber")
+        private Integer minValue = 0;
+        @SuppressWarnings("MagicNumber")
+        private Integer maxValue = 1_000_000;
+        private boolean notNull = false;
+    }
+
+    private static class SupportedTypes {
+        public final static String STRING = "java.lang.String";
+
+        public final static String INTEGER = "java.lang.Integer";
     }
 }
