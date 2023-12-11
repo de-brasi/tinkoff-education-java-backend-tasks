@@ -41,8 +41,11 @@ public class RandomObjectGenerator {
             return createRandomBaseTypeObj(classObj, AnnotationsRestrictions.getDefault());
         }
 
-        // TODO: выяснить почему не могу отсортировать в обратном порядке
-
+        // TODO:
+        //  Выяснить почему не возможно отсортировать в обратном порядке как:
+        //  Constructor<?>[] constructors = Arrays.stream(classObj.getConstructors())
+        //      .sorted(Comparator.comparingInt(Constructor::getParameterCount).reversed())
+        //      .toArray(Constructor<?>[]::new);
         Constructor<?>[] constructors = Arrays.stream(classObj.getConstructors())
             .sorted(Comparator.comparingInt(Constructor::getParameterCount)).toArray(Constructor<?>[]::new);
 
