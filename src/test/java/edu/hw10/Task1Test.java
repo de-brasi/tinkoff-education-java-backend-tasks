@@ -3,6 +3,7 @@ package edu.hw10;
 import edu.hw10.task1.RandomObjectGenerator;
 import edu.hw10.task1.annotations.Max;
 import edu.hw10.task1.annotations.Min;
+import edu.hw10.task1.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -66,17 +67,19 @@ public class Task1Test {
     @Test
     @DisplayName("Record object with annotations")
     public void test6() {
-        // TODO
         var rog = new RandomObjectGenerator();
 
-        var exampleRecordObj = rog.nextObject(ExampleRecord.class);
-        assertThat(exampleRecordObj instanceof ExampleRecord).isTrue();
+        for (int i = 0; i < 100; i++) {
+            var exampleRecordObj = rog.nextObject(ExampleRecord.class);
+            assertThat(exampleRecordObj instanceof ExampleRecord).isTrue();
 
-        assert exampleRecordObj instanceof ExampleRecord;
-        ExampleRecord someEntity = (ExampleRecord) exampleRecordObj;
+            assert exampleRecordObj instanceof ExampleRecord;
+            ExampleRecord someEntity = (ExampleRecord) exampleRecordObj;
 
-        assertThat(someEntity.age()).isLessThanOrEqualTo(MAX_NUMERIC_ANNOTATION_VALUE);
-        assertThat(MIN_NUMERIC_ANNOTATION_VALUE).isLessThanOrEqualTo(someEntity.age());
+            assertThat(someEntity.age()).isLessThanOrEqualTo(MAX_NUMERIC_ANNOTATION_VALUE);
+            assertThat(MIN_NUMERIC_ANNOTATION_VALUE).isLessThanOrEqualTo(someEntity.age());
+        }
+
     }
 
     public static class Example {
@@ -96,8 +99,8 @@ public class Task1Test {
     }
 
     public record ExampleRecord(
-        String name,
-        @Min(MIN_NUMERIC_ANNOTATION_VALUE) @Max(MAX_NUMERIC_ANNOTATION_VALUE) Integer age
+        @NotNull String name,
+        @Max(18) @Min(7) Integer age
     ) {}
 
     public record RecordWrapper(Example entity) {}
