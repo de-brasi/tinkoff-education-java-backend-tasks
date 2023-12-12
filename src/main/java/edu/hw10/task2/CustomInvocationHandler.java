@@ -12,6 +12,9 @@ public class CustomInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (method.isAnnotationPresent(Cache.class) && method.getAnnotation(Cache.class).persist()) {
+            System.out.println("Cached method: " + method.getName());
+        }
         System.out.println("Before invoking independent custom method: " + method.getName());
         // You can perform additional tasks here.
         Object result = method.invoke(target, args); // Delegate to the real object.
