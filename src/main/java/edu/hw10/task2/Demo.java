@@ -1,11 +1,8 @@
 package edu.hw10.task2;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
 public class Demo {
     public interface CustomInterface {
+        @Cache(persist = true)
         void customMethod();
     }
 
