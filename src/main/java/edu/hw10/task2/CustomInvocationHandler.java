@@ -14,7 +14,7 @@ public class CustomInvocationHandler implements InvocationHandler {
 
     public CustomInvocationHandler(Object target) {
         this.target = target;
-        this.filePathForSave = DEFAULT_PATH;
+        this.filePathForSave = Paths.get(System.getProperty("user.home"), "saving.json");
     }
 
     public CustomInvocationHandler(Object target, Path pathFileForSave) {
@@ -28,12 +28,6 @@ public class CustomInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.isAnnotationPresent(Cache.class) && method.getAnnotation(Cache.class).persist()) {
-            System.out.println("Save to file result of method: " + method.getName());
-        }
-
-        System.out.println("Before invoking independent custom method: " + method.getName());
-
         var newCallInfo = new MethodCallInfo(method, args);
         Object result;
         if (methodsCallCache.containsKey(newCallInfo)) {
@@ -42,10 +36,10 @@ public class CustomInvocationHandler implements InvocationHandler {
             result = method.invoke(target, args);
             methodsCallCache.put(newCallInfo, result);
 
-            saveData();
+            if (method.isAnnotationPresent(Cache.class) && method.getAnnotation(Cache.class).persist()) {
+                saveData();
+            }
         }
-
-        System.out.println("After invoking independent custom method: " + method.getName());
 
         return result;
     }
@@ -104,7 +98,6 @@ public class CustomInvocationHandler implements InvocationHandler {
 
     private final Map<MethodCallInfo, Object> methodsCallCache = new HashMap<>();
     private final Path filePathForSave;
-    private final Path DEFAULT_PATH = Paths.get(System.getProperty("user.home"), "saving.json");
 
     private static record MethodCallInfo(Method method, Object[] args) {}
 }
