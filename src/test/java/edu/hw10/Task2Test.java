@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import java.nio.file.Path;
 import java.util.concurrent.ThreadLocalRandom;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
@@ -88,6 +90,32 @@ public class Task2Test {
         } catch (Exception exception) {
             fail("Not expected exception " + exception.getMessage());
         }
+    }
+
+    @Test
+    @DisplayName("Test saving to file")
+    public void test3(@TempDir Path tempDir) throws InterruptedException {
+        Path tempFile = tempDir.resolve("tmp.json");
+
+        LongProcessOperationInterface interfaceInstance = new LongProcessOperationInterface() {
+            @Override
+            public int longProcess() throws InterruptedException {
+                Thread.sleep(1000);
+                return 1;
+            }
+        };
+        LongProcessOperationInterface proxy = (LongProcessOperationInterface)
+            CacheProxy.create(interfaceInstance, LongProcessOperationInterface.class, tempFile);
+
+        var start = System.nanoTime();
+        var resBefore = proxy.longProcess();
+        var firstMethodCallDuration = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        var resAfter = proxy.longProcess();
+        var secondMethodCallDuration = System.nanoTime() - start;
+
+        assertThat(tempFile.toFile().getTotalSpace()).isNotEqualTo(0);
     }
 
     private final static Logger LOGGER = LogManager.getLogger();
