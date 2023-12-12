@@ -18,6 +18,10 @@ public class CustomInvocationHandler implements InvocationHandler {
     }
 
     public CustomInvocationHandler(Object target, Path pathFileForSave) {
+        if (!pathFileForSave.toString().endsWith(".json")) {
+            throw new RuntimeException("Unexpected file type");
+        }
+
         this.target = target;
         this.filePathForSave = pathFileForSave;
     }
