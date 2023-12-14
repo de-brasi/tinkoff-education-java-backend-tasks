@@ -4,7 +4,7 @@ import edu.hw11.util.ArithmeticUtils;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class Task2AndTest {
+public class Task2Test {
     @Test
     public void test() {
         assertThat(ArithmeticUtils.sum(1, 2)).isEqualTo(3);
