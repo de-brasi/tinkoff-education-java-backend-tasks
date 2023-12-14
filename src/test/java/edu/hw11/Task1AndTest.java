@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class Task1Test {
+public class Task1AndTest {
     @Test
     public void test()
         throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
