@@ -68,8 +68,6 @@ public class ByteBuddyExample {
             methodVisitor.visitInsn(Opcodes.IRETURN);    // Возвращение значени
             methodVisitor.visitEnd();
 
-            StackManipulation.Size operandStackSize = new StackManipulation.Compound().apply(methodVisitor, context);
-
             return new Size(2, 1);
         }
     }
