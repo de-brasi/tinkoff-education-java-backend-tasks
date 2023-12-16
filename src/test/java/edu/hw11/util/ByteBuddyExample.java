@@ -29,7 +29,7 @@ public class ByteBuddyExample {
             .defineMethod("customIncr", int.class, Visibility.PUBLIC)
             .withParameters(int.class)
             .intercept(new Implementation.Simple(new IncrementVarAppender()))
-            .defineMethod("fib", int.class, Visibility.PUBLIC)
+            .defineMethod("fib", long.class, Visibility.PUBLIC)
             .withParameters(int.class)
             .intercept(new Implementation.Simple(new FibComputingAppender()))
             .make();
@@ -92,55 +92,152 @@ public class ByteBuddyExample {
             Implementation.@NotNull Context context,
             @NotNull MethodDescription methodDescription
         ) {
+//            var label1 = new Label();
+//            var label2 = new Label();
+//
+//            methodVisitor.visitCode();
+//
+//            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+//            methodVisitor.visitInsn(Opcodes.ICONST_1);
+//
+//            methodVisitor.visitJumpInsn(Opcodes.IF_ICMPNE, label1);
+//            methodVisitor.visitInsn(Opcodes.ICONST_0);
+//            methodVisitor.visitInsn(Opcodes.IRETURN);
+//
+//            methodVisitor.visitLabel(label1);
+//            methodVisitor.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+//
+//            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+//            methodVisitor.visitInsn(Opcodes.ICONST_2);
+//
+//            methodVisitor.visitJumpInsn(Opcodes.IF_ICMPNE, label2);
+//            methodVisitor.visitInsn(Opcodes.ICONST_1);
+//            methodVisitor.visitInsn(Opcodes.IRETURN);
+//
+//            methodVisitor.visitLabel(label2);
+//            methodVisitor.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+//
+//            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+//            methodVisitor.visitInsn(Opcodes.ICONST_1);
+//            methodVisitor.visitInsn(Opcodes.ISUB);
+//            methodVisitor.visitMethodInsn(
+//                Opcodes.INVOKESTATIC,
+//                "edu/hw11/util/FibExample",
+//                "fib",
+//                "(I)I"
+//            );
+//            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+//            methodVisitor.visitInsn(Opcodes.ICONST_2);
+//            methodVisitor.visitInsn(Opcodes.ISUB);
+//            methodVisitor.visitMethodInsn(
+//                Opcodes.INVOKESTATIC,
+//                "edu/hw11/util/FibExample",
+//                "fib",
+//                "(I)I"
+//            );
+//            methodVisitor.visitInsn(Opcodes.IADD);
+//            methodVisitor.visitInsn(Opcodes.IRETURN);
+//
+//            methodVisitor.visitMaxs(3, 1);
+//            methodVisitor.visitEnd();
+//            return new Size(3, 1);
+
+
+
             var label1 = new Label();
             var label2 = new Label();
+            var label3 = new Label();
+            var labelGotoEntry = new Label();
 
             methodVisitor.visitCode();
 
-            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+            // LOCALS:  load (с локальной на стек операндов),
+            //          store (со стека операндов в локальную переменную)
+
+            //  0: lconst_0
+            methodVisitor.visitInsn(Opcodes.LCONST_0);
+            //  1: lstore_1
+            methodVisitor.visitVarInsn(Opcodes.LSTORE, 1);  // todo: ?
+            //  2: lconst_1
+            methodVisitor.visitInsn(Opcodes.LCONST_1);
+            //  3: lstore_3
+            methodVisitor.visitVarInsn(Opcodes.LSTORE, 3);  // todo: ?
+            //  4: iload_0
+            methodVisitor.visitVarInsn(Opcodes.ILOAD, 0);
+            //  5: iconst_1
             methodVisitor.visitInsn(Opcodes.ICONST_1);
-
+            //  6: if_icmpne     11
             methodVisitor.visitJumpInsn(Opcodes.IF_ICMPNE, label1);
-            methodVisitor.visitInsn(Opcodes.ICONST_0);
-            methodVisitor.visitInsn(Opcodes.IRETURN);
 
+            //  9: lload_1
+            methodVisitor.visitVarInsn(Opcodes.LLOAD, 1);
+            //  10: lreturn
+            methodVisitor.visitInsn(Opcodes.LRETURN);
+
+            //  11: iload_0
             methodVisitor.visitLabel(label1);
             methodVisitor.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            methodVisitor.visitVarInsn(Opcodes.ILOAD, 0);
 
-            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+            //  12: iconst_2
             methodVisitor.visitInsn(Opcodes.ICONST_2);
 
+            //  13: if_icmpne     18
             methodVisitor.visitJumpInsn(Opcodes.IF_ICMPNE, label2);
-            methodVisitor.visitInsn(Opcodes.ICONST_1);
-            methodVisitor.visitInsn(Opcodes.IRETURN);
+            //  16: lload_3
+            methodVisitor.visitVarInsn(Opcodes.LLOAD, 3);
+            //  17: lreturn
+            methodVisitor.visitInsn(Opcodes.LRETURN);
 
+            //  18: iconst_0
             methodVisitor.visitLabel(label2);
             methodVisitor.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            methodVisitor.visitInsn(Opcodes.ICONST_0);
 
-            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
-            methodVisitor.visitInsn(Opcodes.ICONST_1);
-            methodVisitor.visitInsn(Opcodes.ISUB);
-            methodVisitor.visitMethodInsn(
-                Opcodes.INVOKESTATIC,
-                "edu/hw11/util/FibExample",
-                "fib",
-                "(I)I"
-            );
-            methodVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+            //  19: istore        7
+            methodVisitor.visitVarInsn(Opcodes.ISTORE, 7);
+            //  21: iload         7
+            methodVisitor.visitLabel(labelGotoEntry);
+            methodVisitor.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            methodVisitor.visitVarInsn(Opcodes.ILOAD, 7);
+            //  23: iload_0
+            methodVisitor.visitVarInsn(Opcodes.ILOAD, 0);
+            //  24: iconst_2
             methodVisitor.visitInsn(Opcodes.ICONST_2);
+            //  25: isub
             methodVisitor.visitInsn(Opcodes.ISUB);
-            methodVisitor.visitMethodInsn(
-                Opcodes.INVOKESTATIC,
-                "edu/hw11/util/FibExample",
-                "fib",
-                "(I)I"
-            );
-            methodVisitor.visitInsn(Opcodes.IADD);
-            methodVisitor.visitInsn(Opcodes.IRETURN);
 
-            methodVisitor.visitMaxs(3, 1);
+            //  26: if_icmpge     45
+            methodVisitor.visitJumpInsn(Opcodes.IF_ICMPNE, label3);
+            //  29: lload_1
+            methodVisitor.visitVarInsn(Opcodes.LLOAD, 1);
+            //  30: lload_3
+            methodVisitor.visitVarInsn(Opcodes.LLOAD, 3);
+            //  31: ladd
+            methodVisitor.visitInsn(Opcodes.LADD);
+            //  32: lstore        5
+            methodVisitor.visitVarInsn(Opcodes.LSTORE, 5);
+            //  34: lload_3
+            methodVisitor.visitVarInsn(Opcodes.LLOAD, 3);
+            //  35: lstore_1
+            methodVisitor.visitVarInsn(Opcodes.LSTORE, 1);
+            //  36: lload         5
+            methodVisitor.visitVarInsn(Opcodes.LLOAD, 5);
+            //  38: lstore_3
+            methodVisitor.visitVarInsn(Opcodes.LSTORE, 3);
+            //  39: iinc          7, 1
+            methodVisitor.visitIincInsn(7, 1);
+            //  42: goto          21
+            methodVisitor.visitJumpInsn(Opcodes.GOTO, labelGotoEntry);
+            //  45: lload_3
+            methodVisitor.visitLabel(label3);
+            methodVisitor.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+            methodVisitor.visitVarInsn(Opcodes.LLOAD, 3);
+            //  46: lreturn
+            methodVisitor.visitInsn(Opcodes.LRETURN);
+
             methodVisitor.visitEnd();
-            return new Size(3, 1);
+            return new Size(4, 8);
         }
     }
 }
