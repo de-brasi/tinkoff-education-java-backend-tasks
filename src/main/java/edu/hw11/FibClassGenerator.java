@@ -50,6 +50,7 @@ public class FibClassGenerator {
         }
 
         @Override
+        @SuppressWarnings("ParameterNumber")
         public final ClassVisitor wrap(
             TypeDescription td, ClassVisitor cv, Implementation.Context ctx,
             TypePool tp, FieldList<FieldDescription.InDefinedShape> fields,
@@ -153,7 +154,10 @@ public class FibClassGenerator {
             methodVisitor.visitInsn(Opcodes.LRETURN);
 
             methodVisitor.visitEnd();
-            return new Size(4, 8);
+
+            final int operandSize = 4;
+            final int localSize = 8;
+            return new Size(operandSize, localSize);
         }
     }
 
