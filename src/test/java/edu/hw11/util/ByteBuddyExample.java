@@ -90,7 +90,7 @@ public class ByteBuddyExample {
             methodVisitor.visitInsn(Opcodes.LCONST_0);
             methodVisitor.visitInsn(Opcodes.LRETURN);
 
-            // если n != 1, то
+            // если n != 1, то проверить n на равенство с 2
             // stack: {} locals: {Opcode.INTEGER}
             methodVisitor.visitLabel(notFirstFibNumber);
             methodVisitor.visitInsn(Opcodes.ICONST_2);
