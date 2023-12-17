@@ -7,11 +7,12 @@ import org.apache.logging.log4j.Logger;
 public class DirectAccessExample {
     private DirectAccessExample() {}
 
+    @SuppressWarnings("UncommentedMain")
     public static void main(String[] args) {
-        LOGGER.info(target.name());
-        LOGGER.info(target.surname());
+        LOGGER.info(TARGET.name());
+        LOGGER.info(TARGET.surname());
     }
 
-    private final static Student target = new Student("Some", "Student");
+    private final static Student TARGET = new Student("Some", "Student");
     private final static Logger LOGGER = LogManager.getLogger();
 }

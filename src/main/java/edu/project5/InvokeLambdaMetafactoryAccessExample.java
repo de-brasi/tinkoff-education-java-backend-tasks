@@ -1,18 +1,20 @@
 package edu.project5;
 
 import edu.project5.targets.Student;
-import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import javax.swing.text.Style;
 
 public class InvokeLambdaMetafactoryAccessExample {
+    private InvokeLambdaMetafactoryAccessExample() {}
+
+    @SuppressWarnings("UncommentedMain")
     public static void main(String[] args) throws Throwable {
+        final String sourceMethodName = "get";
+
         // Get name
         MethodHandles.Lookup caller = MethodHandles.lookup();
         MethodType getterNameType = MethodType.methodType(StudentNameInfoGetter.class);
@@ -24,7 +26,7 @@ public class InvokeLambdaMetafactoryAccessExample {
 
         StudentNameInfoGetter nameGetter = (StudentNameInfoGetter) LambdaMetafactory.metafactory(
             caller,
-            "get",
+                sourceMethodName,
             getterNameType,
             methodGetterType,
             originalCalledGenNameMethod,
@@ -33,7 +35,7 @@ public class InvokeLambdaMetafactoryAccessExample {
             .getTarget()
             .invokeExact();
 
-        LOGGER.info(nameGetter.get(target));
+        LOGGER.info(nameGetter.get(TARGET));
 
 
         // Get surname
@@ -43,7 +45,7 @@ public class InvokeLambdaMetafactoryAccessExample {
         );
         StudentSurnameInfoGetter surnameGetter = (StudentSurnameInfoGetter) LambdaMetafactory.metafactory(
                 caller,
-                "get",
+                sourceMethodName,
                 getterSurnameType,
                 methodGetterType,
                 originalCalledGenSurnameMethod,
@@ -51,8 +53,11 @@ public class InvokeLambdaMetafactoryAccessExample {
             )
             .getTarget()
             .invokeExact();
-        LOGGER.info(surnameGetter.get(target));
+        LOGGER.info(surnameGetter.get(TARGET));
     }
+
+    private final static Student TARGET = new Student("Some", "Student");
+    private final static Logger LOGGER = LogManager.getLogger();
 
     public interface StudentNameInfoGetter {
         String get(Student target);
@@ -61,7 +66,4 @@ public class InvokeLambdaMetafactoryAccessExample {
     public interface StudentSurnameInfoGetter {
         String get(Student target);
     }
-
-    private final static Student target = new Student("Some", "Student");
-    private final static Logger LOGGER = LogManager.getLogger();
 }

@@ -1,23 +1,24 @@
 package edu.project5;
 
 import edu.project5.targets.Student;
+import java.lang.reflect.InvocationTargetException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.lang.reflect.InvocationTargetException;
 
 public class ReflectMethodAccessExample {
     private ReflectMethodAccessExample() {}
 
+    @SuppressWarnings("UncommentedMain")
     public static void main(String[] args)
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         LOGGER.info(
-            target.getClass().getMethod("name").invoke(target)
+            TARGET.getClass().getMethod("name").invoke(TARGET)
         );
         LOGGER.info(
-            target.getClass().getMethod("surname").invoke(target)
+            TARGET.getClass().getMethod("surname").invoke(TARGET)
         );
     }
 
-    private final static Student target = new Student("Some", "Student");
+    private final static Student TARGET = new Student("Some", "Student");
     private final static Logger LOGGER = LogManager.getLogger();
 }

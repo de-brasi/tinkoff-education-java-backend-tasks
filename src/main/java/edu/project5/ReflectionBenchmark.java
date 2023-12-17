@@ -21,6 +21,7 @@ import org.openjdk.jmh.runner.options.TimeValue;
 
 @State(Scope.Thread)
 public class ReflectionBenchmark {
+    @SuppressWarnings({"UncommentedMain", "MagicNumber"})
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
             .include(ReflectionBenchmark.class.getSimpleName())
@@ -39,8 +40,6 @@ public class ReflectionBenchmark {
         new Runner(options).run();
     }
 
-    record Student(String name, String surname) {}
-
     private Student student;
     private Method method;
     private MethodHandle methodHandle;
@@ -48,21 +47,23 @@ public class ReflectionBenchmark {
 
     @Setup
     public void setup() throws Throwable {
+        final String sourceMethodName = "name";
+
         student = new Student("SomeName", "SomeSurname");
-        method = student.getClass().getMethod("name");
+        method = student.getClass().getMethod(sourceMethodName);
 
         // using java.lang.invoke.MethodHandles
         MethodHandles.Lookup lookup = MethodHandles.lookup();
         MethodType methodType = MethodType.methodType(String.class);
 
-        methodHandle = lookup.findVirtual(Student.class, "name", methodType);
+        methodHandle = lookup.findVirtual(Student.class, sourceMethodName, methodType);
 
         // using java.lang.invoke.LambdaMetafactory
         MethodHandles.Lookup caller = MethodHandles.lookup();
         MethodType getterNameType = MethodType.methodType(StudentNameInfoGetter.class);
         MethodType methodGetterType = MethodType.methodType(String.class, Student.class);
         MethodHandle originalCalledGenNameMethod = caller.findVirtual(
-            Student.class, "name", MethodType.methodType(String.class)
+            Student.class, sourceMethodName, MethodType.methodType(String.class)
         );
         MethodType instantiatedMethodType = MethodType.methodType(String.class, Student.class);
 
@@ -109,4 +110,6 @@ public class ReflectionBenchmark {
     private interface StudentNameInfoGetter {
         String get(Student target);
     }
+
+    record Student(String name, String surname) {}
 }
