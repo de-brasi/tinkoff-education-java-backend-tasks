@@ -11,15 +11,15 @@ public class Rectangle {
         this.height = height;
     }
 
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
 
-    public Rectangle setWidth(int width) {
-        return new Rectangle(width, this.height);
+    public void setWidth(int width) {
+        this.width = width;
     }
 
-    public Rectangle setHeight(int height) {
-        return new Rectangle(this.width, height);
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public double area() {
