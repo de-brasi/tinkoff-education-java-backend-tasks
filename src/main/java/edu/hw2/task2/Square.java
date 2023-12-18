@@ -1,17 +1,24 @@
 package edu.hw2.task2;
 
 public class Square extends Rectangle {
+    public Square() {
+        super(0, 0);
+    }
+
     public Square(int size) {
         super(size, size);
     }
 
-    @Override
-    public Rectangle setWidth(int width) {
-        return new Square(width);
+    public void setWidth(int width) {
+        setSize(width);
     }
 
-    @Override
-    public Rectangle setHeight(int height) {
-        return new Square(height);
+    public void setHeight(int height) {
+        setSize(height);
+    }
+
+    private void setSize(int size) {
+        super.setWidth(size);
+        super.setHeight(size);
     }
 }
