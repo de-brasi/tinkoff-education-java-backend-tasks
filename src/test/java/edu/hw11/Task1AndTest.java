@@ -12,12 +12,14 @@ public class Task1AndTest {
     @Test
     public void test()
         throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        final String expectedString = "Hello, ByteBuddy!";
+
         Class<?> exampleType = new ByteBuddy()
             .subclass(Object.class)
-            .method(named("toString")).intercept(FixedValue.value("Hello World!"))
+            .method(named("toString")).intercept(FixedValue.value(expectedString))
             .make()
             .load(getClass().getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
             .getLoaded();
-        assertThat(exampleType.getDeclaredConstructor().newInstance().toString()).isEqualTo("Hello World!");
+        assertThat(exampleType.getDeclaredConstructor().newInstance().toString()).isEqualTo(expectedString);
     }
 }
