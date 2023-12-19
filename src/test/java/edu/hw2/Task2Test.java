@@ -20,29 +20,54 @@ public class Task2Test {
     @Test
     @DisplayName("Square area")
     void test2() {
-        var rect = new Square(10);
+        Rectangle rect = new Square(10);
         assertThat(rect.area()).isEqualTo(100);
     }
 
     @Test
-    @DisplayName("Changing side value")
+    @DisplayName("Change square size")
     void test3() {
-        Rectangle square = new Square(10);
-        square.setHeight(2);
-        assertThat(square.area()).isEqualTo(4);
+        Rectangle rect = new Square(10);
+        assertThat(rect instanceof Square).isTrue();
+        assertThat(rect.area()).isEqualTo(100);
+
+        rect = ((Square) rect).setSize(20);
+        assertThat(rect instanceof Square).isTrue();
+        assertThat(rect.area()).isEqualTo(400);
+    }
+
+    @Test
+    @DisplayName("Change square width")
+    void test4() {
+        Rectangle rect = new Square(10);
+        assertThat(rect instanceof Square).isTrue();
+        assertThat(rect.area()).isEqualTo(100);
+
+        rect = rect.setWidth(20);
+        assertThat(rect instanceof Square).isFalse();
+        assertThat(rect.area()).isEqualTo(200);
+    }
+
+
+    @Test
+    @DisplayName("Change square height")
+    void test5() {
+        Rectangle rect = new Square(10);
+        assertThat(rect instanceof Square).isTrue();
+        assertThat(rect.area()).isEqualTo(100);
+
+        rect = rect.setHeight(20);
+        assertThat(rect instanceof Square).isFalse();
+        assertThat(rect.area()).isEqualTo(200);
     }
 
     @ParameterizedTest
     @MethodSource("rectangles")
     void rectangleArea(Rectangle rect) {
-        rect.setWidth(20);
-        rect.setHeight(10);
+        rect = rect.setWidth(20);
+        rect = rect.setHeight(10);
 
-        if (rect instanceof Square) {
-            assertThat(rect.area()).isEqualTo(100.0);
-        } else {
-            assertThat(rect.area()).isEqualTo(200.0);
-        }
+        assertThat(rect.area()).isEqualTo(200.0);
     }
 
     private static Arguments[] rectangles() {
